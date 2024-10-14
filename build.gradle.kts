@@ -1,5 +1,6 @@
 plugins {
     java
+    kotlin("jvm") version "2.0.21"
     application
     id( "org.openjfx.javafxplugin" ) version "0.0.13"
 }
@@ -23,7 +24,7 @@ javafx {
     modules = listOf("javafx.controls", "javafx.fxml", "javafx.graphics", "javafx.swing")
 }
 
-val jUnitVersion = "5.7.1"
+val jUnitVersion = "5.10.3"
 
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitVersion")
@@ -39,10 +40,14 @@ tasks.withType<Test> {
 }
 
 application {
-    mainClass.set("ryleh.LaunchRyleh")
+    mainClass.set("io.github.agentseek.LaunchAgentSeek")
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+kotlin {
+    jvmToolchain(17)
 }
