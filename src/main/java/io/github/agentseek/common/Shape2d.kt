@@ -12,6 +12,19 @@ interface Shape2d {
      */
     fun contains(point: Point2d): Boolean
 
+    /**
+     * Sets the Shape2d position to new value.
+     *
+     * @param position Point2d value.
+     */
+    fun setPosition(position: Point2d)
+
+    /**
+     * Gets the Shape2d position.
+     *
+     * @return Point2d value.
+     */
+    fun getPosition(): Point2d
 
     /**
      * Check if two Shape2d instances intersect.
@@ -20,4 +33,11 @@ interface Shape2d {
      * @return boolean value.
      */
     fun intersect(shape: Shape2d): Boolean
+
+    /**
+     * Return the center of Shape2d.
+     *
+     * @return Point2d value.
+     */
+    fun getCenter(): Point2d
 }

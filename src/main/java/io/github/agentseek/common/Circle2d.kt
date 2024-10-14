@@ -15,6 +15,18 @@ class Circle2d(val radius: Int, var center: Point2d) : Shape2d {
     /**
      * {@inheritDoc}
      */
+    override fun setPosition(position: Point2d) {
+        center = position
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun getPosition(): Point2d = center
+
+    /**
+     * {@inheritDoc}
+     */
     override fun intersect(shape: Shape2d): Boolean {
         if (shape is Circle2d) {
             return (Vector2d(center, shape.center).module() <= radius
@@ -22,6 +34,11 @@ class Circle2d(val radius: Int, var center: Point2d) : Shape2d {
         }
         return false
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun getCenter(): Point2d = center
 
     /**
      * {@inheritDoc}
