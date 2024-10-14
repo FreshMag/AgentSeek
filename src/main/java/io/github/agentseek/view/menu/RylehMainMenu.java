@@ -18,7 +18,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-import ryleh.Ryleh;
+import io.github.agentseek.AgentSeek;
 import ryleh.view.ViewHandlerImpl;
 
 /**
@@ -59,7 +59,7 @@ public class RylehMainMenu {
      *
      */
     public void newMenu() {
-        factory.setLevelFont(Font.loadFont(Ryleh.class.getResource("/assets/fonts/saturno.ttf").toExternalForm(),
+        factory.setLevelFont(Font.loadFont(AgentSeek.class.getResource("/assets/fonts/saturno.ttf").toExternalForm(),
                 factory.getScaledSize()));
         final Separator separator = new Separator();
         final BorderPane pane = new BorderPane();

@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import ryleh.Ryleh;
+import io.github.agentseek.AgentSeek;
 
 /**
  * This class is used to handle game UI.
@@ -48,7 +48,7 @@ public class GameUI {
      */
     public GameUI() {
         this.tutorialUi = new ArrayList<>();
-        this.font = Font.loadFont(Ryleh.class.getResource("/assets/fonts/manaspc.ttf").toExternalForm(),
+        this.font = Font.loadFont(AgentSeek.class.getResource("/assets/fonts/manaspc.ttf").toExternalForm(),
                 FONT_SCALE * ViewHandlerImpl.getScaleModifier());
         this.setLives();
         this.setLevel();
@@ -157,7 +157,7 @@ public class GameUI {
      * This method updates font size after the ScaleModifier has been changed.
      */
     private void updateFontScale() {
-        this.font = Font.loadFont(Ryleh.class.getResource("/assets/fonts/manaspc.ttf").toExternalForm(),
+        this.font = Font.loadFont(AgentSeek.class.getResource("/assets/fonts/manaspc.ttf").toExternalForm(),
                 FONT_SCALE * ViewHandlerImpl.getScaleModifier());
         this.level.setFont(this.font);
         this.item.setFont(this.font);

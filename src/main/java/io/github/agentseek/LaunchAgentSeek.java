@@ -1,14 +1,14 @@
 package io.github.agentseek;
 
-public final class LaunchRyleh {
+public final class LaunchAgentSeek {
 
-    private LaunchRyleh() {
+    private LaunchAgentSeek() {
     }
     /**
-     * Launches Ryleh's call application.
+     * Launches AgentSeek application.
      * @param args
      */
     public static void main(final String[] args) {
-        Ryleh.main(args);
+        AgentSeek.main(args);
     }
 }
