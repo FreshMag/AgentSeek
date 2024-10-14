@@ -1,4 +1,4 @@
-package ryleh;
+package io.github.agentseek;
 
 public final class LaunchRyleh {
 

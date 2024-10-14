@@ -1,4 +1,4 @@
-package ryleh;
+package io.github.agentseek;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
