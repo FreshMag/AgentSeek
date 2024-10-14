@@ -25,3 +25,25 @@ replay_pid*
 
 # INTELLIJ
 .idea
+*.iml
+out/
+
+# Eclipse #
+.classpath
+.project
+.checkstyle
+.eclipse-pmd
+.settings/
+bin/
+config/
+
+# Maven #
+dependency-reduced-pom.xml
+target/
+
+# Gradle #
+.gradle/
+build/
+gradle/
+gradlew
+gradlew.bat
