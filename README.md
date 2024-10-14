@@ -12,7 +12,7 @@
 
 ## Overview
 
-Project for Intelligent System Engineering course a.y. 2023-2024
+Project for Intelligent Systems Engineering course a.y. 2023-2024
 
 
 <!--
