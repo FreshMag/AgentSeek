@@ -1,63 +1,61 @@
-package ryleh.common;
+package io.github.agentseek.common
+
 /**
  * This class is an implementation of Timer interface and is used to measure a time range.
+ * @param waitTime Time to wait.
  */
-public class TimerImpl implements Timer {
-
-    private double startMills;
-    private double elapsedMills;
-    /**
-     * Constructor method to instantiate a Timer given the amount of time to wait.
-     * @param waitTime Time to wait.
-     */
-    public TimerImpl(final double waitTime) {
-        this.reset();
-        this.elapsedMills = waitTime;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isElapsed() {
-        if (this.isStarted() && System.currentTimeMillis() - this.startMills > this.elapsedMills) {
-            reset();
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void startTimer() {
-        if (!isStarted()) {
-            this.startMills = System.currentTimeMillis();
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setWaitTime(final double wait) {
-        this.elapsedMills = wait;
-    }
+class TimerImpl(waitTime: Double) : Timer {
+    private var startMills = 0.0
+    private var elapsedMills: Double
 
     /**
      * Checks if the timer is already working.
-     * 
+     *
      * @return True if it's going on, false otherwise
      */
-    private boolean isStarted() {
-        return this.startMills != 0;
+    private val isStarted: Boolean
+        get() = startMills != 0.0
+
+    /**
+     * Constructor method to instantiate a Timer given the amount of time to wait.
+
+     */
+    init {
+        reset()
+        elapsedMills = waitTime
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun isElapsed(): Boolean {
+        if (isStarted && System.currentTimeMillis() - startMills > elapsedMills) {
+            reset()
+            return true
+        }
+        return false
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun startTimer() {
+        if (!isStarted) {
+            startMills = System.currentTimeMillis().toDouble()
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun setWaitTime(wait: Double) {
+        elapsedMills = wait
     }
 
     /**
      * Resets the Timer.
      */
-    private void reset() {
-        this.startMills = 0;
+    private fun reset() {
+        startMills = 0.0
     }
 }

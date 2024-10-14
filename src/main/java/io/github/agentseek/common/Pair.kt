@@ -1,121 +1,67 @@
-package ryleh.common;
+package io.github.agentseek.common
 
 /**
- * 
- * A standard generic Pair<X,Y>, with getters, hashCode, equals, and toString.
+ * A standard generic Pair<X></X>,Y>, with getters, hashCode, equals, and toString.
  * well implemented.
- * 
+ *
  * @param <X> X type.
  * @param <Y> Y type.
- */
-public class Pair<X, Y> {
-    private X x;
-    private Y y;
-
-    /**
-     * Constructor method that creates a Pair instance.
-     * 
-     * @param x X value.
-     * @param y Y value.
-     */
-    public Pair(final X x, final Y y) {
-        super();
-        this.x = x;
-        this.y = y;
-    }
-
-    /**
-     * Sets the value for x.
-     * 
-     * @param x X value.
-     */
-    public void setX(final X x) {
-        this.x = x;
-    }
-
-    /**
-     * Sets the value for y.
-     * 
-     * @param y Y value.
-     */
-    public void setY(final Y y) {
-        this.y = y;
-    }
-
-    /**
-     * Gets the value for x.
-     * 
-     * @return X value.
-     */
-    public X getX() {
-        return x;
-    }
-
-    /**
-     * Gets the value for y.
-     * 
-     * @return Y value.
-     */
-    public Y getY() {
-        return y;
-    }
+</Y></X> */
+class Pair<X, Y>(var x: X, var y: Y) {
 
     /**
      * Method that assigns a hashcode to Pair instance.
-     * 
+     *
      * @return int int hashcode value.
      */
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((x == null) ? 0 : x.hashCode());
-        result = prime * result + ((y == null) ? 0 : y.hashCode());
-        return result;
+    override fun hashCode(): Int {
+        val prime = 31
+        var result = 1
+        result = prime * result + (x?.hashCode() ?: 0)
+        result = prime * result + (y?.hashCode() ?: 0)
+        return result
     }
 
     /**
      * Method that checks if two Pair instance and other object is equal.
-     * 
+     *
      * @return boolean boolean value.
      */
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
+    override fun equals(obj: Any?): Boolean {
+        if (this === obj) {
+            return true
         }
         if (obj == null) {
-            return false;
+            return false
         }
-        if (getClass() != obj.getClass()) {
-            return false;
+        if (javaClass != obj.javaClass) {
+            return false
         }
-        final Pair other = (Pair) obj;
+        val other = obj as Pair<*, *>
         if (x == null) {
             if (other.x != null) {
-                return false;
+                return false
             }
-        } else if (!x.equals(other.x)) {
-            return false;
+        } else if (x != other.x) {
+            return false
         }
         if (y == null) {
             if (other.y != null) {
-                return false;
+                return false
             }
-        } else if (!y.equals(other.y)) {
-            return false;
+        } else if (y != other.y) {
+            return false
         }
-        return true;
+        return true
     }
 
     /**
      * Method that converts Pair instance to String representation.
-     * 
+     *
      * @return String String value.
      */
-    @Override
-    public String toString() {
-        return "Pair [x=" + x + ", y=" + y + "]";
+    override fun toString(): String {
+        return "Pair [x=$x, y=$y]"
     }
 }
 

@@ -2,26 +2,10 @@ plugins {
     java
     kotlin("jvm") version "2.0.21"
     application
-    id( "org.openjfx.javafxplugin" ) version "0.0.13"
 }
 
 repositories {
     mavenCentral()
-}
-
-val javaFXModules = listOf(
-    "base",
-    "controls",
-    "fxml",
-    "swing",
-    "graphics"
-)
-
-val supportedPlatforms = listOf("linux", "mac", "win")
-
-javafx {
-    version = "22.0.1"
-    modules = listOf("javafx.controls", "javafx.fxml", "javafx.graphics", "javafx.swing")
 }
 
 val jUnitVersion = "5.10.3"
