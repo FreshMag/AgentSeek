@@ -1,9 +1,7 @@
-package io.github.agentseek.controller.core
+package io.github.agentseek.core
 
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.components.Component
-import io.github.agentseek.core.GameObject
-import io.github.agentseek.core.GameObjectImpl
 import io.github.agentseek.physics.CircleHitBox
 import io.github.agentseek.physics.HitBox
 import io.github.agentseek.view.Renderer

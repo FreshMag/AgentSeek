@@ -3,9 +3,8 @@ package io.github.agentseek.world
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.common.Rectangle2d
 import io.github.agentseek.core.GameObject
-import io.github.agentseek.controller.core.GameEngine
-import io.github.agentseek.controller.events.Event
-import io.github.agentseek.controller.events.EventListener
+import io.github.agentseek.events.Event
+import io.github.agentseek.events.EventListener
 
 /**
  * An implementation of Game World. Bounds are represented by a rectangle and game objects are contained inside a list.
@@ -16,12 +15,6 @@ class WorldImpl(private val eventListener: EventListener) : World {
         Rectangle2d(BOUNDS_WIDTH, BOUNDS_HEIGHT, BOUNDS_UPPER_LEFT_X, BOUNDS_UPPER_LEFT_Y)
     private var agentSeekId = 0
 
-    /**
-     * Instantiate a World and his bounds.
-     */
-    init {
-        GameEngine.runDebugger { println("${bounds.upperLeft} ${bounds.upperRight}") }
-    }
 
     override fun generateId(type: String): String {
         agentSeekId++

@@ -3,7 +3,7 @@ package io.github.agentseek.world
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.common.Shape2d
 import io.github.agentseek.core.GameObject
-import io.github.agentseek.controller.events.Event
+import io.github.agentseek.events.Event
 
 /**
  * Game's world. The World represents the domain of the game, containing all game objects and the bounds where the

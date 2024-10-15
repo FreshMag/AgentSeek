@@ -1,4 +1,4 @@
-package io.github.agentseek.controller.events
+package io.github.agentseek.events
 
 /**
  * This interface manages Event instances.

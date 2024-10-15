@@ -1,7 +1,7 @@
 package ryleh.controller.core.factories
 
 import io.github.agentseek.common.Point2d
-import io.github.agentseek.controller.core.GameState
+import io.github.agentseek.core.GameState
 
 /**
  * A factory class for basic entities such as player,bullet,rock,item and fire.

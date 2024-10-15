@@ -2,10 +2,10 @@ package io.github.agentseek.components
 
 import io.github.agentseek.common.Timer
 import io.github.agentseek.common.TimerImpl
-import io.github.agentseek.controller.events.GameOverEvent
-import io.github.agentseek.controller.events.RemoveEntityEvent
-import io.github.agentseek.world.World
 import io.github.agentseek.core.isPlayer
+import io.github.agentseek.events.GameOverEvent
+import io.github.agentseek.events.RemoveEntityEvent
+import io.github.agentseek.world.World
 import kotlin.math.max
 import kotlin.math.min
 

@@ -1,6 +1,6 @@
-package io.github.agentseek.controller.events
+package io.github.agentseek.events
 
-import io.github.agentseek.controller.core.GameState
+import io.github.agentseek.core.GameState
 
 /**
  * This class manages a NewLevel Event and implements Event interface.

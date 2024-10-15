@@ -1,4 +1,4 @@
-package io.github.agentseek.controller.core
+package io.github.agentseek.core
 
 
 /**
@@ -19,5 +19,4 @@ class GameEngine(private var gameState: GameState? = null) {
     fun mainLoop() {
         TODO("rifare game loop")
     }
-
 }

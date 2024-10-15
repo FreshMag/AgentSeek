@@ -1,8 +1,7 @@
-package ryleh.controller.events
+package io.github.agentseek.events
 
-import io.github.agentseek.controller.core.GameState
-import io.github.agentseek.controller.events.Event
 import io.github.agentseek.core.GameObject
+import io.github.agentseek.core.GameState
 
 /**
  * This class manages an EnemyCollision Event and implements Event interface.

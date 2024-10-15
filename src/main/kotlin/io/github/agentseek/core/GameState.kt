@@ -1,7 +1,5 @@
-package io.github.agentseek.controller.core
+package io.github.agentseek.core
 
-import io.github.agentseek.core.GameObject
-import io.github.agentseek.core.Type
 import io.github.agentseek.world.World
 
 /**
@@ -61,10 +59,5 @@ interface GameState {
     // val view: ViewHandlerImpl?
 
     // val levelHandler: LevelHandler
-
-    /**
-     * Gets the [GameObject]s that have the given [type]
-     */
-    fun getGameObjectsByType(type: Type): Iterable<GameObject>
 
 }
