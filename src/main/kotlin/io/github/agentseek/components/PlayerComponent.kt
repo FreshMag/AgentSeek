@@ -3,7 +3,6 @@ package io.github.agentseek.components
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.common.Vector2d
 import io.github.agentseek.core.GameObject
-import io.github.agentseek.core.Type
 import io.github.agentseek.physics.Direction
 import io.github.agentseek.world.World
 
@@ -57,10 +56,7 @@ class PlayerComponent(world: World, private val speed: Int) : AbstractComponent(
     /**
      * Checks if next movement is legal.
      */
-    private fun canMove(): Boolean =
-        !(gameObject.hitBox.isOutOfBounds(world.bounds)
-                || world.gameObjects.filter { it.type == Type.ROCK }
-            .any { gameObject.hitBox.isCollidingWith(it.hitBox) })
+    private fun canMove(): Boolean = !(gameObject.hitBox.isOutOfBounds(world.bounds))
 
     /**
      * Gets current blocked direction. If direction is IDLE player can move in all directions.

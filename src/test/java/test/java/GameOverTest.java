@@ -1,22 +1,21 @@
 package test.java;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import io.github.agentseek.core.GameObject;
+import io.github.agentseek.events.GameOverEvent;
+import io.github.agentseek.world.WorldImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import ryleh.common.Circle2d;
 import ryleh.controller.events.Event;
 import ryleh.controller.events.EventListener;
-import io.github.agentseek.controller.events.GameOverEvent;
-import io.github.agentseek.core.GameObject;
 import ryleh.model.GameObjectImpl;
 import ryleh.model.Type;
 import ryleh.model.World;
-import io.github.agentseek.world.WorldImpl;
 import ryleh.model.components.HealthIntComponent;
 import ryleh.model.physics.CircleHitBox;
 import ryleh.model.physics.HitBoxType;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class GameOverTest implements EventListener {
 
@@ -25,6 +24,7 @@ class GameOverTest implements EventListener {
     private GameObject object;
     private HealthIntComponent health;
     private boolean isGameOver;
+
     @BeforeEach
     void setUp() throws Exception {
         final World world = new WorldImpl(this);
@@ -36,6 +36,7 @@ class GameOverTest implements EventListener {
         world.addGameObject(object);
         object.onAdded(world);
     }
+
     @Test
     void testGameOver() {
         for (int testCount = 0; testCount < TEST_FRAMES; testCount++) {

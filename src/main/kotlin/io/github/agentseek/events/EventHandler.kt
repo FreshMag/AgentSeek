@@ -1,9 +1,9 @@
 package ryleh.controller.events
 
 import io.github.agentseek.components.HealthIntComponent
-import io.github.agentseek.controller.core.GameState
-import io.github.agentseek.controller.events.Event
-import io.github.agentseek.controller.events.EventListener
+import io.github.agentseek.core.GameState
+import io.github.agentseek.events.Event
+import io.github.agentseek.events.EventListener
 import java.util.function.Consumer
 
 /**
