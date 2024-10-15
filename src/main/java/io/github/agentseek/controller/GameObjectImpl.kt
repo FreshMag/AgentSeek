@@ -5,28 +5,31 @@ import io.github.agentseek.model.World
 import io.github.agentseek.model.components.Component
 import io.github.agentseek.model.physics.CircleHitBox
 import io.github.agentseek.model.physics.HitBox
+import io.github.agentseek.view.Renderer
 import java.util.function.Consumer
 
 /**
  * A class that provides the implementation of the interface GameObject,
  * handling the operations related to a GameObject.
  */
-class GameObjectImpl(override val type: Type) : GameObject {
+class GameObjectImpl(override val type: Type, override var renderer: Renderer = TODO()) : GameObject {
     private var id: String? = null
     override var position: Point2d = Point2d(0.0, 0.0)
         set(value) {
-            hitBox.form.setPosition(value)
+            hitBox.form.position = value
+            field = value
         }
     override val hitBox: HitBox = CircleHitBox(DEFAULT_HITBOX_RADIUS)
     override var components: List<Component> = ArrayList()
 
     override fun onAdded(world: World) {
         this.id = world.generateId("gameObject")
-        hitBox.form.setPosition(position)
+        hitBox.form.position = position
     }
 
     override fun onUpdate(deltaTime: Double) {
-        components.forEach(Consumer { i: Component? -> i!!.onUpdate(deltaTime) })
+        components.forEach { it.onUpdate(deltaTime) }
+        renderer.render(this)
     }
 
     override fun addComponent(component: Component) {

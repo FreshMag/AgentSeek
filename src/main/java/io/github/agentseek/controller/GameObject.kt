@@ -5,6 +5,7 @@ import io.github.agentseek.common.Point2d
 import io.github.agentseek.model.World
 import io.github.agentseek.model.components.Component
 import io.github.agentseek.model.physics.HitBox
+import io.github.agentseek.view.Renderer
 
 /**
  * An interface to handle an object of the game world.
@@ -30,6 +31,11 @@ interface GameObject {
      * This object's [HitBox].
      */
     val hitBox: HitBox
+
+    /**
+     * The GameObject graphical appearance
+     */
+    var renderer: Renderer
 
     /**
      * This method is called when the object is added to the [world].

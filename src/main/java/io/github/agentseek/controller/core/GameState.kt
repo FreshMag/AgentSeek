@@ -1,25 +1,47 @@
 package io.github.agentseek.controller.core
 
-import io.github.agentseek.controller.Entity
+import io.github.agentseek.controller.GameObject
 import io.github.agentseek.controller.Type
 import io.github.agentseek.model.World
-import java.util.*
 
 /**
  * This interface represents the state of the game and generates new levels based on a LevelHandler.
  */
 interface GameState {
     /**
-     * @return a reference to current player.
+     * Reference to current player.
      */
-    val player: Entity
+    val player: GameObject
 
     /**
-     * Add an Entity to the current GameState.
-     *
-     * @param entity Entity to be added.
+     * Gets the [World] representing the domain of the game.
      */
-    fun addEntity(entity: Entity)
+    val world: World
+
+    /**
+     * Gets current active [GameObject]s.
+     */
+    val entities: Iterable<GameObject>
+
+    /**
+     * Checks if player has won or lost.
+     */
+    val isVictory: Boolean
+
+    /**
+     * Checks if game is over and if player has won or lost.
+     */
+    val isGameOver: Boolean
+
+    /**
+     * Add a [GameObject] to the current GameState.
+     */
+    fun addGameObject(gameObject: GameObject)
+
+    /**
+     * Removes a [GameObject] to current GameState.
+     */
+    fun removeGameObject(gameObject: GameObject)
 
     /**
      * Generates a new Level and spawns all entities inside it, player too.
@@ -27,75 +49,22 @@ interface GameState {
     fun generateNewLevel()
 
     /**
-     * Removes an Entity to current GameState.
-     *
-     * @param entity Entity to be removed.
+     * Updates current GameState, passing the [deltaTime] of time elapsed since last update.
      */
-    fun removeEntity(entity: Entity)
+    fun updateState(deltaTime: Double)
 
     /**
-     * Updates current GameState of a certain amount of time elapsed.
-     *
-     * @param dt Delta time, time elapsed after last update.
-     */
-    fun updateState(dt: Double)
-
-    /**
-     * Checks if game is over and if player has won or lost.
-     *
-     * @return True if the game is over.
-     */
-    val isGameOver: Boolean
-
-    /**
-     * Sets flags that indicates that the game is over.
-     *
-     * @param victory True if player has won, false if player has lost.
+     * Sets flags that indicates that the game is over: if [victory] is `true`, the game ended with a victory.
      */
     fun callGameOver(victory: Boolean)
 
-    /**
-     * Gets the object that is handling the view.
-     *
-     * @return The handler of the view.
-     */
-    val view: ViewHandlerImpl?
+    // val view: ViewHandlerImpl?
+
+    // val levelHandler: LevelHandler
 
     /**
-     * Gets the object that is handling the Levels System.
-     *
-     * @return The handler of the levels system.
+     * Gets the [GameObject]s that have the given [type]
      */
-    val levelHandler: LevelHandler?
+    fun getGameObjectsByType(type: Type): Iterable<GameObject>
 
-    /**
-     * Gets an Entity whose type corresponds to the type given in input, taken from
-     * the current active entities.
-     *
-     * @param type Type of the Entity.
-     * @return An Optional of Entity if an Entity with the determined type was
-     * present, or an empty Optional otherwise.
-     */
-    fun getEntityByType(type: Type): Optional<Entity?>?
-
-    /**
-     * Gets the object that is handling the domain of the game.
-     *
-     * @return The World(domain) of the game.
-     */
-    val world: World
-
-    /**
-     * Gets current active entities.
-     *
-     * @return A list of all current entities.
-     */
-    val entities: List<Any?>?
-
-    /**
-     * Checks if player has won or lost.
-     *
-     * @return True if player has won.
-     */
-    val isVictory: Boolean
 }
