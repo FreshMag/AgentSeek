@@ -4,9 +4,8 @@ import io.github.agentseek.common.Timer
 import io.github.agentseek.common.TimerImpl
 import io.github.agentseek.controller.events.GameOverEvent
 import io.github.agentseek.controller.events.RemoveEntityEvent
-import io.github.agentseek.model.Type
 import io.github.agentseek.model.World
-import io.github.agentseek.model.isPlayer
+import io.github.agentseek.controller.isPlayer
 import kotlin.math.max
 import kotlin.math.min
 

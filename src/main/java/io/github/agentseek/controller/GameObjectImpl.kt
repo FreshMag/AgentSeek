@@ -1,6 +1,7 @@
-package io.github.agentseek.model
+package io.github.agentseek.controller
 
 import io.github.agentseek.common.Point2d
+import io.github.agentseek.model.World
 import io.github.agentseek.model.components.Component
 import io.github.agentseek.model.physics.CircleHitBox
 import io.github.agentseek.model.physics.HitBox

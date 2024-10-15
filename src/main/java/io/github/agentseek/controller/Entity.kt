@@ -1,6 +1,5 @@
 package io.github.agentseek.controller
 
-import io.github.agentseek.model.GameObject
 import io.github.agentseek.view.GraphicComponent
 
 /**

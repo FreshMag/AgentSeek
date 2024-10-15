@@ -3,7 +3,7 @@ package io.github.agentseek.model.items
 import io.github.agentseek.controller.core.GameEngine
 import io.github.agentseek.controller.core.GameState
 import io.github.agentseek.model.components.ShootingComponent
-import io.github.agentseek.model.getComponent
+import io.github.agentseek.controller.getComponent
 
 /**
  * This type of item augments player's attack speed by a factor.

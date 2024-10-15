@@ -1,5 +1,6 @@
 package io.github.agentseek.model
 
+import io.github.agentseek.controller.Type
 import io.github.agentseek.controller.core.GameEngine
 import java.util.*
 import java.util.function.Function

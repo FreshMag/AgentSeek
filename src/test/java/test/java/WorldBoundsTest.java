@@ -11,7 +11,7 @@ import ryleh.common.Rectangle2d;
 import ryleh.common.Vector2d;
 import ryleh.controller.events.Event;
 import ryleh.controller.events.EventListener;
-import io.github.agentseek.model.GameObject;
+import io.github.agentseek.controller.GameObject;
 import ryleh.model.GameObjectImpl;
 import ryleh.model.Type;
 import ryleh.model.World;

@@ -1,6 +1,6 @@
 package io.github.agentseek.model.components
 
-import io.github.agentseek.model.GameObject
+import io.github.agentseek.controller.GameObject
 
 /**
  * A Component can be added to a GameObject to specify some sort of additional behavior.

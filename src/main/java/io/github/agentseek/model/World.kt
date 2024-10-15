@@ -2,6 +2,7 @@ package io.github.agentseek.model
 
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.common.Shape2d
+import io.github.agentseek.controller.GameObject
 import io.github.agentseek.controller.events.Event
 
 /**

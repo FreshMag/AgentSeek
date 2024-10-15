@@ -2,7 +2,7 @@ package io.github.agentseek.model.components
 
 import io.github.agentseek.common.GameMath
 import io.github.agentseek.common.Vector2d
-import io.github.agentseek.model.Type
+import io.github.agentseek.controller.Type
 import io.github.agentseek.model.World
 
 /**

@@ -2,8 +2,7 @@ package io.github.agentseek.controller.events
 
 import io.github.agentseek.controller.Entity
 import io.github.agentseek.controller.core.GameState
-import io.github.agentseek.controller.events.Event
-import io.github.agentseek.model.GameObject
+import io.github.agentseek.controller.GameObject
 import java.util.*
 
 /**

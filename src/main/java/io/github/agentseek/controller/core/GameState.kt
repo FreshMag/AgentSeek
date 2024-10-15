@@ -1,7 +1,7 @@
 package io.github.agentseek.controller.core
 
 import io.github.agentseek.controller.Entity
-import io.github.agentseek.model.Type
+import io.github.agentseek.controller.Type
 import io.github.agentseek.model.World
 import java.util.*
 

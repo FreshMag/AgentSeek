@@ -1,8 +1,8 @@
 package io.github.agentseek.model.components
 
-import io.github.agentseek.model.GameObject
+import io.github.agentseek.controller.GameObject
 import io.github.agentseek.model.World
-import io.github.agentseek.model.isPlayer
+import io.github.agentseek.controller.isPlayer
 
 /**
  * Abstract implementation of Component. All components should extend this class.

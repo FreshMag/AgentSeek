@@ -1,7 +1,7 @@
 package io.github.agentseek.model.components
 
 import io.github.agentseek.common.Vector2d
-import io.github.agentseek.model.GameObject
+import io.github.agentseek.controller.GameObject
 import io.github.agentseek.model.World
 import kotlin.math.cos
 import kotlin.math.sin

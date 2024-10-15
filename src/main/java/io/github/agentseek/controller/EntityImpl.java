@@ -1,7 +1,7 @@
 package ryleh.controller;
 
 import io.github.agentseek.controller.Entity;
-import io.github.agentseek.model.GameObject;
+import io.github.agentseek.controller.GameObject;
 import ryleh.view.graphics.GraphicComponent;
 /**
  * A class that manages the attributes of an Entity type and implements Entity interface.

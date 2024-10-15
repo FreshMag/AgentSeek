@@ -3,8 +3,7 @@ package io.github.agentseek.model.components
 import io.github.agentseek.common.Timer
 import io.github.agentseek.common.TimerImpl
 import io.github.agentseek.controller.events.NewLevelEvent
-import io.github.agentseek.model.GameObject
-import io.github.agentseek.model.Type
+import io.github.agentseek.controller.GameObject
 import io.github.agentseek.model.World
 
 /**

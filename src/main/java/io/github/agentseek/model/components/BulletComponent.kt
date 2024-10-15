@@ -2,8 +2,8 @@ package io.github.agentseek.model.components
 
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.common.Vector2d
-import io.github.agentseek.model.GameObject
-import io.github.agentseek.model.Type.*
+import io.github.agentseek.controller.GameObject
+import io.github.agentseek.controller.Type.*
 import io.github.agentseek.model.World
 import ryleh.controller.events.EnemyCollisionEvent
 import io.github.agentseek.controller.events.RemoveEntityEvent

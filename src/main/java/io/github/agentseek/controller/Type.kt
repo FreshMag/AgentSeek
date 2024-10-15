@@ -1,4 +1,4 @@
-package io.github.agentseek.model
+package io.github.agentseek.controller
 
 /**
  * This enum represents the type of each game object. Each object added to the world belong to one of these types.
