@@ -1,7 +1,7 @@
 package io.github.agentseek.controller.core
 
-import io.github.agentseek.model.WorldImpl
-import io.github.agentseek.model.components.PlayerComponent
+import io.github.agentseek.world.WorldImpl
+import io.github.agentseek.components.PlayerComponent
 import java.util.*
 
 /**

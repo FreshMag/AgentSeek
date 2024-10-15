@@ -7,8 +7,8 @@ import io.github.agentseek.controller.Entity;
 import ryleh.controller.core.GameEngine;
 import ryleh.controller.core.GameState;
 import ryleh.model.Type;
-import io.github.agentseek.model.components.CollisionWithPlayerComponent;
-import io.github.agentseek.model.components.DrunkComponent;
+import io.github.agentseek.components.CollisionWithPlayerComponent;
+import io.github.agentseek.components.DrunkComponent;
 import ryleh.model.components.HealthIntComponent;
 import ryleh.model.components.LurkerComponent;
 import ryleh.model.physics.CircleHitBox;
@@ -20,7 +20,7 @@ import ryleh.view.graphics.enemies.EnemyLurkerGraphicComponent;
 import ryleh.view.graphics.enemies.EnemyShooterGraphicComponent;
 import ryleh.view.graphics.enemies.EnemySpinnerGraphicComponent;
 import ryleh.model.components.ShooterComponent;
-import io.github.agentseek.model.components.SpinnerComponent;
+import io.github.agentseek.components.SpinnerComponent;
 
 /**
  * A factory class for enemy entities.

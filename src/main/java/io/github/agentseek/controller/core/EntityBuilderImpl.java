@@ -3,7 +3,7 @@ package ryleh.controller.core;
 import ryleh.common.Point2d;
 import io.github.agentseek.controller.Entity;
 import ryleh.controller.EntityImpl;
-import io.github.agentseek.controller.GameObject;
+import io.github.agentseek.core.GameObject;
 import ryleh.model.GameObjectImpl;
 import ryleh.model.Type;
 import ryleh.model.components.AbstractComponent;

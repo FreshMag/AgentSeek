@@ -1,8 +1,8 @@
 package io.github.agentseek.controller.core
 
-import io.github.agentseek.controller.GameObject
-import io.github.agentseek.controller.Type
-import io.github.agentseek.model.World
+import io.github.agentseek.core.GameObject
+import io.github.agentseek.core.Type
+import io.github.agentseek.world.World
 
 /**
  * This interface represents the state of the game and generates new levels based on a LevelHandler.

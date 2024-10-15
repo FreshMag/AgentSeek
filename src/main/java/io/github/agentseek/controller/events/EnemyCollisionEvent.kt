@@ -1,7 +1,7 @@
 package ryleh.controller.events
 
 import io.github.agentseek.controller.events.Event
-import io.github.agentseek.controller.GameObject
+import io.github.agentseek.core.GameObject
 
 /**
  * This class manages an EnemyCollision Event and implements Event interface.
