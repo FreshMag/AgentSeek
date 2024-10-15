@@ -4,7 +4,6 @@ import io.github.agentseek.common.Point2d
 import io.github.agentseek.common.Timer
 import io.github.agentseek.common.TimerImpl
 import io.github.agentseek.common.Vector2d
-import io.github.agentseek.controller.events.BulletSpawnEvent
 import io.github.agentseek.world.World
 
 /**

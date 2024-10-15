@@ -1,12 +1,11 @@
-package io.github.agentseek.controller.events;
+package io.github.agentseek.controller.events
+
 /**
  * This interface manages Event instances.
  */
-public interface EventListener {
+interface EventListener {
     /**
-     * Notify the happening of an Event.
-     * 
-     * @param e Event to be notified
+     * Notify the happening of an Event [e].
      */
-    void notifyEvent(Event e);
+    fun notifyEvent(e: Event)
 }
