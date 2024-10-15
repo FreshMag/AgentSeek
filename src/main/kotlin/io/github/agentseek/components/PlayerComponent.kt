@@ -4,8 +4,8 @@ import io.github.agentseek.common.Point2d
 import io.github.agentseek.common.Vector2d
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.Type
-import io.github.agentseek.world.World
 import io.github.agentseek.physics.Direction
+import io.github.agentseek.world.World
 
 /**
  * Main component of a Game object of type PLAYER. Specifies how player's movement works.
@@ -13,7 +13,7 @@ import io.github.agentseek.physics.Direction
 class PlayerComponent(world: World, private val speed: Int) : AbstractComponent(world) {
     private var velocity: Vector2d = Vector2d.zero()
     private var lastPos: Point2d = Point2d.origin()
-    private var direction: Direction = Direction.IDLE
+    var direction: Direction = Direction.IDLE
         set(value) {
             if (field != Direction.IDLE) {
                 this.lastDirection = field
