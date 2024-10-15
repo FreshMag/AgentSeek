@@ -3,18 +3,12 @@ package io.github.agentseek.common
 import kotlin.math.sqrt
 
 /**
- * Two-dimensional vector.
- * @param x Component.
- * @param y Component.
- * @constructor empty
+ * Two-dimensional vector, with a [x] component and [y] component
  */
 class Vector2d(var x: Double, var y: Double) {
 
     /**
-     * Instantiates a vector from two points.
-     *
-     * @param origin Point of application of the vector.
-     * @param destination Second point.
+     * Instantiates a vector from two points, [origin] and [destination]
      */
     constructor(origin: Point2d, destination: Point2d) : this(origin.x, origin.y) {
         x -= destination.x
@@ -22,75 +16,43 @@ class Vector2d(var x: Double, var y: Double) {
     }
 
     /**
-     * Return the difference between two vectors.
-     *
-     * @param vector Vector to be subtracted.
-     * @return Difference between the two vectors.
+     * Return the difference between this vector and another [vector].
      */
-    fun sub(vector: Vector2d): Vector2d = Vector2d(x - vector.x, y - vector.y)
-
+    operator fun minus(vector: Vector2d): Vector2d = Vector2d(x - vector.x, y - vector.y)
 
     /**
-     * Module of the vector.
-     *
-     * @return The module of the vector.
+     * Module of this vector.
      */
     fun module(): Double = sqrt(x * x + y * y)
 
+    /**
+     * This vector normalized.
+     */
+    fun normalized(): Vector2d =
+        Vector2d(x / module(), y / module())
 
     /**
-     * Vector normalized.
-     *
-     * @return The vector normalized.
+     * Multiplies this vector by a [factor].
      */
-    fun normalized(): Vector2d {
-        val module = sqrt(x * x + y * y)
-        return Vector2d(x / module, y / module)
-    }
+    operator fun times(factor: Double): Vector2d = Vector2d(x * factor, y * factor)
 
     /**
-     * Multiplies this vector by a factor, without changing his state.
-     *
-     * @param factor Factor.
-     * @return Result of multiplication as a new two-dimensional vector.
+     * Sums this vector with [vector]
      */
-    fun multiply(factor: Double): Vector2d = Vector2d(x * factor, y * factor)
+    operator fun plus(vector: Vector2d): Vector2d = Vector2d(x + vector.x, y + vector.y)
 
+    companion object {
+        /**
+         * Generate a new vector given the angle in [degrees] with x-axis.
+         */
+        fun fromAngle(degrees: Double): Vector2d =
+            Vector2d(
+                GameMath.cosDeg(degrees.toFloat().toDouble()),
+                GameMath.sinDeg(degrees.toFloat().toDouble())
+            )
 
-    /**
-     * Multiplies this vector by a factor, changing his state.
-     *
-     * @param factor Factor.
-     * @return Result of multiplication as a new two-dimensional vector.
-     */
-    fun mulLocal(factor: Double): Vector2d {
-        x *= factor
-        y *= factor
-        return Vector2d(x, y)
-    }
+        fun zero(): Vector2d = Vector2d(0.0, 0.0)
 
-    /**
-     * Sum of two vectors. ATTENTION: this vector's state will be changed!
-     *
-     * @param vector Vector sum.
-     * @return The sum of the two vectors.
-     */
-    fun addLocal(vector: Vector2d): Vector2d {
-        x += vector.x
-        y += vector.y
-        return Vector2d(x, y)
-    }
-
-    /**
-     * Generate a new vector given the angle with x-axis.
-     *
-     * @param degrees Angle.
-     * @return Vector generated.
-     */
-    fun fromAngle(degrees: Double): Vector2d {
-        return Vector2d(
-            GameMath.cosDeg(degrees.toFloat().toDouble()),
-            GameMath.sinDeg(degrees.toFloat().toDouble())
-        )
+        fun fromPosition(position: Point2d): Vector2d = Vector2d(position.x, position.y)
     }
 }

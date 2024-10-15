@@ -1,48 +1,25 @@
 package io.github.agentseek.common
 
 /**
- * This class represents a Circle in two dimensions.
- * @param center Center of the circle.
- * @param radius Radius of the circle, by default is (0.0, 0.0).
+ * This class represents a Circle in two dimensions, with [position] (i.e. the center, default is (0.0, 0.0))
+ * and [radius]
  */
-class Circle2d(val radius: Int, var center: Point2d) : Shape2d {
+class Circle2d(val radius: Int, override var position: Point2d = Point2d(0.0, 0.0)) : Shape2d {
+    override var center: Point2d
+        get() = position
+        set(value) {
+            position = value
+        }
 
-    /**
-     * {@inheritDoc}
-     */
     override fun contains(point: Point2d): Boolean = Vector2d(center, point).module() <= radius
 
-    /**
-     * {@inheritDoc}
-     */
-    override fun setPosition(position: Point2d) {
-        center = position
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    override fun getPosition(): Point2d = center
-
-    /**
-     * {@inheritDoc}
-     */
-    override fun intersect(shape: Shape2d): Boolean {
-        if (shape is Circle2d) {
-            return (Vector2d(center, shape.center).module() <= radius
-                    + shape.radius)
+    override fun intersect(shape: Shape2d): Boolean =
+        when(shape) {
+            is Circle2d -> (Vector2d(center, shape.center).module() <= radius + shape.radius)
+            is Rectangle2d -> TODO()
+            else -> false
         }
-        return false
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    override fun getCenter(): Point2d = center
-
-    /**
-     * {@inheritDoc}
-     */
     override fun toString(): String = "Circle2d [radius=$radius, center=$center]"
 
 }

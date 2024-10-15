@@ -3,12 +3,12 @@ package ryleh.controller.core.factories;
 import ryleh.common.Circle2d;
 import ryleh.common.GameMath;
 import ryleh.common.Point2d;
-import ryleh.controller.Entity;
+import io.github.agentseek.controller.Entity;
 import ryleh.controller.core.GameEngine;
 import ryleh.controller.core.GameState;
 import ryleh.model.Type;
-import ryleh.model.components.CollisionComponent;
-import ryleh.model.components.DrunkComponent;
+import io.github.agentseek.model.components.CollisionWithPlayerComponent;
+import io.github.agentseek.model.components.DrunkComponent;
 import ryleh.model.components.HealthIntComponent;
 import ryleh.model.components.LurkerComponent;
 import ryleh.model.physics.CircleHitBox;
@@ -20,7 +20,7 @@ import ryleh.view.graphics.enemies.EnemyLurkerGraphicComponent;
 import ryleh.view.graphics.enemies.EnemyShooterGraphicComponent;
 import ryleh.view.graphics.enemies.EnemySpinnerGraphicComponent;
 import ryleh.model.components.ShooterComponent;
-import ryleh.model.components.SpinnerComponent;
+import io.github.agentseek.model.components.SpinnerComponent;
 
 /**
  * A factory class for enemy entities.
@@ -61,10 +61,10 @@ public final class EnemyFactory {
         final Entity e = GameEngine.entityBuilder().type(Type.ENEMY_SHOOTER).position(position)
                 .with(new ShooterComponent(state.getWorld(), state.getPlayer()))
                 .with(new HealthIntComponent(state.getWorld(), ENEMY_HEALTH))
-                .with(new CollisionComponent(state.getWorld(), Type.ENEMY_SHOOTER)).view(shooter)
+                .with(new CollisionWithPlayerComponent(state.getWorld(), Type.ENEMY_SHOOTER)).view(shooter)
                 .bbox(new CircleHitBox(new Circle2d(HitBoxType.ENEMY.getBoxRadius()))).build();
-        state.getWorld().addGameObject(e.getGameObject());
-        state.getView().addGraphicComponent(e.getView());
+        state.getWorld().addGameObject(e.gameObject);
+        state.getView().addGraphicComponent(e.view);
         return e;
     }
 
@@ -81,10 +81,10 @@ public final class EnemyFactory {
         spinner.setZindex(1);
         final Entity e = GameEngine.entityBuilder().type(Type.ENEMY_SPINNER).position(position)
                 .with(new SpinnerComponent(state.getWorld())).with(new HealthIntComponent(state.getWorld(), ENEMY_HEALTH))
-                .with(new CollisionComponent(state.getWorld(), Type.ENEMY_SPINNER)).view(spinner)
+                .with(new CollisionWithPlayerComponent(state.getWorld(), Type.ENEMY_SPINNER)).view(spinner)
                 .bbox(new CircleHitBox(new Circle2d(HitBoxType.ENEMY.getBoxRadius()))).build();
-        state.getWorld().addGameObject(e.getGameObject());
-        state.getView().addGraphicComponent(e.getView());
+        state.getWorld().addGameObject(e.gameObject);
+        state.getView().addGraphicComponent(e.view);
         return e;
     }
 
@@ -101,10 +101,10 @@ public final class EnemyFactory {
         drunk.setZindex(0);
         final Entity e = GameEngine.entityBuilder().type(Type.ENEMY_DRUNK).position(position)
                 .with(new DrunkComponent(state.getWorld())).with(new HealthIntComponent(state.getWorld(), ENEMY_HEALTH))
-                .with(new CollisionComponent(state.getWorld(), Type.ENEMY_DRUNK)).view(drunk)
+                .with(new CollisionWithPlayerComponent(state.getWorld(), Type.ENEMY_DRUNK)).view(drunk)
                 .bbox(new CircleHitBox(new Circle2d(HitBoxType.ENEMY.getBoxRadius()))).build();
-        state.getWorld().addGameObject(e.getGameObject());
-        state.getView().addGraphicComponent(e.getView());
+        state.getWorld().addGameObject(e.gameObject);
+        state.getView().addGraphicComponent(e.view);
         return e;
     }
 
@@ -123,10 +123,10 @@ public final class EnemyFactory {
         final Entity e = GameEngine.entityBuilder().type(Type.ENEMY_LURKER).position(position)
                 .with(new LurkerComponent(state.getWorld(), state.getPlayer()))
                 .with(new HealthIntComponent(state.getWorld(), ENEMY_HEALTH))
-                .with(new CollisionComponent(state.getWorld(), Type.ENEMY_LURKER)).view(lurker)
+                .with(new CollisionWithPlayerComponent(state.getWorld(), Type.ENEMY_LURKER)).view(lurker)
                 .bbox(new CircleHitBox(new Circle2d(HitBoxType.ENEMY.getBoxRadius()))).build();
-        state.getWorld().addGameObject(e.getGameObject());
-        state.getView().addGraphicComponent(e.getView());
+        state.getWorld().addGameObject(e.gameObject);
+        state.getView().addGraphicComponent(e.view);
         return e;
     }
 
@@ -145,10 +145,10 @@ public final class EnemyFactory {
         final Entity e = GameEngine.entityBuilder().type(Type.ENEMY_DRUNKSPINNER).position(position)
                 .with(new DrunkComponent(state.getWorld())).with(new SpinnerComponent(state.getWorld()))
                 .with(new HealthIntComponent(state.getWorld(), ENEMY_HEALTH))
-                .with(new CollisionComponent(state.getWorld(), Type.ENEMY_DRUNKSPINNER)).view(drunkSpinner)
+                .with(new CollisionWithPlayerComponent(state.getWorld(), Type.ENEMY_DRUNKSPINNER)).view(drunkSpinner)
                 .bbox(new CircleHitBox(new Circle2d(HitBoxType.ENEMY.getBoxRadius()))).build();
-        state.getWorld().addGameObject(e.getGameObject());
-        state.getView().addGraphicComponent(e.getView());
+        state.getWorld().addGameObject(e.gameObject);
+        state.getView().addGraphicComponent(e.view);
         return e;
     }
 }

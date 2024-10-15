@@ -1,6 +1,6 @@
 package io.github.agentseek.common
 
-import java.util.*
+import java.util.Random
 import kotlin.math.sin
 
 /**
@@ -50,46 +50,25 @@ object GameMath {
     private const val DEG_TO_INDEX = SIN_COUNT / DEGFULL
 
     /**
-     * A method to generate a random double given a range.
-     *
-     * @param min minimum range value.
-     * @param max maximum range value.
-     * @return a double value randomly generated in that range.
+     * A method to generate a random double given a range between [min] and [max]
      */
-    fun randomInRange(min: Double, max: Double): Double {
-        val range = max - min
-        val scaled = RANDOM.nextDouble() * range
-        return scaled + min // == (rand.nextDouble() * (max-min)) + min;
-    }
+    fun randomInRange(min: Double, max: Double): Double =
+        (RANDOM.nextDouble() * (max - min)) + min
 
     /**
-     * A method to generate a random integer given a range.
-     *
-     * @param min minimum range value.
-     * @param max maximum range value.
-     * @return an integer value randomly generated in that range.
+     * A method to generate a random integer given a range between [min] and [max]
      */
-    fun randomInt(min: Int, max: Int): Int {
-        val range = max - min
-        val scaled = RANDOM.nextInt() * range
-        return scaled + min // == (rand.nextDouble() * (max-min)) + min;
-    }
+    fun randomInt(min: Int, max: Int): Int =
+        (RANDOM.nextInt() * (max - min)) + min
 
     /**
-     * A method to generate a random boolean given a chance.
-     *
-     * @param chance chance to get a true value.
-     * @return a boolean value randomly generated using the given chance.
+     * A method to generate a true value randomly if a given [chance].
      */
-    fun randomBoolean(chance: Double): Boolean {
-        return if (randomInRange(0.0, 1.0) < chance) true else false
-    }
+    fun randomSampling(chance: Double): Boolean =
+        randomInRange(0.0, 1.0) < chance
 
     /**
-     * A method to generate a raw noise for 1D Perlin noise generation.
-     *
-     * @param x double value used as dimension argument.
-     * @return raw noise value for given dimension argument.
+     * A method to generate a raw noise for 1D Perlin noise generation, using [x] as dimension argument.
      */
     fun rawNoise(x: Double): Double {
         val n = (x.toInt() shl 13) xor (x.toInt())
@@ -97,10 +76,7 @@ object GameMath {
     }
 
     /**
-     * A method to generate a smooth noise using 1D Perlin noise generation.
-     *
-     * @param x double value used as dimension argument.
-     * @return smooth noise value for given dimension argument.
+     * A method to generate a smooth noise using 1D Perlin noise generation, using [x] as dimension argument.
      */
     fun smoothNoise(x: Double): Double {
         val left = rawNoise(x - 1.0f)
@@ -109,51 +85,29 @@ object GameMath {
     }
 
     /**
-     * A method to get sin in radians value from a lookup table given an angle.
-     *
-     * @param degrees angle in degrees.
-     * @return the sin in radians from a lookup table.
+     * A method to get sin in radians value from a lookup table given an angle in [degrees].
      */
-    fun sinDeg(degrees: Double): Double {
-        return Sin.TABLE[(degrees * DEG_TO_INDEX).toInt() and SIN_MASK]
-    }
+    fun sinDeg(degrees: Double): Double =
+        Sin.TABLE[(degrees * DEG_TO_INDEX).toInt() and SIN_MASK]
 
     /**
-     * A method to get cos in radians value from a lookup table given an angle.
-     *
-     * @param degrees angle in degrees.
-     * @return the cos in radians from a lookup table.
+     * A method to get cos in radians value from a lookup table given an angle in [degrees]
      */
-    fun cosDeg(degrees: Double): Double {
-        return Sin.TABLE[((degrees + 90) * DEG_TO_INDEX).toInt() and SIN_MASK]
-    }
+    fun cosDeg(degrees: Double): Double =
+        Sin.TABLE[((degrees + 90) * DEG_TO_INDEX).toInt() and SIN_MASK]
 
     /**
-     * A method to convert an angle from radians to degrees.
-     *
-     * @param angle angle value in radians.
-     * @return angle value in degrees.
+     * A method to convert an [angle] from radians to degrees.
      */
-    fun toDegrees(angle: Double): Double {
-        return Math.toDegrees(angle)
-    }
+    fun toDegrees(angle: Double): Double =
+        Math.toDegrees(angle)
 
     /**
-     * A method to convert an angle from degrees to radians.
-     *
-     * @param angle angle value in degrees.
-     * @return angle value in radians.
+     * A method to convert an [angle] from degrees to radians.
      */
-    fun toRadians(angle: Double): Double {
-        return Math.toRadians(angle)
-    }
+    fun toRadians(angle: Double): Double =
+        Math.toRadians(angle)
 
-    /**
-     * A method to convert from P2d to Point2D.
-     *
-     * @param point P2d value to convert.
-     * @return a Point2D equivalent value.
-     */
     /**
      * Class used for sin lookup table generation.
      */

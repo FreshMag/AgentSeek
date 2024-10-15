@@ -1,13 +1,14 @@
 package ryleh.controller;
 
+import io.github.agentseek.controller.Entity;
 import javafx.scene.Scene;
 import ryleh.controller.core.GameEngine;
 import ryleh.controller.core.GameState;
-import ryleh.controller.events.NewLevelEvent;
+import io.github.agentseek.controller.events.NewLevelEvent;
 import ryleh.controller.levels.LevelHandler;
 import ryleh.controller.levels.LevelHandlerImpl;
 import ryleh.model.World;
-import ryleh.model.components.PlayerComponent;
+import io.github.agentseek.model.components.PlayerComponent;
 import ryleh.model.components.ShootingComponent;
 import ryleh.model.physics.Direction;
 import ryleh.view.graphics.PlayerGraphicComponent;

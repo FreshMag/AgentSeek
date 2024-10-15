@@ -1,91 +1,61 @@
-package ryleh.model
+package io.github.agentseek.model
 
 
 import io.github.agentseek.common.Point2d
-import java.util.*
+import io.github.agentseek.model.components.Component
+import io.github.agentseek.model.physics.HitBox
 
 /**
  * An interface to handle an object of the game world.
  */
 interface GameObject {
-    /**
-     * This method is called when the object is added to the world.
-     *
-     * @param world World to which this object is added.
-     */
-    fun onAdded(world: World?)
-
-    /**
-     * This method is called once every update. This will update every component
-     * added to this object.
-     *
-     * @param deltaTime Time elapsed since last update.
-     */
-    fun onUpdate(deltaTime: Double)
 
     /**
      * This object's current position.
-     *
-     * @return Object's current position.
      */
-    fun getPosition(): Point2d?
+    var position: Point2d
 
     /**
-     * Sets this object's current position.
-     *
-     * @param position Position to be set.
+     * Gets the [List] of [Component]s added to this object.
      */
-    fun setPosition(position: Point2d?)
+    var components: List<Component>
 
     /**
-     * Gets the list of components added to this object.
-     *
-     * @return List of components.
+     * This object's [Type].
      */
-    val components: List<Any?>?
+    val type: Type
 
     /**
-     * Gets component of a certain class that extends AbstractComponent, or an empty
-     * Optional if this object doesn't have that component.
-     *
-     * @param type Type of the component.
-     * @return Optional of Component if contains that component, or an empty
-     * Optional otherwise.
+     * This object's [HitBox].
      */
-    fun getComponent(type: Class<out AbstractComponent?>?): Optional<out AbstractComponent?>?
+    val hitBox: HitBox
 
     /**
-     * Adds a component to this object.
-     *
-     * @param component Component to be added.
+     * This method is called when the object is added to the [world].
      */
-    fun addComponent(component: AbstractComponent?)
+    fun onAdded(world: World)
 
     /**
-     * Gets this object's type.
-     *
-     * @return Type of this object.
+     * This method is called once every update. This will update every component
+     * added to this object. [deltaTime] is the time elapsed since last update.
      */
-    fun getType(): Type?
+    fun onUpdate(deltaTime: Double)
+
 
     /**
-     * Sets this object's type.
-     *
-     * @param type Type to be set.
+     * Adds a [component] to this object.
      */
-    fun setType(type: Type?)
-
-    /**
-     * Sets this object's hitbox.
-     *
-     * @param box Hitbox set.
-     */
-    fun setHitBox(box: HitBox?)
-
-    /**
-     * Gets this object's hitbox.
-     *
-     * @return Hitbox of this object.
-     */
-    fun getHitBox(): HitBox?
+    fun addComponent(component: Component)
 }
+
+/**
+ * Gets component of a certain class that extends [Component], or `null` if this object doesn't have that
+ * type of component.
+ */
+inline fun <reified T : Component> GameObject.getComponent(): T? =
+    components.find { it is T } as? T
+
+/**
+ * Returns `true` if this [GameObject] is the player.
+ */
+fun GameObject.isPlayer(): Boolean = type == Type.PLAYER

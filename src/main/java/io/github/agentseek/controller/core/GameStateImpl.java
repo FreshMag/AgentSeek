@@ -8,7 +8,7 @@ import java.util.Optional;
 import javafx.stage.Stage;
 import ryleh.common.GameMath;
 import ryleh.common.Point2d;
-import ryleh.controller.Entity;
+import io.github.agentseek.controller.Entity;
 import ryleh.controller.InputController;
 import ryleh.controller.InputControllerImpl;
 import ryleh.controller.core.factories.BasicFactory;
@@ -17,9 +17,9 @@ import ryleh.controller.levels.LevelHandler;
 import ryleh.controller.levels.LevelHandlerImpl;
 import ryleh.model.Type;
 import ryleh.model.World;
-import ryleh.model.WorldImpl;
+import io.github.agentseek.model.WorldImpl;
 import ryleh.view.ViewHandlerImpl;
-import ryleh.model.components.PlayerComponent;
+import io.github.agentseek.model.components.PlayerComponent;
 /**
  * This is an implementation of the GameState interface.
  */
@@ -76,11 +76,11 @@ public class GameStateImpl implements GameState {
         view.getGraphicComponents().clear();
         view.displayLevelScene();
         levelHandler.generateNewLevel();
-        view.addGraphicComponent(player.getView());
-        world.addGameObject(player.getGameObject());
+        view.addGraphicComponent(player.view);
+        world.addGameObject(player.gameObject);
         entities.add(player);
 
-        ((PlayerComponent) player.getGameObject().getComponent(PlayerComponent.class).get())
+        ((PlayerComponent) player.gameObject.getComponent(PlayerComponent.class).get())
                 .setPosition(levelHandler.getPosition(levelHandler.getPlayerSpawn()));
 
         entities.addAll(levelHandler.getEntities());
@@ -92,7 +92,7 @@ public class GameStateImpl implements GameState {
         Collections.sort(entities, new Comparator<Entity>() {
             @Override
             public int compare(final Entity o1, final Entity o2) {
-                return o1.getView().getZindex() - o2.getView().getZindex();
+                return o1.view.getZindex() - o2.view.getZindex();
             }
         });
         input.initInput();
@@ -106,8 +106,8 @@ public class GameStateImpl implements GameState {
     @Override
     public void removeEntity(final Entity entity) {
         entities.remove(entity);
-        view.removeGraphicComponent(entity.getView());
-        world.removeGameObject(entity.getGameObject());
+        view.removeGraphicComponent(entity.view);
+        world.removeGameObject(entity.gameObject);
     }
 
     /**
@@ -117,9 +117,9 @@ public class GameStateImpl implements GameState {
     public void updateState(final double dt) {
         input.updateInput();
         for (final Entity object : this.entities) {
-            object.getGameObject().onUpdate(dt);
-            object.getView().render(GameMath.toPoint2D(new Point2d(object.getGameObject().getPosition().getX(),
-                    object.getGameObject().getPosition().getY())), dt);
+            object.gameObject.onUpdate(dt);
+            object.view.render(GameMath.toPoint2D(new Point2d(object.gameObject.getPosition().getX(),
+                    object.gameObject.getPosition().getY())), dt);
         }
         view.onUpdate();
         eventHandler.checkEvents();
@@ -163,7 +163,7 @@ public class GameStateImpl implements GameState {
      */
     @Override
     public Optional<Entity> getEntityByType(final Type type) {
-        return entities.stream().filter(i -> i.getGameObject().getType().equals(type)).findAny();
+        return entities.stream().filter(i -> i.gameObject.getType().equals(type)).findAny();
     }
 
     /**

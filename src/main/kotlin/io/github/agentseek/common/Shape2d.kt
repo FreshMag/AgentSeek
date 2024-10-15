@@ -5,39 +5,23 @@ package io.github.agentseek.common
  */
 interface Shape2d {
     /**
-     * Checks if the point is contained within the Shape2d.
-     *
-     * @param point Point2d value.
-     * @return boolean value.
+     * Returns the center of this [Shape2d].
+     */
+    var center: Point2d
+    /**
+     * The [Shape2d] position in the 2D space, represented as a [Point2d]. Can be either the center of a circle or
+     * a top left corner of a rectangle.
+    */
+    var position: Point2d
+
+    /**
+     * Checks if the [point] is contained within the [Shape2d].
      */
     fun contains(point: Point2d): Boolean
 
     /**
-     * Sets the Shape2d position to new value.
-     *
-     * @param position Point2d value.
-     */
-    fun setPosition(position: Point2d)
-
-    /**
-     * Gets the Shape2d position.
-     *
-     * @return Point2d value.
-     */
-    fun getPosition(): Point2d
-
-    /**
-     * Check if two Shape2d instances intersect.
-     *
-     * @param shape Shape2d value.
-     * @return boolean value.
+     * Check if this [Shape2d] intersects with [shape].
      */
     fun intersect(shape: Shape2d): Boolean
 
-    /**
-     * Return the center of Shape2d.
-     *
-     * @return Point2d value.
-     */
-    fun getCenter(): Point2d
 }

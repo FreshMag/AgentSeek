@@ -1,13 +1,11 @@
 package io.github.agentseek.common
 
 /**
- * This interface represents a Timer used to measure a time range.
+ * This interface represents a Timer used to measure a time range in milliseconds.
  */
 interface Timer {
     /**
      * Checks if the timer is elapsed.
-     *
-     * @return True if the time is elapsed, false otherwise.
      */
     fun isElapsed(): Boolean
 
@@ -17,9 +15,7 @@ interface Timer {
     fun startTimer()
 
     /**
-     * Sets a new Wait time.
-     *
-     * @param wait Time, in milliseconds, to wait.
+     * Sets a new [wait] time in milliseconds.
      */
     fun setWaitTime(wait: Double)
 }

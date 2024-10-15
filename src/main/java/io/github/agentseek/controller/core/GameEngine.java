@@ -1,12 +1,5 @@
-package ryleh.controller.core;
+package io.github.agentseek.controller.core;
 
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 import ryleh.view.menu.RylehGameOverMenu;
 
 /**

@@ -4,15 +4,15 @@ import ryleh.common.Circle2d;
 import ryleh.common.GameMath;
 import ryleh.common.Point2d;
 import ryleh.common.Vector2d;
-import ryleh.controller.Entity;
+import io.github.agentseek.controller.Entity;
 import ryleh.controller.core.GameEngine;
 import ryleh.controller.core.GameState;
 import ryleh.model.Type;
 import ryleh.model.components.BulletComponent;
-import ryleh.model.components.CollisionComponent;
+import io.github.agentseek.model.components.CollisionWithPlayerComponent;
 import ryleh.model.components.DoorComponent;
 import ryleh.model.components.HealthIntComponent;
-import ryleh.model.components.PlayerComponent;
+import io.github.agentseek.model.components.PlayerComponent;
 import ryleh.model.components.ShootingComponent;
 import ryleh.model.physics.CircleHitBox;
 import ryleh.model.physics.HitBoxType;
@@ -62,10 +62,10 @@ public final class BasicFactory {
                 .with(new PlayerComponent(state.getWorld(), 1000)).with(new HealthIntComponent(state.getWorld(), 3))
                 .with(new ShootingComponent(state.getWorld(), 1.0)).view(player)
                 .bbox(new CircleHitBox(new Circle2d(HitBoxType.PLAYER.getBoxRadius()))).build();
-        state.getWorld().addGameObject(e.getGameObject());
-        state.getView().addGraphicComponent(e.getView());
-        ((PlayerGraphicComponent) e.getView()).setDirection(
-                ((PlayerComponent) e.getGameObject().getComponent(PlayerComponent.class).get()).getDirection());
+        state.getWorld().addGameObject(e.gameObject);
+        state.getView().addGraphicComponent(e.view);
+        ((PlayerGraphicComponent) e.view).setDirection(
+                ((PlayerComponent) e.gameObject.getComponent(PlayerComponent.class).get()).getDirection());
         return e;
     }
 
@@ -87,8 +87,8 @@ public final class BasicFactory {
         final Entity e = GameEngine.entityBuilder().type(bulletType).position(origin)
                 .with(new BulletComponent(state.getWorld(), origin, direction)).view(bullet)
                 .bbox(new CircleHitBox(new Circle2d(HitBoxType.BULLET.getBoxRadius()))).build();
-        state.getWorld().addGameObject(e.getGameObject());
-        state.getView().addGraphicComponent(e.getView());
+        state.getWorld().addGameObject(e.gameObject);
+        state.getView().addGraphicComponent(e.view);
         return e;
     }
 
@@ -105,8 +105,8 @@ public final class BasicFactory {
         rock.setZindex(1);
         final Entity e = GameEngine.entityBuilder().type(Type.ROCK).position(position).view(rock)
                 .bbox(new CircleHitBox(HitBoxType.ROCK.getBoxRadius())).build();
-        state.getWorld().addGameObject(e.getGameObject());
-        state.getView().addGraphicComponent(e.getView());
+        state.getWorld().addGameObject(e.gameObject);
+        state.getView().addGraphicComponent(e.view);
         return e;
     }
 
@@ -122,10 +122,10 @@ public final class BasicFactory {
         final ItemGraphicComponent item = new ItemGraphicComponent(GameMath.toPoint2D(position));
         item.setZindex(0);
         final Entity e = GameEngine.entityBuilder().type(Type.ITEM).position(position)
-                .with(new CollisionComponent(state.getWorld(), Type.ITEM)).view(item)
+                .with(new CollisionWithPlayerComponent(state.getWorld(), Type.ITEM)).view(item)
                 .bbox(new CircleHitBox(new Circle2d(HitBoxType.ITEM.getBoxRadius()))).build();
-        state.getWorld().addGameObject(e.getGameObject());
-        state.getView().addGraphicComponent(e.getView());
+        state.getWorld().addGameObject(e.gameObject);
+        state.getView().addGraphicComponent(e.view);
         return e;
     }
 
@@ -141,10 +141,10 @@ public final class BasicFactory {
         final FireGraphicComponent fire = new FireGraphicComponent(GameMath.toPoint2D(position));
         fire.setZindex(1);
         final Entity e = GameEngine.entityBuilder().type(Type.FIRE).position(position)
-                .with(new CollisionComponent(state.getWorld(), Type.FIRE)).view(fire)
+                .with(new CollisionWithPlayerComponent(state.getWorld(), Type.FIRE)).view(fire)
                 .bbox(new CircleHitBox(new Circle2d(HitBoxType.FIRE.getBoxRadius()))).build();
-        state.getWorld().addGameObject(e.getGameObject());
-        state.getView().addGraphicComponent(e.getView());
+        state.getWorld().addGameObject(e.gameObject);
+        state.getView().addGraphicComponent(e.view);
         return e;
     }
 
@@ -162,8 +162,8 @@ public final class BasicFactory {
         final Entity e = GameEngine.entityBuilder().type(Type.DOOR).position(position).view(door)
                 .with(new DoorComponent(state.getWorld(), door.getTotalAnimDuration()))
                 .bbox(new CircleHitBox(new Circle2d(HitBoxType.DOOR.getBoxRadius()))).build();
-        state.getWorld().addGameObject(e.getGameObject());
-        state.getView().addGraphicComponent(e.getView());
+        state.getWorld().addGameObject(e.gameObject);
+        state.getView().addGraphicComponent(e.view);
         return e;
     }
 }
