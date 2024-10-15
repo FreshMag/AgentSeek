@@ -8,13 +8,13 @@ import java.util.Random;
 import ryleh.common.Point2d;
 import ryleh.common.Pair;
 import ryleh.common.Rectangle2d;
-import ryleh.controller.Entity;
+import io.github.agentseek.controller.Entity;
 import ryleh.controller.EntityImpl;
 import ryleh.controller.core.GameEngine;
 import ryleh.controller.core.GameState;
 import ryleh.controller.core.factories.BasicFactory;
 import ryleh.controller.core.factories.EnemyFactory;
-import ryleh.model.LevelDesigner;
+import io.github.agentseek.world.LevelDesigner;
 import ryleh.model.Type;
 import ryleh.model.World;
 /**
@@ -212,7 +212,7 @@ public class LevelHandlerImpl implements LevelHandler {
      */
     private void addEntity(final Pair<Integer, Integer> temp, final Entity entity) {
         spawnPoints.put(temp, entity);
-        entity.getGameObject().setPosition(getPosition(temp));
+        entity.gameObject.setPosition(getPosition(temp));
     }
 
     /**

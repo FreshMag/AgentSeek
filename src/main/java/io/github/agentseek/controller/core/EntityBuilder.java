@@ -1,7 +1,7 @@
 package ryleh.controller.core;
 
 import ryleh.common.Point2d;
-import ryleh.controller.Entity;
+import io.github.agentseek.controller.Entity;
 import ryleh.model.Type;
 import ryleh.model.components.AbstractComponent;
 import ryleh.model.physics.HitBox;

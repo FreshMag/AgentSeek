@@ -1,4 +1,4 @@
-package ryleh.controller.events;
+package io.github.agentseek.controller.events;
 /**
  * This interface manages Event instances.
  */
