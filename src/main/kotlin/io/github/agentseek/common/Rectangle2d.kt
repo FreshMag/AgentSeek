@@ -9,14 +9,14 @@ class Rectangle2d : Shape2d {
      *
      * @return Height of the rectangle.
      */
-    val height: Int
+    private val height: Int
 
     /**
      * Gets Width of the rectangle.
      *
      * @return Width of the rectangle.
      */
-    val width: Int
+    private val width: Int
     /**
      * Gets upper left vertex of the rectangle.
      *
@@ -84,8 +84,8 @@ class Rectangle2d : Shape2d {
     /**
      * {@inheritDoc}
      */
-    override fun contains(position: Point2d): Boolean {
-        return position.x > upperLeft.x && position.x < upperRight.x && position.y > upperLeft.y && position.y < lowerLeft.y
+    override fun contains(point: Point2d): Boolean {
+        return point.x > upperLeft.x && point.x < upperRight.x && point.y > upperLeft.y && point.y < lowerLeft.y
     }
 
     /**

@@ -3,7 +3,7 @@ package io.github.agentseek.common
 import kotlin.math.sqrt
 
 /**
- * Two dimensional vector.
+ * Two-dimensional vector.
  * @param x Component.
  * @param y Component.
  * @constructor empty

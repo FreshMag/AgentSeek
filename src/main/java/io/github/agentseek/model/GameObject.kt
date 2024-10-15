@@ -1,93 +1,91 @@
-package ryleh.model;
+package ryleh.model
 
-import java.util.List;
-import java.util.Optional;
-import ryleh.common.Point2d;
-import ryleh.model.components.AbstractComponent;
-import ryleh.model.physics.HitBox;
+
+import io.github.agentseek.common.Point2d
+import java.util.*
 
 /**
  * An interface to handle an object of the game world.
  */
-public interface GameObject {
+interface GameObject {
     /**
      * This method is called when the object is added to the world.
-     * 
+     *
      * @param world World to which this object is added.
      */
-    void onAdded(World world);
+    fun onAdded(world: World?)
 
     /**
      * This method is called once every update. This will update every component
      * added to this object.
-     * 
+     *
      * @param deltaTime Time elapsed since last update.
      */
-    void onUpdate(double deltaTime);
+    fun onUpdate(deltaTime: Double)
 
     /**
      * This object's current position.
-     * 
+     *
      * @return Object's current position.
      */
-    Point2d getPosition();
+    fun getPosition(): Point2d?
 
     /**
      * Sets this object's current position.
-     * 
+     *
      * @param position Position to be set.
      */
-    void setPosition(Point2d position);
+    fun setPosition(position: Point2d?)
 
     /**
      * Gets the list of components added to this object.
-     * 
+     *
      * @return List of components.
      */
-    List<AbstractComponent> getComponents();
+    val components: List<Any?>?
 
     /**
      * Gets component of a certain class that extends AbstractComponent, or an empty
      * Optional if this object doesn't have that component.
-     * 
+     *
      * @param type Type of the component.
      * @return Optional of Component if contains that component, or an empty
-     *         Optional otherwise.
+     * Optional otherwise.
      */
-    Optional<? extends AbstractComponent> getComponent(Class<? extends AbstractComponent> type);
+    fun getComponent(type: Class<out AbstractComponent?>?): Optional<out AbstractComponent?>?
 
     /**
      * Adds a component to this object.
-     * 
+     *
      * @param component Component to be added.
      */
-    void addComponent(AbstractComponent component);
+    fun addComponent(component: AbstractComponent?)
 
     /**
      * Gets this object's type.
-     * 
+     *
      * @return Type of this object.
      */
-    Type getType();
+    fun getType(): Type?
 
     /**
      * Sets this object's type.
-     * 
+     *
      * @param type Type to be set.
      */
-    void setType(Type type);
+    fun setType(type: Type?)
 
     /**
      * Sets this object's hitbox.
-     * 
+     *
      * @param box Hitbox set.
      */
-    void setHitBox(HitBox box);
+    fun setHitBox(box: HitBox?)
 
     /**
      * Gets this object's hitbox.
-     * 
+     *
      * @return Hitbox of this object.
      */
-    HitBox getHitBox();
+    fun getHitBox(): HitBox?
 }
