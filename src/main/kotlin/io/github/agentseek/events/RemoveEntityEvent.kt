@@ -16,7 +16,7 @@ class RemoveEntityEvent(private var target: GameObject) : Event {
      * Removes the [target] GameObject from the list of entities of the [state].
      */
     private fun removeEntity(target: GameObject, state: GameState) {
-        val removable = state.entities.firstOrNull {
+        val removable = state.gameObjects.firstOrNull {
             it == target
         }
         removable?.let {
