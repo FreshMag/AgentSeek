@@ -1,10 +1,12 @@
 package io.github.agentseek.util
 
 import io.github.agentseek.core.engine.GameEngine
+import io.github.agentseek.util.factories.SceneFactory
 import kotlin.system.exitProcess
 
 object GameREPL {
     private var isRunning = false
+    private var dummyComponent: DummyComponent? = null
     private fun parseLine(line: String) {
         when (line) {
             "start" -> {
@@ -41,6 +43,9 @@ object GameREPL {
         println("\t - Digit 'start' to make the loop run indefinitely")
         println("\t - Digit 'resume' after having it paused to resume")
         println("\t - Digit 'exit' to exit the application")
+        val (replScene, dummyComponent) = SceneFactory.replScene()
+        this.dummyComponent = dummyComponent
+        GameEngine.loadScene(replScene)
         while (true) {
             blockAndWaitLine()
         }
