@@ -40,6 +40,7 @@ object GameREPL {
         println("\t - Press ENTER to do one iteration of the loop or to stop an ongoing loop")
         println("\t - Digit 'start' to make the loop run indefinitely")
         println("\t - Digit 'resume' after having it paused to resume")
+        println("\t - Digit 'exit' to exit the application")
         while (true) {
             blockAndWaitLine()
         }
