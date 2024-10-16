@@ -12,19 +12,26 @@ import kotlin.time.Duration.Companion.milliseconds
 object GameEngine {
 
     private val logger = KotlinLogging.logger {}
-    private val STANDARD_STARTING_PERIOD = 20.milliseconds
-    private val loop: GameLoop = GameLoop(STANDARD_STARTING_PERIOD)
+    private val STANDARD_STARTING_PERIOD = 100.milliseconds
     private val state: GameState by lazy<GameState> { TODO() }
     val eventSystem: EventHandler by lazy { EventHandler(state) }
+
+    /**
+     * The main loop of the game engine
+     */
+    private val loop: GameLoop by lazy {
+        GameLoop(STANDARD_STARTING_PERIOD) { dt ->
+            log("Test. Delta Time: $dt")
+            // state.updateState(dt)
+            // eventSystem.handleEvents()
+        }
+    }
 
     /**
      * Initialize the game loop
      */
     fun start() {
-        loop.start { dt ->
-            state.updateState(dt)
-            eventSystem.handleEvents()
-        }
+        loop.start()
     }
 
     /**
@@ -32,6 +39,13 @@ object GameEngine {
      */
     fun pause() {
         loop.pause()
+    }
+
+    /**
+     * Resumes the game loop
+     */
+    fun resume() {
+        loop.resume()
     }
 
     /**
