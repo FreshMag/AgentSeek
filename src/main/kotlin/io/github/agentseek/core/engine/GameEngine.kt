@@ -1,9 +1,8 @@
 package io.github.agentseek.core.engine
 
 import io.github.agentseek.core.Game
-import io.github.agentseek.events.EventHandler
+import io.github.agentseek.core.GameImpl
 import io.github.oshai.kotlinlogging.KotlinLogging
-import kotlin.system.exitProcess
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
@@ -13,8 +12,7 @@ object GameEngine {
 
     private val logger = KotlinLogging.logger {}
     private val STANDARD_STARTING_PERIOD = 100.milliseconds
-    private val state: Game by lazy<Game> { TODO() }
-    val eventSystem: EventHandler by lazy { EventHandler(state) }
+    private val state: Game by lazy<Game> { GameImpl() }
 
     /**
      * The main loop of the game engine
@@ -22,8 +20,7 @@ object GameEngine {
     private val loop: GameLoop by lazy {
         GameLoop(STANDARD_STARTING_PERIOD) { dt ->
             log("Test. Delta Time: $dt")
-            // state.updateState(dt)
-            // eventSystem.handleEvents()
+            state.updateState(dt)
         }
     }
 
@@ -49,11 +46,10 @@ object GameEngine {
     }
 
     /**
-     * Stops the game loop and the whole application
+     * Stops the game loop
      */
     fun stop() {
         loop.stop()
-        exitProcess(0)
     }
 
     /**

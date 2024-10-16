@@ -10,17 +10,12 @@ interface Game {
     /**
      * Reference to current player.
      */
-    val player: GameObject
+    val player: GameObject?
 
     /**
      * Gets the [World] representing the domain of the game.
      */
     val world: World
-
-    /**
-     * Gets current active [GameObject]s.
-     */
-    val gameObjects: Iterable<GameObject>
 
     /**
      * Checks if player has won or lost.
@@ -31,21 +26,6 @@ interface Game {
      * Checks if game is over and if player has won or lost.
      */
     val isGameOver: Boolean
-
-    /**
-     * Add a [GameObject] to the current GameState.
-     */
-    fun addGameObject(gameObject: GameObject)
-
-    /**
-     * Removes a [GameObject] to current GameState.
-     */
-    fun removeGameObject(gameObject: GameObject)
-
-    /**
-     * Generates a new Level and spawns all entities inside it, player too.
-     */
-    fun generateNewLevel()
 
     /**
      * Updates current GameState, passing the [deltaTime] of time elapsed since last update.
