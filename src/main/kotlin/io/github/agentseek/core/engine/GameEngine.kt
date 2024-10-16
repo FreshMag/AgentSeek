@@ -31,7 +31,7 @@ object GameEngine {
     }
 
     /**
-     * Initialize the game loop
+     * Starts a non-blocking game loop
      */
     fun start() {
         loop.start()
@@ -63,5 +63,20 @@ object GameEngine {
      */
     fun log(message: String) {
         logger.debug { message }
+    }
+
+    /**
+     * Does only one iteration of the game loop
+     */
+    fun doOne() {
+        loop.doOne(STANDARD_STARTING_PERIOD)
+    }
+
+    /**
+     * Stops the game loop and starts a new scene from scratch
+     */
+    fun reset() {
+        stop()
+        loadScene(Game.emptyScene())
     }
 }

@@ -13,6 +13,8 @@ class GameLoop(startingPeriod: Duration, private val loopBehavior: (Duration) ->
     private var isRunning = true
     private var isPaused = false
     private var job: Job? = null
+    private var currentFrameTime: Long = 0L
+    private var lastFrameTime: Long = 0L
 
     fun start(): Job? {
         isRunning = true
@@ -33,17 +35,22 @@ class GameLoop(startingPeriod: Duration, private val loopBehavior: (Duration) ->
         isPaused = false
     }
 
-    private suspend fun gameLoop() {
-        var lastFrameTime = nanoTime()
-        while (isRunning) {
-            val currentFrameTime = nanoTime()
-            val deltaTime = (currentFrameTime - lastFrameTime) / 1_000_000.0 // Convert nanoseconds to milliseconds
-            lastFrameTime = currentFrameTime
-            val frameTime = measureTimeMillis {
-                if (!isPaused) {
-                    loopBehavior(deltaTime.milliseconds)
-                }
+    fun doOne(artificialDeltaTime: Duration): Long {
+        val frameTime = measureTimeMillis {
+            if (!isPaused) {
+                loopBehavior(artificialDeltaTime)
             }
+        }
+        return frameTime
+    }
+
+    private suspend fun gameLoop() {
+        lastFrameTime = nanoTime()
+        while (isRunning) {
+            currentFrameTime = nanoTime()
+            val deltaTime = (currentFrameTime - lastFrameTime) / 1_000_000.0 // Convert nanoseconds to milliseconds
+            val frameTime = doOne(deltaTime.milliseconds)
+            lastFrameTime = currentFrameTime
             delay((period - frameTime).coerceAtLeast(0L))
         }
     }
