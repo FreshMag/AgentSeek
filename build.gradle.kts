@@ -11,6 +11,8 @@ repositories {
 val jUnitVersion = "5.10.3"
 
 dependencies {
+    implementation("io.github.oshai:kotlin-logging-jvm:7.0.0")
+
     testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jUnitVersion")
     testImplementation("io.kotest:kotest-runner-junit5:$version")
