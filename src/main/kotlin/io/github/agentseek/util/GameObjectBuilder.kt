@@ -1,15 +1,18 @@
-package io.github.agentseek.core
+package io.github.agentseek.util
 
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.components.Component
+import io.github.agentseek.core.GameObject
+import io.github.agentseek.core.GameObjectImpl
 import io.github.agentseek.physics.CircleHitBox
 import io.github.agentseek.physics.HitBox
 import io.github.agentseek.view.Renderer
+import io.github.agentseek.world.World
 
 /**
  * Shorthand build to construct [GameObject]s
  */
-class GameObjectBuilder {
+class GameObjectBuilder(private val world: World) {
     /**
      * This object's current position.
      */
@@ -58,7 +61,7 @@ class GameObjectBuilder {
 
     @Throws(IllegalStateException::class)
     fun build(): GameObject {
-        val gameObject = GameObjectImpl(renderer, hitBox)
+        val gameObject = GameObjectImpl(renderer, hitBox, world)
         gameObject.position = position
         components.forEach { gameObject.addComponent(it) }
         return gameObject

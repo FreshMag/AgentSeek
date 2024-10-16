@@ -11,7 +11,7 @@ import kotlin.time.DurationUnit
 /**
  * Main component of a Game object of type PLAYER. Specifies how player's movement works.
  */
-class PlayerComponent(world: World, private val speed: Int) : AbstractComponent(world) {
+class PlayerComponent(gameObject: GameObject, private val speed: Int) : AbstractComponent(gameObject) {
     private var velocity: Vector2d = Vector2d.zero()
     private var lastPos: Point2d = Point2d.origin()
     var direction: Direction = Direction.IDLE
@@ -24,8 +24,7 @@ class PlayerComponent(world: World, private val speed: Int) : AbstractComponent(
     private var lastDirection: Direction = Direction.IDLE
     private var blocked: Direction = Direction.IDLE
 
-    override fun onAdded(gameObject: GameObject) {
-        super.onAdded(gameObject)
+    override fun init() {
         this.move(0)
     }
 

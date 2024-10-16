@@ -8,9 +8,13 @@ import kotlin.time.Duration
  */
 interface Component {
     /**
+     * GameObject to which this component is added
+     */
+    val gameObject: GameObject
+    /**
      * This method is called when this component is added to a [GameObject].
      */
-    fun onAdded(gameObject: GameObject)
+    fun init()
 
     /**
      * This method is called once every update of GameState. [deltaTime] is the time elapsed since last update.

@@ -4,6 +4,7 @@ import io.github.agentseek.common.Point2d
 import io.github.agentseek.common.Shape2d
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.events.Event
+import io.github.agentseek.util.GameObjectBuilder
 
 /**
  * Game's world. The World represents the domain of the game, containing all game objects and the bounds where the
@@ -45,5 +46,11 @@ interface World {
     /**
      * Notify an [event] to the EventListener.
      */
-    fun notifyEvent(event: Event)
+    fun notifyEvent(event: Event, source: GameObject)
+
+    /**
+     * Instantiates a new [GameObject] builder related to this world
+     */
+    fun gameObjectBuilder(): GameObjectBuilder = GameObjectBuilder(this)
+
 }

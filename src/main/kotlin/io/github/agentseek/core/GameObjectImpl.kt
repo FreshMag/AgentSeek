@@ -15,20 +15,18 @@ import kotlin.time.Duration
 class GameObjectImpl(
     override var renderer: Renderer = TODO(),
     override val hitBox: HitBox = CircleHitBox(DEFAULT_HITBOX_RADIUS),
+    override val world: World
 ) : GameObject {
-    private var id: String? = null
+    private val id: String = world.generateId("gameObject")
     override var position: Point2d = Point2d(0.0, 0.0)
         set(value) {
             hitBox.form.position = value
             field = value
         }
     override var components: List<Component> = ArrayList()
-    private var world: World? = null
 
-    override fun onAdded(world: World) {
-        this.id = world.generateId("gameObject")
+    init {
         hitBox.form.position = position
-        this.world = world
     }
 
     override fun onUpdate(deltaTime: Duration) {
@@ -40,7 +38,7 @@ class GameObjectImpl(
     override fun addComponent(component: Component) {
         check(!components.any { component.javaClass.isInstance(it) })
         components += component
-        component.onAdded(this)
+        component.init()
     }
 
     override fun spawn(gameObject: GameObject) {
