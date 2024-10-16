@@ -15,7 +15,6 @@ class GameImpl : Game, EventListener {
     override var isGameOver: Boolean = false
     private val eventHandler: EventHandler = EventHandler(this)
 
-
     override fun updateState(deltaTime: Duration) {
         world.gameObjects.forEach { it.onUpdate(deltaTime) }
         eventHandler.handleEvents()
