@@ -22,10 +22,12 @@ class GameObjectImpl(
             field = value
         }
     override var components: List<Component> = ArrayList()
+    private var world: World? = null
 
     override fun onAdded(world: World) {
         this.id = world.generateId("gameObject")
         hitBox.form.position = position
+        this.world = world
     }
 
     override fun onUpdate(deltaTime: Double) {
@@ -38,6 +40,14 @@ class GameObjectImpl(
         check(!components.any { component.javaClass.isInstance(it) })
         components += component
         component.onAdded(this)
+    }
+
+    override fun spawn(gameObject: GameObject) {
+        world?.addGameObject(gameObject)
+    }
+
+    override fun delete() {
+        world?.removeGameObject(this)
     }
 
     override fun toString(): String {

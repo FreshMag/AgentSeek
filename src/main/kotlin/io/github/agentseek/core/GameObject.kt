@@ -49,6 +49,16 @@ interface GameObject {
      * Adds a [component] to this object.
      */
     fun addComponent(component: Component)
+
+    /**
+     * Spawns a new [gameObject] in the world.
+     */
+    fun spawn(gameObject: GameObject)
+
+    /**
+     * Deletes this [GameObject] from the [World]
+     */
+    fun delete()
 }
 
 /**
