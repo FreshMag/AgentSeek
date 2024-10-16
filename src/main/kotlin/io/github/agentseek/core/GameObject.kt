@@ -5,14 +5,19 @@ import io.github.agentseek.common.Point2d
 import io.github.agentseek.world.World
 import io.github.agentseek.components.Component
 import io.github.agentseek.components.PlayerComponent
+import io.github.agentseek.events.Event
 import io.github.agentseek.physics.HitBox
 import io.github.agentseek.view.Renderer
+import kotlin.time.Duration
 
 /**
  * An interface to handle an object of the game world.
  */
 interface GameObject {
-
+    /**
+     * The world of this GameObject
+     */
+    val world: World
     /**
      * This object's current position.
      */
@@ -34,21 +39,38 @@ interface GameObject {
     var renderer: Renderer
 
     /**
-     * This method is called when the object is added to the [world].
+     * Identifier for this GameObject
      */
-    fun onAdded(world: World)
+    val id: String
 
     /**
      * This method is called once every update. This will update every component
      * added to this object. [deltaTime] is the time elapsed since last update.
      */
-    fun onUpdate(deltaTime: Double)
+    fun onUpdate(deltaTime: Duration)
 
 
     /**
      * Adds a [component] to this object.
      */
     fun addComponent(component: Component)
+
+    /**
+     * Spawns a new [gameObject] in the world.
+     */
+    fun spawn(gameObject: GameObject)
+
+    /**
+     * Deletes this [GameObject] from the [World]
+     */
+    fun delete()
+
+    /**
+     * Notifies an event to the world of the GameObject
+     */
+    fun notifyEvent(event: Event) {
+        world.notifyEvent(event, this)
+    }
 }
 
 /**

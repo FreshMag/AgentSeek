@@ -3,6 +3,7 @@ package io.github.agentseek.world
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.common.Rectangle2d
 import io.github.agentseek.core.GameObject
+import io.github.agentseek.core.engine.GameEngine.log
 import io.github.agentseek.events.Event
 import io.github.agentseek.events.EventListener
 
@@ -27,14 +28,14 @@ class WorldImpl(private val eventListener: EventListener) : World {
 
     override fun addGameObject(gameObject: GameObject) {
         gameObjects.add(gameObject)
-        gameObject.onAdded(this)
     }
 
     override fun removeGameObject(gameObject: GameObject) {
         gameObjects.remove(gameObject)
     }
 
-    override fun notifyWorldEvent(event: Event) {
+    override fun notifyEvent(event: Event, source: GameObject) {
+        log("Notified event $event from $source")
         eventListener.notifyEvent(event)
     }
 

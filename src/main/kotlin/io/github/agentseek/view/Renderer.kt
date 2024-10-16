@@ -7,6 +7,10 @@ import io.github.agentseek.core.GameObject
  */
 interface Renderer {
     /**
+     * Layer where this Renderer will render
+     */
+    val layer: Layer
+    /**
      * Updates the appearance of this [Renderer], associated to a [GameObject]
      */
     fun render(gameObject: GameObject)
@@ -33,19 +37,6 @@ interface Renderer {
      */
     // fun onRemoved(event: EventHandler<ActionEvent?>?)
 
-    /**
-     * A method that returns the zIndex of a GraphicComponent.
-     *
-     * @return The zIndex of a GraphicComponent.
-     */
-    /**
-     * The method that sets the zIndex of a graphicCOmponent in the view,
-     * which is used to define the right order to render each GraphicComponent.
-     *
-     * @param zIndex the value of the zIndex that needs to be set to a
-     * graphicComponent.
-     */
-    // var zindex: Int
 
     /**
      * A Method that returns the current texture of the graphicComponent.

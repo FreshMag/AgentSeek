@@ -11,8 +11,15 @@ repositories {
 val jUnitVersion = "5.10.3"
 
 dependencies {
+    implementation("io.github.oshai:kotlin-logging-jvm:7.0.0")
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12
+    implementation("org.slf4j:slf4j-simple:2.0.3")
+
+
     testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jUnitVersion")
+    testImplementation("io.kotest:kotest-runner-junit5:$version")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
 }
 
 tasks.withType<JavaCompile> {

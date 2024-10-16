@@ -6,6 +6,7 @@ import io.github.agentseek.components.Component
 import io.github.agentseek.physics.CircleHitBox
 import io.github.agentseek.physics.HitBox
 import io.github.agentseek.view.Renderer
+import kotlin.time.Duration
 
 /**
  * A class that provides the implementation of the interface GameObject,
@@ -14,8 +15,9 @@ import io.github.agentseek.view.Renderer
 class GameObjectImpl(
     override var renderer: Renderer = TODO(),
     override val hitBox: HitBox = CircleHitBox(DEFAULT_HITBOX_RADIUS),
+    override val world: World
 ) : GameObject {
-    private var id: String? = null
+    override val id: String = world.generateId("gameObject")
     override var position: Point2d = Point2d(0.0, 0.0)
         set(value) {
             hitBox.form.position = value
@@ -23,12 +25,11 @@ class GameObjectImpl(
         }
     override var components: List<Component> = ArrayList()
 
-    override fun onAdded(world: World) {
-        this.id = world.generateId("gameObject")
+    init {
         hitBox.form.position = position
     }
 
-    override fun onUpdate(deltaTime: Double) {
+    override fun onUpdate(deltaTime: Duration) {
         components.forEach { it.onUpdate(deltaTime) }
         renderer.render(this)
     }
@@ -37,7 +38,15 @@ class GameObjectImpl(
     override fun addComponent(component: Component) {
         check(!components.any { component.javaClass.isInstance(it) })
         components += component
-        component.onAdded(this)
+        component.init()
+    }
+
+    override fun spawn(gameObject: GameObject) {
+        world?.addGameObject(gameObject)
+    }
+
+    override fun delete() {
+        world?.removeGameObject(this)
     }
 
     override fun toString(): String {

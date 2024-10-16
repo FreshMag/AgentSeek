@@ -1,7 +1,7 @@
 package ryleh.controller.core.factories
 
 import io.github.agentseek.common.Point2d
-import io.github.agentseek.core.GameState
+import io.github.agentseek.core.Game
 
 /**
  * A factory class for basic entities such as player,bullet,rock,item and fire.
@@ -24,7 +24,7 @@ object BasicFactory {
     /**
      * Method that creates a player entity given a GameState [state] instance and a Point2d [position]
      */
-    fun createPlayer(state: GameState, position: Point2d) {
+    fun createPlayer(state: Game, position: Point2d) {
         /* final PlayerGraphicComponent player = new PlayerGraphicComponent(GameMath.toPoint2D(position));
         player.setZindex(1);
         final Entity e = GameEngine.entityBuilder().type(Type.PLAYER).position(position)

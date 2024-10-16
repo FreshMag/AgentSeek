@@ -1,25 +1,27 @@
 package io.github.agentseek.core
 
 import io.github.agentseek.world.World
+import kotlin.time.Duration
 
 /**
  * This interface represents the state of the game and generates new levels based on a LevelHandler.
  */
-interface GameState {
+interface Game {
     /**
      * Reference to current player.
      */
-    val player: GameObject
+    val player: GameObject?
+
+    /**
+     * GameObjects of the world
+     */
+    val gameObjects: Iterable<GameObject>
+        get() = world.gameObjects
 
     /**
      * Gets the [World] representing the domain of the game.
      */
     val world: World
-
-    /**
-     * Gets current active [GameObject]s.
-     */
-    val entities: Iterable<GameObject>
 
     /**
      * Checks if player has won or lost.
@@ -32,32 +34,17 @@ interface GameState {
     val isGameOver: Boolean
 
     /**
-     * Add a [GameObject] to the current GameState.
-     */
-    fun addGameObject(gameObject: GameObject)
-
-    /**
-     * Removes a [GameObject] to current GameState.
-     */
-    fun removeGameObject(gameObject: GameObject)
-
-    /**
-     * Generates a new Level and spawns all entities inside it, player too.
-     */
-    fun generateNewLevel()
-
-    /**
      * Updates current GameState, passing the [deltaTime] of time elapsed since last update.
      */
-    fun updateState(deltaTime: Double)
+    fun updateState(deltaTime: Duration)
 
     /**
      * Sets flags that indicates that the game is over: if [victory] is `true`, the game ended with a victory.
      */
     fun callGameOver(victory: Boolean)
 
-    // val view: ViewHandlerImpl?
-
-    // val levelHandler: LevelHandler
+    companion object {
+        fun emptyScene(): Game = GameImpl()
+    }
 
 }

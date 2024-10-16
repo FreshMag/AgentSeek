@@ -5,11 +5,13 @@ import io.github.agentseek.common.Vector2d
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.physics.Direction
 import io.github.agentseek.world.World
+import kotlin.time.Duration
+import kotlin.time.DurationUnit
 
 /**
  * Main component of a Game object of type PLAYER. Specifies how player's movement works.
  */
-class PlayerComponent(world: World, private val speed: Int) : AbstractComponent(world) {
+class PlayerComponent(gameObject: GameObject, private val speed: Int) : AbstractComponent(gameObject) {
     private var velocity: Vector2d = Vector2d.zero()
     private var lastPos: Point2d = Point2d.origin()
     var direction: Direction = Direction.IDLE
@@ -22,14 +24,13 @@ class PlayerComponent(world: World, private val speed: Int) : AbstractComponent(
     private var lastDirection: Direction = Direction.IDLE
     private var blocked: Direction = Direction.IDLE
 
-    override fun onAdded(gameObject: GameObject) {
-        super.onAdded(gameObject)
-        this.move(0.0)
+    override fun init() {
+        this.move(0)
     }
 
-    override fun onUpdate(deltaTime: Double) {
+    override fun onUpdate(deltaTime: Duration) {
         if (this.canMove() && blocked != this.direction) {
-            move(deltaTime)
+            move(deltaTime.toLong(DurationUnit.MILLISECONDS))
         } else {
             this.blocked = this.direction
             resetPos()
@@ -37,11 +38,11 @@ class PlayerComponent(world: World, private val speed: Int) : AbstractComponent(
     }
 
     /**
-     * Moves the player. [deltaTime] is the time elapsed since last update.
+     * Moves the player. [deltaTimeMillis] is the time elapsed since last update in milliseconds.
      */
-    private fun move(deltaTime: Double) {
+    private fun move(deltaTimeMillis: Long) {
         lastPos = gameObject.position
-        gameObject.position += (velocity * (TIME_MULTIPLIER * deltaTime))
+        gameObject.position += (velocity * (TIME_MULTIPLIER * deltaTimeMillis))
     }
 
     /**

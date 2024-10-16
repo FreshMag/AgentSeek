@@ -2,23 +2,25 @@ package io.github.agentseek.components
 
 import io.github.agentseek.common.Timer
 import io.github.agentseek.common.TimerImpl
+import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.isPlayer
 import io.github.agentseek.events.GameOverEvent
 import io.github.agentseek.events.RemoveEntityEvent
 import io.github.agentseek.world.World
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.time.Duration
 
 /**
  * This component is used to track an object's health points. Here, hps are implemented as an integer.
  */
 class HealthIntComponent(
-    world: World,
+    gameObject: GameObject,
     /**
      * Sets max amount of health points.
      */
     private var maxHp: Int
-) : AbstractComponent(world) {
+) : AbstractComponent(gameObject) {
     /**
      * Current amount of health points left.
      */
@@ -31,15 +33,15 @@ class HealthIntComponent(
     private var isImmortal: Boolean = false
     private val timer: Timer = TimerImpl(WAIT_TIME)
 
-    override fun onUpdate(deltaTime: Double) {
+    override fun onUpdate(deltaTime: Duration) {
         if (timer.isElapsed()) {
             this.isImmortal = false
         }
         if (this.currentHp <= 0) {
             if (gameObject.isPlayer()) {
-                world.notifyWorldEvent(GameOverEvent())
+                notifyEvent(GameOverEvent())
             } else {
-                world.notifyWorldEvent(RemoveEntityEvent(gameObject))
+                notifyEvent(RemoveEntityEvent(gameObject))
             }
         }
     }
