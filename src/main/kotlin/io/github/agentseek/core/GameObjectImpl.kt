@@ -17,7 +17,7 @@ class GameObjectImpl(
     override val hitBox: HitBox = CircleHitBox(DEFAULT_HITBOX_RADIUS),
     override val world: World
 ) : GameObject {
-    private val id: String = world.generateId("gameObject")
+    override val id: String = world.generateId("gameObject")
     override var position: Point2d = Point2d(0.0, 0.0)
         set(value) {
             hitBox.form.position = value

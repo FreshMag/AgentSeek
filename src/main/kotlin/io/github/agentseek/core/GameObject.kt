@@ -39,6 +39,11 @@ interface GameObject {
     var renderer: Renderer
 
     /**
+     * Identifier for this GameObject
+     */
+    val id: String
+
+    /**
      * This method is called once every update. This will update every component
      * added to this object. [deltaTime] is the time elapsed since last update.
      */
@@ -64,7 +69,7 @@ interface GameObject {
      * Notifies an event to the world of the GameObject
      */
     fun notifyEvent(event: Event) {
-        world?.notifyEvent(event, this)
+        world.notifyEvent(event, this)
     }
 }
 

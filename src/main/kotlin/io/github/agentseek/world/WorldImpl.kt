@@ -35,7 +35,7 @@ class WorldImpl(private val eventListener: EventListener) : World {
     }
 
     override fun notifyEvent(event: Event, source: GameObject) {
-        log("Notified event: $event")
+        log("Notified event $event from $source")
         eventListener.notifyEvent(event)
     }
 
