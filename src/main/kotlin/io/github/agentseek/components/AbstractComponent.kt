@@ -24,7 +24,7 @@ abstract class AbstractComponent(
     protected val player: GameObject?
         get() = world.gameObjects.firstOrNull { it.isPlayer() }
 
-    abstract override fun onUpdate(deltaTime: Duration)
+    override fun onUpdate(deltaTime: Duration) {}
 
     final override fun toString(): String {
         return "${this.javaClass.simpleName} [id=$id]"
