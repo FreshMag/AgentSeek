@@ -1,5 +1,7 @@
 package io.github.agentseek
 
+import io.github.agentseek.core.engine.GameEngine
+
 fun main() {
-    println("Example file")
+    GameEngine.start()
 }
