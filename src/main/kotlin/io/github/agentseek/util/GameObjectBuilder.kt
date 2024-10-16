@@ -6,6 +6,7 @@ import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.GameObjectImpl
 import io.github.agentseek.physics.CircleHitBox
 import io.github.agentseek.physics.HitBox
+import io.github.agentseek.view.EmptyRenderer
 import io.github.agentseek.view.Renderer
 import io.github.agentseek.world.World
 
@@ -21,17 +22,17 @@ class GameObjectBuilder(private val world: World) {
     /**
      * Gets the [List] of [Component]s added to this object.
      */
-    var components: MutableList<Component> = mutableListOf()
+    private var componentSetters: MutableList<(GameObject) -> Component> = mutableListOf()
 
     /**
      * This object's [HitBox].
      */
-    var hitBox: HitBox = CircleHitBox(GameObjectImpl.DEFAULT_HITBOX_RADIUS)
+    private var hitBox: HitBox = CircleHitBox(GameObjectImpl.DEFAULT_HITBOX_RADIUS)
 
     /**
      * The GameObject graphical appearance
      */
-    var renderer: Renderer = TODO()
+    private var renderer: Renderer = EmptyRenderer()
 
     fun position(position: Point2d): GameObjectBuilder {
         this.position = position
@@ -44,8 +45,8 @@ class GameObjectBuilder(private val world: World) {
     }
 
 
-    fun with(component: Component): GameObjectBuilder {
-        components.add(component)
+    fun with(componentSetter: (GameObject) -> Component): GameObjectBuilder {
+        componentSetters.add(componentSetter)
         return this
     }
 
@@ -63,7 +64,7 @@ class GameObjectBuilder(private val world: World) {
     fun build(): GameObject {
         val gameObject = GameObjectImpl(renderer, hitBox, world)
         gameObject.position = position
-        components.forEach { gameObject.addComponent(it) }
+        componentSetters.forEach { gameObject.addComponent(it(gameObject)) }
         return gameObject
     }
 }
