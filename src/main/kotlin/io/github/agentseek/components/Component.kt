@@ -1,6 +1,7 @@
 package io.github.agentseek.components
 
 import io.github.agentseek.core.GameObject
+import kotlin.time.Duration
 
 /**
  * A Component can be added to a GameObject to specify some sort of additional behavior.
@@ -14,5 +15,5 @@ interface Component {
     /**
      * This method is called once every update of GameState. [deltaTime] is the time elapsed since last update.
      */
-    fun onUpdate(deltaTime: Double)
+    fun onUpdate(deltaTime: Duration)
 }

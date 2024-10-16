@@ -7,6 +7,7 @@ import io.github.agentseek.components.Component
 import io.github.agentseek.components.PlayerComponent
 import io.github.agentseek.physics.HitBox
 import io.github.agentseek.view.Renderer
+import kotlin.time.Duration
 
 /**
  * An interface to handle an object of the game world.
@@ -42,7 +43,7 @@ interface GameObject {
      * This method is called once every update. This will update every component
      * added to this object. [deltaTime] is the time elapsed since last update.
      */
-    fun onUpdate(deltaTime: Double)
+    fun onUpdate(deltaTime: Duration)
 
 
     /**

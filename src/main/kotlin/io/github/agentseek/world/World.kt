@@ -13,7 +13,7 @@ interface World {
     /**
      * Gets the list of game objects added to this world.
      */
-    val gameObjects: List<GameObject>
+    val gameObjects: Iterable<GameObject>
 
     /**
      * Generate a basic unique ID for each object that has a reference to this world, using the [type] of the object

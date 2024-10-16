@@ -6,6 +6,7 @@ import io.github.agentseek.components.Component
 import io.github.agentseek.physics.CircleHitBox
 import io.github.agentseek.physics.HitBox
 import io.github.agentseek.view.Renderer
+import kotlin.time.Duration
 
 /**
  * A class that provides the implementation of the interface GameObject,
@@ -30,7 +31,7 @@ class GameObjectImpl(
         this.world = world
     }
 
-    override fun onUpdate(deltaTime: Double) {
+    override fun onUpdate(deltaTime: Duration) {
         components.forEach { it.onUpdate(deltaTime) }
         renderer.render(this)
     }

@@ -8,6 +8,7 @@ import io.github.agentseek.events.RemoveEntityEvent
 import io.github.agentseek.world.World
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.time.Duration
 
 /**
  * This component is used to track an object's health points. Here, hps are implemented as an integer.
@@ -31,7 +32,7 @@ class HealthIntComponent(
     private var isImmortal: Boolean = false
     private val timer: Timer = TimerImpl(WAIT_TIME)
 
-    override fun onUpdate(deltaTime: Double) {
+    override fun onUpdate(deltaTime: Duration) {
         if (timer.isElapsed()) {
             this.isImmortal = false
         }

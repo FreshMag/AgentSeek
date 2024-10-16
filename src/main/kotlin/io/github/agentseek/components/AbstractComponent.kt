@@ -3,6 +3,7 @@ package io.github.agentseek.components
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.isPlayer
 import io.github.agentseek.world.World
+import kotlin.time.Duration
 
 /**
  * Abstract implementation of Component. All components should extend this class.
@@ -29,7 +30,7 @@ abstract class AbstractComponent(
     protected val player: GameObject?
         get() = world.gameObjects.firstOrNull { it.isPlayer() }
 
-    abstract override fun onUpdate(deltaTime: Double)
+    abstract override fun onUpdate(deltaTime: Duration)
 
     final override fun toString(): String {
         return "${this.javaClass.simpleName} [id=$id]"
