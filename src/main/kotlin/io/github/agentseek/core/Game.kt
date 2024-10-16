@@ -6,7 +6,7 @@ import kotlin.time.Duration
 /**
  * This interface represents the state of the game and generates new levels based on a LevelHandler.
  */
-interface GameState {
+interface Game {
     /**
      * Reference to current player.
      */

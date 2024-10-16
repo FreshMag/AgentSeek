@@ -1,6 +1,6 @@
 package io.github.agentseek.core.engine
 
-import io.github.agentseek.core.GameState
+import io.github.agentseek.core.Game
 import io.github.agentseek.events.EventHandler
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.system.exitProcess
@@ -13,7 +13,7 @@ object GameEngine {
 
     private val logger = KotlinLogging.logger {}
     private val STANDARD_STARTING_PERIOD = 100.milliseconds
-    private val state: GameState by lazy<GameState> { TODO() }
+    private val state: Game by lazy<Game> { TODO() }
     val eventSystem: EventHandler by lazy { EventHandler(state) }
 
     /**
