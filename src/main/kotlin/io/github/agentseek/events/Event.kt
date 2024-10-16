@@ -8,9 +8,7 @@ import io.github.agentseek.core.GameState
  */
 interface Event {
     /**
-     * Perform some actions depending on the specified event.
-     *
-     * @param state is the current state of the game.
+     * Perform some actions on the [state] depending on the specified event.
      */
     fun handle(state: GameState)
 }

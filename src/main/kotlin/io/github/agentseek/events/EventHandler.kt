@@ -1,33 +1,25 @@
-package ryleh.controller.events
+package io.github.agentseek.events
 
-import io.github.agentseek.components.HealthIntComponent
 import io.github.agentseek.core.GameState
-import io.github.agentseek.events.Event
-import io.github.agentseek.events.EventListener
-import java.util.function.Consumer
+import java.util.concurrent.BlockingQueue
+import java.util.concurrent.LinkedBlockingQueue
 
 /**
  * This class manages other Event instances and implements EventListener.
  */
 class EventHandler(private val gameState: GameState) : EventListener {
-    private val eventQueue: MutableList<Event> = ArrayList()
-    private lateinit var comp: HealthIntComponent
+    private val eventQueue: BlockingQueue<Event> = LinkedBlockingQueue()
 
     /**
      * This method is called once every game loop. It checks all events inside the
      * Event Queue and handles their behavior.
      */
     fun checkEvents() {
-        if (eventQueue.isNotEmpty()) {
-            eventQueue.forEach(Consumer { e ->
-                e.handle(this.gameState)
-            })
-            eventQueue.clear()
-        }
+        eventQueue.forEach { it.handle(this.gameState) }
+        eventQueue.clear()
     }
 
-
     override fun notifyEvent(e: Event) {
-        eventQueue.add(e)
+        eventQueue.offer(e)
     }
 }
