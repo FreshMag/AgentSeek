@@ -13,6 +13,12 @@ interface Game {
     val player: GameObject?
 
     /**
+     * GameObjects of the world
+     */
+    val gameObjects: Iterable<GameObject>
+        get() = world.gameObjects
+
+    /**
      * Gets the [World] representing the domain of the game.
      */
     val world: World
@@ -37,8 +43,8 @@ interface Game {
      */
     fun callGameOver(victory: Boolean)
 
-    // val view: ViewHandlerImpl?
-
-    // val levelHandler: LevelHandler
+    companion object {
+        fun emptyScene(): Game = GameImpl()
+    }
 
 }
