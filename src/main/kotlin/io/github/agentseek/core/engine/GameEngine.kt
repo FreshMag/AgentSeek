@@ -1,4 +1,6 @@
-package io.github.agentseek.core
+package io.github.agentseek.core.engine
+
+import io.github.agentseek.core.GameState
 
 
 /**
