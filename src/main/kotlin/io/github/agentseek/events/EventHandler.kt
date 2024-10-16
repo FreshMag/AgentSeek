@@ -14,7 +14,7 @@ class EventHandler(private val gameState: GameState) : EventListener {
      * This method is called once every game loop. It checks all events inside the
      * Event Queue and handles their behavior.
      */
-    fun checkEvents() {
+    fun handleEvents() {
         eventQueue.forEach { it.handle(this.gameState) }
         eventQueue.clear()
     }
