@@ -13,6 +13,7 @@ val jUnitVersion = "5.10.3"
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jUnitVersion")
+    testImplementation("io.kotest:kotest-runner-junit5:$version")
 }
 
 tasks.withType<JavaCompile> {
