@@ -26,7 +26,7 @@ class DoorComponent(world: World, duration: Int) : AbstractComponent(world) {
         if (timer.isElapsed() || isCollidable) {
             this.isCollidable = true
             if (player?.hitBox?.isCollidingWith(gameObject.hitBox) == true) {
-                world.notifyWorldEvent(NewLevelEvent())
+                world.notifyEvent(NewLevelEvent())
             }
         }
     }

@@ -38,9 +38,9 @@ class HealthIntComponent(
         }
         if (this.currentHp <= 0) {
             if (gameObject.isPlayer()) {
-                world.notifyWorldEvent(GameOverEvent())
+                world.notifyEvent(GameOverEvent())
             } else {
-                world.notifyWorldEvent(RemoveEntityEvent(gameObject))
+                world.notifyEvent(RemoveEntityEvent(gameObject))
             }
         }
     }

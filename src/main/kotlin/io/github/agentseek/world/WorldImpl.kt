@@ -34,7 +34,7 @@ class WorldImpl(private val eventListener: EventListener) : World {
         gameObjects.remove(gameObject)
     }
 
-    override fun notifyWorldEvent(event: Event) {
+    override fun notifyEvent(event: Event) {
         eventListener.notifyEvent(event)
     }
 

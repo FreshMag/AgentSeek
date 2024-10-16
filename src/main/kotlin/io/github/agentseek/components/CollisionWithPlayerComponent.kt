@@ -19,7 +19,7 @@ class CollisionWithPlayerComponent(world: World) : AbstractComponent(world) {
         if (!this.hasAlreadyCollided) {
             val playerIfColliding: GameObject? = player?.takeIf { it.hitBox.isCollidingWith(gameObject.hitBox) }
             playerIfColliding?.let {
-                world.notifyWorldEvent(EnemyCollisionEvent(it))
+                world.notifyEvent(EnemyCollisionEvent(it))
             }
         }
     }

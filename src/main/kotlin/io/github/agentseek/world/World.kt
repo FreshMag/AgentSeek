@@ -45,5 +45,5 @@ interface World {
     /**
      * Notify an [event] to the EventListener.
      */
-    fun notifyWorldEvent(event: Event)
+    fun notifyEvent(event: Event)
 }
