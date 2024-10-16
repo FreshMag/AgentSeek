@@ -7,6 +7,6 @@ import io.github.agentseek.core.Game
  */
 class NewLevelEvent : Event {
     override fun handle(state: Game) {
-        state.generateNewLevel()
+
     }
 }
