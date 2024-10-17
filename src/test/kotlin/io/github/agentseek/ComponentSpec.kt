@@ -1,8 +1,6 @@
 package io.github.agentseek
 
-import io.github.agentseek.core.Game
 import io.github.agentseek.core.engine.GameEngine
-import io.github.agentseek.events.Event
 import io.github.agentseek.util.EngineTestingUtil
 import io.github.agentseek.util.FastComponent.createComponent
 import io.kotest.assertions.throwables.shouldThrow
@@ -12,7 +10,7 @@ import io.kotest.matchers.shouldBe
 class ComponentSpec : FreeSpec({
     var scene = EngineTestingUtil.setUpEmptyScene()
 
-    beforeSpec{
+    beforeSpec {
         scene = EngineTestingUtil.setUpEmptyScene()
     }
     afterSpec {
