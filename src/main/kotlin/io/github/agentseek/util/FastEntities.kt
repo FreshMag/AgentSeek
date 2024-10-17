@@ -6,7 +6,7 @@ import io.github.agentseek.core.Game
 import io.github.agentseek.core.GameObject
 import kotlin.time.Duration
 
-object FastComponent {
+object FastEntities {
 
     fun Game.createComponent(initFun: Component.() -> Unit = {},
                              updateFun: Component.(Duration) -> Unit = {},
