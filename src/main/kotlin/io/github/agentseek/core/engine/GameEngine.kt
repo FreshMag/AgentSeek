@@ -2,6 +2,7 @@ package io.github.agentseek.core.engine
 
 import io.github.agentseek.core.Game
 import io.github.agentseek.util.factories.SceneFactory
+import io.github.agentseek.view.GameGui
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
@@ -25,6 +26,7 @@ object GameEngine {
         GameLoop(STANDARD_STARTING_PERIOD) { dt ->
             log("Test. Delta Time: $dt")
             state?.updateState(dt)
+            GameGui.render()
         }
     }
 

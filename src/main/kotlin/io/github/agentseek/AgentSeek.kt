@@ -1,10 +1,9 @@
 package io.github.agentseek
 
-import io.github.agentseek.view.Gui
+import io.github.agentseek.view.GameGui
 
 fun main() {
     // GameREPL.start()
-    val gui = Gui()
-    gui.startMainMenu()
-    Gui()
-}
+    GameGui.startGameGui()
+
+}// non faro commit sensati in questa condizio

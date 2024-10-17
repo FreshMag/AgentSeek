@@ -1,13 +1,14 @@
 package io.github.agentseek.core
 
 import io.github.agentseek.common.Point2d
-import io.github.agentseek.world.World
 import io.github.agentseek.components.Component
 import io.github.agentseek.components.PlayerComponent
 import io.github.agentseek.events.Event
 import io.github.agentseek.physics.CircleHitBox
 import io.github.agentseek.physics.HitBox
+import io.github.agentseek.view.EmptyRenderer
 import io.github.agentseek.view.Renderer
+import io.github.agentseek.world.World
 import kotlin.time.Duration
 
 /**
@@ -17,7 +18,7 @@ class GameObject(
     /**
      * The GameObject graphical appearance
      */
-    var renderer: Renderer = TODO(),
+    var renderer: Renderer = EmptyRenderer(),
     /**
      * This object's [HitBox].
      */
@@ -31,6 +32,7 @@ class GameObject(
      * Identifier for this GameObject
      */
     val id: String = world.generateId("gameObject")
+
     /**
      * This object's current position.
      */
@@ -39,6 +41,7 @@ class GameObject(
             hitBox.form.position = value
             field = value
         }
+
     /**
      * Gets the [List] of [Component]s added to this object.
      */
@@ -47,6 +50,7 @@ class GameObject(
     init {
         hitBox.form.position = position
     }
+
     /**
      * This method is called once every update. This will update every component
      * added to this object. [deltaTime] is the time elapsed since last update.
@@ -55,6 +59,7 @@ class GameObject(
         components.forEach { it.onUpdate(deltaTime) }
         renderer.render(this)
     }
+
     /**
      * Adds a [component] to this object.
      */
@@ -64,6 +69,7 @@ class GameObject(
         components += component
         component.init()
     }
+
     /**
      * Removes a [component] from this object.
      */
@@ -71,12 +77,14 @@ class GameObject(
         component.onRemoved()
         components -= component
     }
+
     /**
      * Spawns a new [gameObject] in the world.
      */
     fun spawn(gameObject: GameObject) {
         world.addGameObject(gameObject)
     }
+
     /**
      * Deletes this [GameObject] from the [World]
      */
