@@ -24,7 +24,7 @@ interface Component {
 
     /**
      * This method is called when this component gets removed from its [GameObject].
-     * Note: this method is **NOT** called when the [GameObject] gets deleted.
+     * Note: this method gets called also when the [GameObject] gets deleted.
      */
     fun onRemoved()
 
