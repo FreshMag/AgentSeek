@@ -1,6 +1,7 @@
 package io.github.agentseek.components
 
 import io.github.agentseek.core.GameObject
+import io.github.agentseek.events.Event
 import kotlin.time.Duration
 
 /**
@@ -20,4 +21,15 @@ interface Component {
      * This method is called once every update of GameState. [deltaTime] is the time elapsed since last update.
      */
     fun onUpdate(deltaTime: Duration)
+
+    /**
+     * This method is called when this component gets removed from its [GameObject].
+     * Note: this method is **NOT** called when the [GameObject] gets deleted.
+     */
+    fun onRemoved()
+
+    /**
+     * Notifies an event, using its game object as source
+     */
+    fun notifyEvent(event: Event)
 }

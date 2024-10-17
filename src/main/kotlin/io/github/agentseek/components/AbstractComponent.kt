@@ -26,11 +26,14 @@ abstract class AbstractComponent(
 
     override fun onUpdate(deltaTime: Duration) {}
 
+    override fun onRemoved() {}
+
+    override fun notifyEvent(event: Event) {
+        gameObject.notifyEvent(event)
+    }
+
     final override fun toString(): String {
         return "${this.javaClass.simpleName} [id=$id]"
     }
 
-    protected fun notifyEvent(event: Event) {
-        gameObject.notifyEvent(event)
-    }
 }
