@@ -1,7 +1,6 @@
 package io.github.agentseek.components
 
 import io.github.agentseek.core.GameObject
-import io.github.agentseek.core.isPlayer
 import io.github.agentseek.events.Event
 import io.github.agentseek.world.World
 import kotlin.time.Duration
