@@ -6,12 +6,13 @@ import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.engine.GameEngine.log
 import io.github.agentseek.events.Event
 import io.github.agentseek.events.EventListener
+import java.util.*
 
 /**
  * An implementation of Game World. Bounds are represented by a rectangle and game objects are contained inside a list.
  */
 class WorldImpl(private val eventListener: EventListener) : World {
-    override val gameObjects: MutableList<GameObject> = ArrayList()
+    override val gameObjects: MutableList<GameObject> = Collections.synchronizedList(mutableListOf())
     override val bounds: Rectangle2d =
         Rectangle2d(BOUNDS_WIDTH, BOUNDS_HEIGHT, BOUNDS_UPPER_LEFT_X, BOUNDS_UPPER_LEFT_Y)
     private var agentSeekId = 0
