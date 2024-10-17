@@ -41,12 +41,17 @@ class GameObjectImpl(
         component.init()
     }
 
+    override fun removeComponent(component: Component) {
+        component.onRemoved()
+        components -= component
+    }
+
     override fun spawn(gameObject: GameObject) {
-        world?.addGameObject(gameObject)
+        world.addGameObject(gameObject)
     }
 
     override fun delete() {
-        world?.removeGameObject(this)
+        world.removeGameObject(this)
     }
 
     override fun toString(): String {
@@ -66,7 +71,7 @@ class GameObjectImpl(
     }
 
     override fun hashCode(): Int {
-        var result = id?.hashCode() ?: 0
+        var result = id.hashCode() ?: 0
         result = 31 * result + position.hashCode()
         result = 31 * result + components.hashCode()
         return result

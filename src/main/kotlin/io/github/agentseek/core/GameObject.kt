@@ -49,11 +49,15 @@ interface GameObject {
      */
     fun onUpdate(deltaTime: Duration)
 
-
     /**
      * Adds a [component] to this object.
      */
     fun addComponent(component: Component)
+
+    /**
+     * Removes a [component] from this object.
+     */
+    fun removeComponent(component: Component)
 
     /**
      * Spawns a new [gameObject] in the world.
