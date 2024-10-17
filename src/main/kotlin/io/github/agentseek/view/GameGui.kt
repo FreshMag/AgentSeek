@@ -1,6 +1,7 @@
 package io.github.agentseek.view
 
 import io.github.agentseek.core.engine.GameEngine
+import io.github.agentseek.util.GameREPL
 import io.github.agentseek.util.factories.SceneFactory
 import java.awt.*
 import java.util.*
@@ -8,23 +9,30 @@ import javax.swing.JComponent
 import javax.swing.JFrame
 import javax.swing.JPanel
 import javax.swing.SwingUtilities
+import javax.swing.WindowConstants.EXIT_ON_CLOSE
 
 
-object GameGui : JFrame() {
-    val screenSize: Dimension = Toolkit.getDefaultToolkit().screenSize
-    const val APP_NAME = "Agent Seek"
+object GameGui {
+    val screenSize: Dimension = Dimension(1000, 720)//Toolkit.getDefaultToolkit().screenSize
+    private const val APP_NAME = "Agent Seek"
 
-    val list: MutableList<Shape> = Collections.synchronizedList(mutableListOf())
+    private val shapesToDraw: MutableList<Shape> = Collections.synchronizedList(mutableListOf())
+    private var buffer: List<Shape> = emptyList()
+    private val frame = JFrame()
 
     fun startGameGui() {
-        name = APP_NAME
-        this.add(TestingPanelGraphics(), BorderLayout.CENTER)
-        size = screenSize
-        preferredSize = screenSize
-        defaultCloseOperation = JFrame.EXIT_ON_CLOSE
-        isVisible = true
+        frame.name = APP_NAME
+        frame.add(TestingPanelGraphics(), BorderLayout.CENTER)
+        frame.size = screenSize
+        frame.preferredSize = screenSize
+        frame.defaultCloseOperation = EXIT_ON_CLOSE
+        frame.isVisible = true
         GameEngine.loadScene(SceneFactory.replScene().first)
         GameEngine.start()
+    }
+
+    fun drawShape(shape: Shape) {
+        shapesToDraw.add(shape)
     }
 
     class TestingPanelGraphics : JPanel() {
@@ -40,12 +48,11 @@ object GameGui : JFrame() {
         private inner class DrawStuff : JComponent() {
             override fun paintComponent(g: Graphics) {
                 super.paintComponent(g)
-
                 val graph2 = g as Graphics2D
 
                 graph2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
 
-                list.forEach {
+                buffer.forEach {
                     graph2.draw(it)
                 }
             }
@@ -53,9 +60,11 @@ object GameGui : JFrame() {
     }
 
     fun render() {
+        buffer = shapesToDraw.toList()
+        shapesToDraw.clear()
         SwingUtilities.invokeLater {
-            repaint()
+            frame.repaint()
         }
-        this.list.clear()
+
     }
 }
