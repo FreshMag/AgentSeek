@@ -1,6 +1,7 @@
 package io.github.agentseek.core.engine
 
 import io.github.agentseek.core.Game
+import io.github.agentseek.util.factories.SceneFactory
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -18,7 +19,7 @@ object GameEngine {
      */
     private val loop: GameLoop by lazy {
         if (state == null) {
-            loadScene(Game.emptyScene())
+            loadScene(SceneFactory.emptyScene())
         }
         GameLoop(STANDARD_STARTING_PERIOD) { dt ->
             log("Test. Delta Time: $dt")
@@ -77,6 +78,6 @@ object GameEngine {
      */
     fun reset() {
         stop()
-        loadScene(Game.emptyScene())
+        loadScene(SceneFactory.emptyScene())
     }
 }
