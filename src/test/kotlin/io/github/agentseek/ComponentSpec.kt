@@ -10,10 +10,10 @@ import io.kotest.matchers.shouldBe
 class ComponentSpec : FreeSpec({
     var scene = EngineTestingUtil.setUpEmptyScene()
 
-    beforeSpec {
+    beforeAny {
         scene = EngineTestingUtil.setUpEmptyScene()
     }
-    afterSpec {
+    afterAny {
         GameEngine.reset()
     }
 
