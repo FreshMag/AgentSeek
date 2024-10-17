@@ -3,7 +3,7 @@ package io.github.agentseek.common
 /**
  * A two-dimensional point, with [x] coordinate and [y] coordinate
  */
-class Point2d(
+data class Point2d(
     var x: Double,
     var y: Double
 ) {
