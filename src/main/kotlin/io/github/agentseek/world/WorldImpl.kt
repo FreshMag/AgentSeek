@@ -6,13 +6,13 @@ import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.engine.GameEngine.log
 import io.github.agentseek.events.Event
 import io.github.agentseek.events.EventListener
-import java.util.*
 
 /**
  * An implementation of Game World. Bounds are represented by a rectangle and game objects are contained inside a list.
  */
 class WorldImpl(private val eventListener: EventListener) : World {
-    override val gameObjects: MutableList<GameObject> = Collections.synchronizedList(mutableListOf())
+    override var gameObjects: List<GameObject> = emptyList()
+        private set
     override val bounds: Rectangle2d =
         Rectangle2d(BOUNDS_WIDTH, BOUNDS_HEIGHT, BOUNDS_UPPER_LEFT_X, BOUNDS_UPPER_LEFT_Y)
     private var agentSeekId = 0
@@ -28,11 +28,19 @@ class WorldImpl(private val eventListener: EventListener) : World {
     }
 
     override fun addGameObject(gameObject: GameObject) {
-        gameObjects.add(gameObject)
+        try {
+            gameObjects += gameObject
+        } catch (e: Exception) {
+            log(e.message ?: "There was an exception while adding GameObject")
+        }
     }
 
     override fun removeGameObject(gameObject: GameObject) {
-        gameObjects.remove(gameObject)
+        try {
+            gameObjects -= gameObject
+        } catch (e: Exception) {
+            log(e.message ?: "There was an exception while removing GameObject")
+        }
     }
 
     override fun notifyEvent(event: Event, source: GameObject) {
