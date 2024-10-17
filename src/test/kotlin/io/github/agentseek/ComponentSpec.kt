@@ -24,6 +24,12 @@ class ComponentSpec : FreeSpec({
             repeat((1..10).count()) { GameEngine.doOne() }
             counter shouldBe 10
         }
+        "should not be update if the game object is not added to the world" - {
+            var counter = 0
+            scene.createComponent({}, { counter++ }, addToWorld = false)
+            repeat((1..10).count()) { GameEngine.doOne() }
+            counter shouldBe 0
+        }
         "should not be updated once its game object gets deleted" - {
             var counter = 0
             val (_, component) = scene.createComponent({}, { counter++ })
