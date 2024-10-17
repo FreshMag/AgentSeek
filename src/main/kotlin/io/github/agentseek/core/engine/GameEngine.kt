@@ -68,6 +68,13 @@ object GameEngine {
     }
 
     /**
+     * Logs a new [message] as an error.
+     */
+    fun logError(message: String) {
+        logger.error { message }
+    }
+
+    /**
      * Does only one iteration of the game loop
      */
     fun doOne(artificialDeltaTime: Duration = STANDARD_STARTING_PERIOD) {
