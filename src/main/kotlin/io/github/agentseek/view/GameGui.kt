@@ -1,7 +1,6 @@
 package io.github.agentseek.view
 
 import io.github.agentseek.core.engine.GameEngine
-import io.github.agentseek.util.GameREPL
 import io.github.agentseek.util.factories.SceneFactory
 import java.awt.*
 import java.util.*
