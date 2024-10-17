@@ -1,9 +1,8 @@
 package io.github.agentseek
 
-import io.github.agentseek.view.GameGui
+import io.github.agentseek.view.MenuGui
 
 fun main() {
     // GameREPL.start()
-    GameGui.startGameGui()
-
-}// non faro commit sensati in questa condizio
+    MenuGui.startMainMenu()
+}
