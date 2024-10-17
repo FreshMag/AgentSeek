@@ -5,7 +5,7 @@ import kotlin.math.sqrt
 /**
  * Two-dimensional vector, with a [x] component and [y] component
  */
-class Vector2d(var x: Double, var y: Double) {
+data class Vector2d(var x: Double, var y: Double) {
 
     /**
      * Instantiates a vector from two points, [origin] and [destination]

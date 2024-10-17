@@ -3,7 +3,7 @@ package io.github.agentseek.common
 /**
  * This class represents a Rectangle in two dimensions.
  */
-class Rectangle2d(
+data class Rectangle2d(
     var upperLeft: Point2d,
     var lowerLeft: Point2d,
     var lowerRight: Point2d,

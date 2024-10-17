@@ -3,7 +3,6 @@ package io.github.agentseek.util
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.components.Component
 import io.github.agentseek.core.GameObject
-import io.github.agentseek.core.GameObjectImpl
 import io.github.agentseek.physics.CircleHitBox
 import io.github.agentseek.physics.HitBox
 import io.github.agentseek.view.EmptyRenderer
@@ -27,7 +26,7 @@ class GameObjectBuilder(private val world: World) {
     /**
      * This object's [HitBox].
      */
-    private var hitBox: HitBox = CircleHitBox(GameObjectImpl.DEFAULT_HITBOX_RADIUS)
+    private var hitBox: HitBox = CircleHitBox(GameObject.DEFAULT_HITBOX_RADIUS)
 
     /**
      * The GameObject graphical appearance
@@ -62,7 +61,7 @@ class GameObjectBuilder(private val world: World) {
 
     @Throws(IllegalStateException::class)
     fun build(): GameObject {
-        val gameObject = GameObjectImpl(renderer, hitBox, world)
+        val gameObject = GameObject(renderer, hitBox, world)
         gameObject.position = position
         componentSetters.forEach { gameObject.addComponent(it(gameObject)) }
         return gameObject

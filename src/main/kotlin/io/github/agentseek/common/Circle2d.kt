@@ -4,7 +4,7 @@ package io.github.agentseek.common
  * This class represents a Circle in two dimensions, with [position] (i.e. the center, default is (0.0, 0.0))
  * and [radius]
  */
-class Circle2d(val radius: Int, override var position: Point2d = Point2d(0.0, 0.0)) : Shape2d {
+data class Circle2d(val radius: Int, override var position: Point2d = Point2d(0.0, 0.0)) : Shape2d {
     override var center: Point2d
         get() = position
         set(value) {

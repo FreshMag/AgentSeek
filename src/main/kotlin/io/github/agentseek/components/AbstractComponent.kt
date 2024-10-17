@@ -1,7 +1,6 @@
 package io.github.agentseek.components
 
 import io.github.agentseek.core.GameObject
-import io.github.agentseek.core.isPlayer
 import io.github.agentseek.events.Event
 import io.github.agentseek.world.World
 import kotlin.time.Duration
@@ -26,11 +25,14 @@ abstract class AbstractComponent(
 
     override fun onUpdate(deltaTime: Duration) {}
 
+    override fun onRemoved() {}
+
+    override fun notifyEvent(event: Event) {
+        gameObject.notifyEvent(event)
+    }
+
     final override fun toString(): String {
         return "${this.javaClass.simpleName} [id=$id]"
     }
 
-    protected fun notifyEvent(event: Event) {
-        gameObject.notifyEvent(event)
-    }
 }

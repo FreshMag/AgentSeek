@@ -42,9 +42,4 @@ interface Game {
      * Sets flags that indicates that the game is over: if [victory] is `true`, the game ended with a victory.
      */
     fun callGameOver(victory: Boolean)
-
-    companion object {
-        fun emptyScene(): Game = GameImpl()
-    }
-
 }
