@@ -13,7 +13,7 @@ import kotlin.time.Duration.Companion.milliseconds
 object GameEngine {
 
     private val logger = KotlinLogging.logger {}
-    private val STANDARD_STARTING_PERIOD = 100.milliseconds
+    private val STANDARD_STARTING_PERIOD = 50.milliseconds
     private var state: Game? = null
 
     /**
@@ -24,7 +24,7 @@ object GameEngine {
             loadScene(SceneFactory.emptyScene())
         }
         GameLoop(STANDARD_STARTING_PERIOD) { dt ->
-            log("Test. Delta Time: $dt")
+            log("DT $dt")
             state?.updateState(dt)
             GameGui.render()
         }
