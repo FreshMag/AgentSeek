@@ -51,7 +51,7 @@ class GameObject(
      * This method is called once every update. This will update every component
      * added to this object. [deltaTime] is the time elapsed since last update.
      */
-    fun onUpdate(deltaTime: Duration) {
+    internal fun onUpdate(deltaTime: Duration) {
         components.forEach { it.onUpdate(deltaTime) }
         renderer.render(this)
     }
@@ -101,7 +101,7 @@ class GameObject(
     /**
      * Returns `true` if this [GameObject] is the player.
      */
-    fun GameObject.isPlayer(): Boolean = hasComponent<PlayerComponent>()
+    fun isPlayer(): Boolean = hasComponent<PlayerComponent>()
 
     /**
      * Notifies an event to the world of the GameObject
