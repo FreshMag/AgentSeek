@@ -3,6 +3,7 @@ package io.github.agentseek.core.engine
 import io.github.agentseek.core.Game
 import io.github.agentseek.util.factories.SceneFactory
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
@@ -69,8 +70,8 @@ object GameEngine {
     /**
      * Does only one iteration of the game loop
      */
-    fun doOne() {
-        loop.doOne(STANDARD_STARTING_PERIOD)
+    fun doOne(artificialDeltaTime: Duration = STANDARD_STARTING_PERIOD) {
+        loop.doOne(artificialDeltaTime)
     }
 
     /**
