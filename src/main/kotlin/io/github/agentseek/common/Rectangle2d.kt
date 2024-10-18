@@ -12,14 +12,14 @@ data class Rectangle2d(
     /**
      * The height of the rectangle.
      */
-    private val height: Int = Vector2d(upperLeft, lowerLeft).module().toInt()
+    private val height: Double = Vector2d(upperLeft, lowerLeft).module()
 
     /**
      * Gets Width of the rectangle.
      *
      * @return Width of the rectangle.
      */
-    private val width: Int = Vector2d(upperLeft, upperRight).module().toInt()
+    private val width: Double = Vector2d(upperLeft, upperRight).module()
 
     /**
      * This constructor is used to instantiate a 2D rectangle that is oriented
