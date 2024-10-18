@@ -44,18 +44,23 @@ sealed class RigidBody(
      */
     var mass: Double = 1.0
 
-    /**
-     * Acceleration of this [RigidBody] in m/s^2
-     */
-    private var acceleration: Vector2d = Vector2d.zero()
 
     /**
      * Whether this [RigidBody] can move or not. If `true`, the [GameObject] cannot move.
      */
     var isStatic: Boolean = false
 
-    private var collisionResolved = false
+    /**
+     * Is `true`, this [RigidBody] bounces of with negative velocity when it hits a static rigid body.
+     */
+    var doesBounce: Boolean = true
 
+
+    /**
+     * Acceleration of this [RigidBody] in m/s^2
+     */
+    private var acceleration: Vector2d = Vector2d.zero()
+    private var collisionResolved = false
     private var collisionCallbacks = emptyList<(GameObject) -> Unit>()
 
     /**
@@ -79,17 +84,21 @@ sealed class RigidBody(
     }
 
     private fun resolveCollision(rigidBody: RigidBody) {
-        val m1 = this.mass
-        val m2 = rigidBody.mass
+        if (rigidBody.isStatic) {
+            this.velocity = if (doesBounce) -velocity else Vector2d.zero()
+        } else {
+            val m1 = this.mass
+            val m2 = rigidBody.mass
 
-        val vi1 = this.velocity
-        val vi2 = rigidBody.velocity
+            val vi1 = this.velocity
+            val vi2 = rigidBody.velocity
 
-        val vf1 = (vi1 * (m1 - m2) + vi2 * 2.0 * m2) / (m1 + m2)
-        val vf2 = (vi2 * (m2 - m1) + vi1 * 2.0 * m1) / (m1 + m2)
+            val vf1 = (vi1 * (m1 - m2) + vi2 * 2.0 * m2) / (m1 + m2)
+            val vf2 = (vi2 * (m2 - m1) + vi1 * 2.0 * m1) / (m1 + m2)
 
-        this.velocity = vf1
-        rigidBody.velocity = vf2
+            this.velocity = vf1
+            rigidBody.velocity = vf2
+        }
         rigidBody.collisionResolved = true
         callCollision(rigidBody.gameObject)
         rigidBody.callCollision(this.gameObject)
