@@ -9,11 +9,55 @@ import io.github.agentseek.physics.HitBox
 import io.github.agentseek.util.FastEntities.emptyGameObject
 import io.github.agentseek.util.repl.GameREPL.isRunning
 import io.github.agentseek.util.repl.GameREPL.scene
+import io.github.agentseek.view.Renderer
 import io.github.agentseek.view.SimpleRenderer
 import picocli.CommandLine.*
 import kotlin.system.exitProcess
 
 object REPLParsing {
+
+    private fun GameObject.createComponentFromClass(className: String): Component? {
+        try {
+            val component: Component = ClassLoader.getSystemClassLoader()
+                .loadClass(className)
+                .getConstructor(GameObject::class.java)
+                .newInstance(this) as Component
+            return component
+        } catch (e: ClassNotFoundException) {
+            println("Component class $className not found")
+        }
+        return null
+    }
+
+    private fun GameObject.addComponentFromFQName(className: String) {
+        createComponentFromClass(className)?.let {
+            try {
+                this.addComponent(it)
+            } catch (e: IllegalStateException) {
+                println("The GameObject already has that component")
+            }
+        }
+    }
+
+    private fun GameObject.removeComponentFromFQName(className: String) {
+        val clazz = Class.forName(className)
+        components.find { clazz.isInstance(it) }?.let { removeComponent(it) } ?: println(
+            "This GameObject doesn't have Component of class $className"
+        )
+    }
+
+    fun GameObject.setRendererFromFQName(className: String) {
+        try {
+            val renderer: Renderer = ClassLoader.getSystemClassLoader()
+                .loadClass(className)
+                .getConstructor()
+                .newInstance() as Renderer
+            this.renderer = renderer
+        } catch (e: ClassNotFoundException) {
+            println("Renderer class $className not found")
+        }
+    }
+
     @Command(
         name = "",
         subcommands = [
@@ -22,8 +66,10 @@ object REPLParsing {
             PauseCommand::class,
             ResumeCommand::class,
             ExitCommand::class,
+            ListObjects::class,
             AddGO::class,
             InspectGO::class,
+            ModifyGO::class,
             DeleteGO::class],
         description = ["Game Read-Eval-Print-Loop for utility"],
         version = [
@@ -111,22 +157,15 @@ object REPLParsing {
         @Option(
             names = ["-c", "--components"],
             split = ",",
-            description = ["Fully qualified names of the Components to be added to this Game Object"],
+            description = ["Fully qualified names of the Components to be added to this Game Object.\n" +
+                    "Note: components classes *must* have only a GameObject as parameter in the constructor"],
             arity = "1..*"
         )
         var components: Array<String> = emptyArray()
 
         override fun run() {
             components.forEach {
-                try {
-                    val component: Component = ClassLoader.getSystemClassLoader()
-                        .loadClass(it)
-                        .getConstructor(GameObject::class.java)
-                        .newInstance(go) as Component
-                    go.addComponent(component)
-                } catch (e: ClassNotFoundException) {
-                    println("Component class $it not found")
-                }
+                go.addComponentFromFQName(it)
             }
             val hitBox = parseForm(form)
             go.hitBox = hitBox ?: return
@@ -160,16 +199,14 @@ object REPLParsing {
         subcommands = [HelpCommand::class]
     )
     class DeleteGO : Runnable {
-        @Option(
-            names = ["id", "-i"],
+        @Parameters(
             description = ["ID of the game object to delete"],
-            required = true
         )
         lateinit var id: String
         override fun run() {
             scene.world.gameObjectById(id)?.let {
                 scene.world.removeGameObject(it)
-            } ?: println("No GameObject was deleted: ID didn't match any GameObject")
+            } ?: println("ID doesn't match any GameObject")
         }
     }
 
@@ -179,10 +216,8 @@ object REPLParsing {
         subcommands = [HelpCommand::class]
     )
     class InspectGO : Runnable {
-        @Option(
-            names = ["id", "-i"],
+        @Parameters(
             description = ["ID of the game object to inspect"],
-            required = true
         )
         lateinit var id: String
         override fun run() {
@@ -190,5 +225,90 @@ object REPLParsing {
                 println(it.toString())
             } ?: println("ID doesn't match any GameObject")
         }
+    }
+
+    @Command(
+        name = "modify",
+        description = ["Modifies a game object"],
+        subcommands = [HelpCommand::class],
+        sortOptions = false
+    )
+    class ModifyGO: Runnable {
+        @Parameters(
+            description = ["ID of the game object to modify"],
+        )
+        lateinit var id: String
+
+        @Option(
+            names = ["add", "--component"],
+            description = ["Fully qualified name of the Component to be added to this Game Object"],
+        )
+        var componentFQName: String = ""
+
+        @Option(
+            names = ["renderer", "--with-renderer"],
+            description = ["Fully qualified name of the Renderer class to be added to this Game Object"],
+        )
+        var rendererFQName: String = ""
+
+        @Option(
+            names = ["remove", "--remove-component"],
+            description = ["Fully qualified name of the Component class to be removed from the Game Object"],
+        )
+        var removedComponentFQName: String = ""
+
+        @Option(
+            names = ["-x"],
+            description = ["specify the x coordinate"],
+        )
+        var x: Double = Double.MAX_VALUE
+
+        @Option(
+            names = ["-y"],
+            description = ["specify the y coordinate"],
+        )
+        var y: Double = Double.MAX_VALUE
+
+        override fun run() {
+            scene.world.gameObjectById(id)?.let {
+                if (componentFQName.isNotBlank()) {
+                    it.addComponentFromFQName(componentFQName)
+                }
+                if (rendererFQName.isNotBlank()) {
+                    it.setRendererFromFQName(rendererFQName)
+                }
+                if (removedComponentFQName.isNotBlank()) {
+                    it.removeComponentFromFQName(removedComponentFQName)
+                }
+                if (x != Double.MAX_VALUE) {
+                    it.position = Point2d(x, it.position.y)
+                }
+                if (y != Double.MAX_VALUE) {
+                    it.position = Point2d(it.position.x, y)
+                }
+                println(it.toString())
+            } ?: println("ID doesn't match any GameObject")
+
+        }
+    }
+    @Command(
+        name = "listobj",
+        description = ["Lists all the game objects"],
+        subcommands = [HelpCommand::class],
+    )
+    class ListObjects: Runnable {
+
+        @Option(
+            names = ["-v", "--verbose"],
+            description = ["Prints all the information of each GameObject, not just the ID"],
+        )
+        var verbose: Boolean = false
+
+        override fun run() {
+            scene.world.gameObjects.forEach {
+                println(if(verbose) it.toString() else it.id)
+            }
+        }
+
     }
 }
