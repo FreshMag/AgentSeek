@@ -1,6 +1,7 @@
 package io.github.agentseek.core.engine
 
 import io.github.agentseek.core.Game
+import io.github.agentseek.core.engine.input.Input
 import io.github.agentseek.util.factories.SceneFactory
 import io.github.agentseek.view.GameGui
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -26,6 +27,7 @@ object GameEngine {
         GameLoop(STANDARD_STARTING_PERIOD) { dt ->
             log("DT $dt")
             state?.updateState(dt)
+            Input.refresh()
             GameGui.render()
         }
     }
