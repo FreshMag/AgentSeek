@@ -2,6 +2,7 @@ package io.github.agentseek.view
 
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.util.factories.SceneFactory
+import io.github.agentseek.util.repl.GameREPL
 import java.awt.*
 import java.util.*
 import javax.swing.JComponent
@@ -19,15 +20,21 @@ object GameGui {
     private var buffer: List<Shape> = emptyList()
     private val frame = JFrame()
 
-    fun startGameGui() {
+    fun startGameGui(repl: Boolean = false) {
         frame.name = APP_NAME
         frame.add(TestingPanelGraphics(), BorderLayout.CENTER)
         frame.size = screenSize
         frame.preferredSize = screenSize
         frame.defaultCloseOperation = EXIT_ON_CLOSE
         frame.isVisible = true
-        GameEngine.loadScene(SceneFactory.replScene().first)
-        GameEngine.start()
+        if (repl) {
+            Thread {
+                GameREPL.start()
+            }.start()
+        } else {
+            GameEngine.loadScene(SceneFactory.replScene().first)
+            GameEngine.start()
+        }
     }
 
     fun drawShape(shape: Shape) {
