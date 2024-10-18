@@ -72,6 +72,7 @@ object REPLParsing {
             ExitCommand::class,
             Do::class,
             SetScene::class,
+            LoadGO::class,
             ListObjects::class,
             AddGO::class,
             InspectGO::class,
@@ -397,7 +398,22 @@ object REPLParsing {
                 Thread.sleep(deltaTime)
             }
         }
+    }
 
+    @Command(
+        name = "loadgo",
+        description = ["Loads a game object from a file"],
+        subcommands = [HelpCommand::class],
+    )
+    class LoadGO : Runnable {
+        @Parameters(
+            paramLabel = "GAME_OBJECT_FILE", description = ["File containing GameObject specification"]
+        )
+        lateinit var file: File
+
+        override fun run() {
+            TODO("Not yet implemented")
+        }
     }
 
 }
