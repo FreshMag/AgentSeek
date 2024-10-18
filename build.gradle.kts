@@ -20,6 +20,11 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jUnitVersion")
     testImplementation("io.kotest:kotest-runner-junit5-jvm:5.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+    // https://mvnrepository.com/artifact/info.picocli/picocli
+    implementation("info.picocli:picocli:4.7.6")
+    // https://mvnrepository.com/artifact/org.jline/jline
+    implementation("org.jline:jline:3.27.0")
+
 }
 
 tasks.withType<JavaCompile> {
@@ -31,7 +36,11 @@ tasks.withType<Test> {
 }
 
 application {
-    mainClass.set("io.github.agentseek.LaunchAgentSeek")
+    mainClass.set("io.github.agentseek.AgentSeek")
+}
+
+tasks.named<JavaExec>("run") {
+    standardInput = System.`in`
 }
 
 java {

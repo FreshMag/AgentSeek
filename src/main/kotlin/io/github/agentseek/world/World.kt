@@ -29,6 +29,11 @@ interface World {
     fun isOutOfBounds(position: Point2d): Boolean
 
     /**
+     * Gets a [GameObject] by id, or `null` if that object doesn't exist.
+     */
+    fun gameObjectById(id: String): GameObject?
+
+    /**
      * Add an [gameObject] to this world.
      */
     fun addGameObject(gameObject: GameObject)

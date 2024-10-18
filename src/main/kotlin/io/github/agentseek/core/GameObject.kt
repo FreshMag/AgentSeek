@@ -22,7 +22,7 @@ class GameObject(
     /**
      * This object's [HitBox].
      */
-    val hitBox: HitBox = CircleHitBox(DEFAULT_HITBOX_RADIUS),
+    var hitBox: HitBox = CircleHitBox(DEFAULT_HITBOX_RADIUS),
     /**
      * The world of this GameObject
      */
@@ -31,7 +31,7 @@ class GameObject(
     /**
      * Identifier for this GameObject
      */
-    val id: String = world.generateId("gameObject")
+    val id: String = world.generateId("go")
 
     /**
      * This object's current position.
@@ -103,7 +103,7 @@ class GameObject(
     /**
      * Returns `true` if this [GameObject] has that a [Component] of class [T]
      */
-    inline fun <reified T : Component> GameObject.hasComponent(): Boolean =
+    inline fun <reified T : Component> hasComponent(): Boolean =
         components.find { it is T } != null
 
     /**
@@ -116,10 +116,6 @@ class GameObject(
      */
     fun notifyEvent(event: Event) {
         world.notifyEvent(event, this)
-    }
-
-    override fun toString(): String {
-        return "GameObjectImpl [id=$id]"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -139,6 +135,10 @@ class GameObject(
         result = 31 * result + position.hashCode()
         result = 31 * result + components.hashCode()
         return result
+    }
+
+    override fun toString(): String {
+        return "GameObject(id='$id', components=$components, \"position=$position, renderer=$renderer, hitBox=$hitBox)"
     }
 
     companion object {
