@@ -142,8 +142,6 @@ object REPLParsing {
         subcommands = [HelpCommand::class]
     )
     class AddGO : Runnable {
-        private val go = scene.emptyGameObject(false)
-
         @Option(
             names = ["-f", "--form"],
             description = ["specify the form of the game object (e.g. circle(<RADIUS>), rectangle(<WIDTH>, <HEIGHT>)," +
@@ -174,6 +172,7 @@ object REPLParsing {
         var components: Array<String> = emptyArray()
 
         override fun run() {
+            val go = scene.emptyGameObject(false)
             components.forEach {
                 go.addComponentFromFQName(it)
             }
@@ -218,6 +217,7 @@ object REPLParsing {
         override fun run() {
             scene.world.gameObjectById(id)?.let {
                 scene.world.removeGameObject(it)
+                println("Removed $id")
             } ?: println("ID doesn't match any GameObject")
         }
     }
