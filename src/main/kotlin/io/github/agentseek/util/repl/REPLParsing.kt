@@ -10,15 +10,14 @@ import io.github.agentseek.util.FastEntities.emptyGameObject
 import io.github.agentseek.util.repl.GameREPL.isRunning
 import io.github.agentseek.util.repl.GameREPL.scene
 import io.github.agentseek.view.SimpleRenderer
-import picocli.CommandLine.Command
-import picocli.CommandLine.Option
+import picocli.CommandLine.*
 import kotlin.system.exitProcess
 
 object REPLParsing {
     @Command(
-        name = "GameREPL",
-        mixinStandardHelpOptions = true,
+        name = "",
         subcommands = [
+            HelpCommand::class,
             StartCommand::class,
             PauseCommand::class,
             ResumeCommand::class,
@@ -30,14 +29,13 @@ object REPLParsing {
         version = [
             "@|yellow AgentSeek-REPL |@",
             "@|blue Build 1.0|@",
-            "@|red,bg(white) (c) 2024|@"]
+            "@|red,bg(white) (c) 2024|@"],
     )
     class REPLCommand : Runnable {
         override fun run() {
             println("Type 'help' to see available commands")
         }
     }
-
 
     @Command(
         name = "start",
@@ -85,7 +83,8 @@ object REPLParsing {
 
     @Command(
         name = "addgo",
-        description = ["Adds a game object"]
+        description = ["Adds a game object"],
+        subcommands = [HelpCommand::class]
     )
     class AddGO : Runnable {
         private val go = scene.emptyGameObject(false)
@@ -98,13 +97,13 @@ object REPLParsing {
         var form: String = "circle(${GameObject.DEFAULT_HITBOX_RADIUS})"
 
         @Option(
-            names = ["x", "--x"],
+            names = ["-x"],
             description = ["specify the x coordinate"],
         )
         var x: Double = 0.0
 
         @Option(
-            names = ["y", "--y"],
+            names = ["-y"],
             description = ["specify the y coordinate"],
         )
         var y: Double = 0.0
@@ -157,11 +156,12 @@ object REPLParsing {
 
     @Command(
         name = "delgo",
-        description = ["Deletes a gameobject"]
+        description = ["Deletes a gameobject"],
+        subcommands = [HelpCommand::class]
     )
     class DeleteGO : Runnable {
         @Option(
-            names = ["-i", "--id"],
+            names = ["id", "-i"],
             description = ["ID of the game object to delete"],
             required = true
         )
@@ -172,13 +172,15 @@ object REPLParsing {
             } ?: println("No GameObject was deleted: ID didn't match any GameObject")
         }
     }
+
     @Command(
         name = "inspect",
-        description = ["Inspects a game object"]
+        description = ["Inspects a game object"],
+        subcommands = [HelpCommand::class]
     )
-    class InspectGO: Runnable {
+    class InspectGO : Runnable {
         @Option(
-            names = ["-i", "--id"],
+            names = ["id", "-i"],
             description = ["ID of the game object to inspect"],
             required = true
         )

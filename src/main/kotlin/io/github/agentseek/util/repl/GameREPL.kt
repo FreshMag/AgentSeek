@@ -37,7 +37,7 @@ object GameREPL {
 
     fun start() {
         println("Welcome to the Game Engine REPL!")
-        println("Type -h or --help to show usage")
+        println("Type help to show usage")
         val (replScene, dummyComponent) = SceneFactory.replScene()
         GameREPL.dummyComponent = dummyComponent
         scene = replScene
