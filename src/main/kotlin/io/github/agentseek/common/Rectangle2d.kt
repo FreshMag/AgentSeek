@@ -63,7 +63,7 @@ data class Rectangle2d(
             this.lowerRight += (transform)
         }
 
-    override fun intersect(shape: Shape2d): Boolean = TODO()
+    override fun intersects(shape: Shape2d): Boolean = TODO()
 
     override var center: Point2d
         get() = Point2d(

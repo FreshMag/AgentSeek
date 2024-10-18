@@ -13,7 +13,7 @@ data class Circle2d(val radius: Int, override var position: Point2d = Point2d(0.
 
     override fun contains(point: Point2d): Boolean = Vector2d(center, point).module() <= radius
 
-    override fun intersect(shape: Shape2d): Boolean =
+    override fun intersects(shape: Shape2d): Boolean =
         when(shape) {
             is Circle2d -> (Vector2d(center, shape.center).module() <= radius + shape.radius)
             is Rectangle2d -> TODO()
