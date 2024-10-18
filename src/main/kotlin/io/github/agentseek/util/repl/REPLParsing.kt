@@ -14,6 +14,8 @@ import io.github.agentseek.view.SimpleRenderer
 import picocli.CommandLine.*
 import java.io.File
 import kotlin.system.exitProcess
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.DurationUnit
 
 
 object REPLParsing {
@@ -68,6 +70,7 @@ object REPLParsing {
             PauseCommand::class,
             ResumeCommand::class,
             ExitCommand::class,
+            Do::class,
             SetScene::class,
             ListObjects::class,
             AddGO::class,
@@ -349,6 +352,30 @@ object REPLParsing {
         override fun run() {
             TODO()
         }
+    }
+
+    @Command(
+        name = "do",
+        description = ["Does a number of iterations of the game loop"],
+        subcommands = [HelpCommand::class],
+    )
+    class Do : Runnable {
+        @Parameters(paramLabel = "N_ITERATIONS", description = ["Number of iterations of the game loop"])
+        var nIterations: Int = 0
+
+        @Option(
+            names = ["-dt", "--delta-time"],
+            description = ["Defines the artificial delta time of these iterations"]
+        )
+        var deltaTime: Long = 100.milliseconds.toLong(DurationUnit.MILLISECONDS)
+
+        override fun run() {
+            repeat((1..nIterations).count()) {
+                GameEngine.doOne(deltaTime.milliseconds)
+                Thread.sleep(deltaTime)
+            }
+        }
+
     }
 
 }
