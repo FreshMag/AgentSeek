@@ -4,8 +4,8 @@ import io.github.agentseek.core.Game
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.util.DummyComponent
 import io.github.agentseek.util.factories.SceneFactory
-import org.jline.reader.LineReader
 import org.jline.reader.LineReaderBuilder
+import org.jline.terminal.TerminalBuilder
 import picocli.CommandLine
 
 
@@ -14,7 +14,12 @@ object GameREPL {
     private lateinit var dummyComponent: DummyComponent
 
     var isRunning = false
-    private val reader: LineReader = LineReaderBuilder.builder().build()
+    private val replCommand = REPLParsing.REPLCommand()
+    private val cmd = CommandLine(replCommand)
+    private val terminal = TerminalBuilder.terminal()
+    private val reader = LineReaderBuilder.builder()
+        .terminal(terminal)
+        .build()
 
     private fun parseLine(line: String) {
         if (line.isEmpty()) {
@@ -26,8 +31,7 @@ object GameREPL {
             }
             return
         }
-        val replCommand = REPLParsing.REPLCommand()
-        val cmd = CommandLine(replCommand)
+
         try {
             cmd.execute(*line.split(" ").toTypedArray())
         } catch (ex: Exception) {
@@ -44,7 +48,7 @@ object GameREPL {
         scene = replScene
         GameEngine.loadScene(replScene)
         while (true) {
-            val input = reader.readLine("")
+            val input = reader.readLine("> ")
             parseLine(input)
         }
     }

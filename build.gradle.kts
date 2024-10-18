@@ -36,7 +36,11 @@ tasks.withType<Test> {
 }
 
 application {
-    mainClass.set("io.github.agentseek.LaunchAgentSeek")
+    mainClass.set("io.github.agentseek.AgentSeek")
+}
+
+tasks.named<JavaExec>("run") {
+    standardInput = System.`in`
 }
 
 java {

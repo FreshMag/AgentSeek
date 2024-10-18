@@ -2,6 +2,9 @@ package io.github.agentseek
 
 import io.github.agentseek.view.MenuGui
 
-fun main() {
-    MenuGui.startMainMenu()
+object AgentSeek {
+    @JvmStatic
+    fun main(args: Array<String>): Unit {
+        MenuGui.startMainMenu()
+    }
 }
