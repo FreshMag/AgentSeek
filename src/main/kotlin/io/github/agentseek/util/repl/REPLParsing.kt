@@ -12,7 +12,9 @@ import io.github.agentseek.util.repl.GameREPL.scene
 import io.github.agentseek.view.Renderer
 import io.github.agentseek.view.SimpleRenderer
 import picocli.CommandLine.*
+import java.io.File
 import kotlin.system.exitProcess
+
 
 object REPLParsing {
 
@@ -66,6 +68,7 @@ object REPLParsing {
             PauseCommand::class,
             ResumeCommand::class,
             ExitCommand::class,
+            SetScene::class,
             ListObjects::class,
             AddGO::class,
             InspectGO::class,
@@ -235,7 +238,7 @@ object REPLParsing {
         subcommands = [HelpCommand::class],
         sortOptions = false
     )
-    class ModifyGO: Runnable {
+    class ModifyGO : Runnable {
         @Parameters(
             description = ["ID of the game object to modify"],
         )
@@ -293,12 +296,13 @@ object REPLParsing {
 
         }
     }
+
     @Command(
         name = "listobj",
         description = ["Lists all the game objects"],
         subcommands = [HelpCommand::class],
     )
-    class ListObjects: Runnable {
+    class ListObjects : Runnable {
 
         @Option(
             names = ["-v", "--verbose"],
@@ -308,7 +312,7 @@ object REPLParsing {
 
         override fun run() {
             scene.world.gameObjects.forEach {
-                println(if(verbose) it.toString() else it.id)
+                println(if (verbose) it.toString() else it.id)
             }
         }
 
@@ -319,7 +323,7 @@ object REPLParsing {
         description = ["Watches a GameObject, showing GameObject information at each game loop"],
         subcommands = [HelpCommand::class],
     )
-    class WatchGO: Runnable {
+    class WatchGO : Runnable {
         @Parameters(
             description = ["ID of the game object to modify"],
         )
@@ -332,5 +336,19 @@ object REPLParsing {
         }
     }
 
+    @Command(
+        name = "scene",
+        description = ["Sets the scene taken from a file"],
+        subcommands = [HelpCommand::class],
+    )
+    class SetScene : Runnable {
+
+        @Parameters(paramLabel = "SCENE_FILE", description = ["File containing the scene to set"])
+        lateinit var file: File
+
+        override fun run() {
+            TODO()
+        }
+    }
 
 }
