@@ -4,8 +4,8 @@ import io.github.agentseek.common.Point2d
 import io.github.agentseek.components.Component
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.engine.GameEngine
-import io.github.agentseek.physics.CircleHitBox
-import io.github.agentseek.physics.HitBox
+import io.github.agentseek.physics.CircleRigidBody
+import io.github.agentseek.physics.RigidBody
 import io.github.agentseek.util.FastEntities.emptyGameObject
 import io.github.agentseek.util.repl.GameREPL.isRunning
 import io.github.agentseek.util.repl.GameREPL.scene
@@ -178,21 +178,21 @@ object REPLParsing {
                 go.addComponentFromFQName(it)
             }
             val hitBox = parseForm(form)
-            go.hitBox = hitBox ?: return
+            go.rigidBody = hitBox ?: return
             go.position = Point2d(x, y)
             go.renderer = SimpleRenderer()
             scene.world.addGameObject(go.also { println(it.id) })
         }
     }
 
-    private fun parseForm(form: String): HitBox? {
+    private fun parseForm(form: String): RigidBody? {
         try {
             val split = form.split("(")
             val shape = split[0]
             val args = split[1].substringBefore(")").split(",")
             return when (shape) {
-                "circle" -> CircleHitBox(args[0].toInt())
-                else -> CircleHitBox(GameObject.DEFAULT_HITBOX_RADIUS)
+                "circle" -> CircleRigidBody(args[0].toInt())
+                else -> CircleRigidBody(GameObject.DEFAULT_HITBOX_RADIUS)
             }
         } catch (e: NumberFormatException) {
             println("Please provide an integer value between parentheses")

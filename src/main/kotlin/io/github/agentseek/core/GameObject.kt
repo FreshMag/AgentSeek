@@ -4,8 +4,8 @@ import io.github.agentseek.common.Point2d
 import io.github.agentseek.components.Component
 import io.github.agentseek.components.PlayerComponent
 import io.github.agentseek.events.Event
-import io.github.agentseek.physics.CircleHitBox
-import io.github.agentseek.physics.HitBox
+import io.github.agentseek.physics.CircleRigidBody
+import io.github.agentseek.physics.RigidBody
 import io.github.agentseek.view.EmptyRenderer
 import io.github.agentseek.view.Renderer
 import io.github.agentseek.world.World
@@ -20,9 +20,9 @@ class GameObject(
      */
     var renderer: Renderer = EmptyRenderer(),
     /**
-     * This object's [HitBox].
+     * This object's [RigidBody].
      */
-    var hitBox: HitBox = CircleHitBox(DEFAULT_HITBOX_RADIUS),
+    var rigidBody: RigidBody = CircleRigidBody(DEFAULT_HITBOX_RADIUS),
     /**
      * The world of this GameObject
      */
@@ -38,7 +38,7 @@ class GameObject(
      */
     var position: Point2d = Point2d(0.0, 0.0)
         set(value) {
-            hitBox.form.position = value
+            rigidBody.form.position = value
             field = value
         }
 
@@ -48,7 +48,7 @@ class GameObject(
     var components: List<Component> = ArrayList()
 
     init {
-        hitBox.form.position = position
+        rigidBody.form.position = position
     }
 
     /**
@@ -138,7 +138,7 @@ class GameObject(
     }
 
     override fun toString(): String {
-        return "GameObject(id='$id', components=$components, \"position=$position, renderer=$renderer, hitBox=$hitBox)"
+        return "GameObject(id='$id', components=$components, \"position=$position, renderer=$renderer, hitBox=$rigidBody)"
     }
 
     companion object {

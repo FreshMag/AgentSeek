@@ -7,15 +7,15 @@ import io.github.agentseek.common.Vector2d
 /**
  * This type of hit box uses a Circle to handle geometric intersection.
  */
-class CircleHitBox(override val form: Circle2d) : HitBox {
+class CircleRigidBody(override val form: Circle2d) : RigidBody {
 
     /**
      * Instantiate a CircleHitBox given the [radius] of his circle.
      */
     constructor(radius: Int) : this(Circle2d(radius))
 
-    override fun isCollidingWith(hitBox: HitBox): Boolean {
-        return form.intersect(hitBox.form)
+    override fun isCollidingWith(rigidBody: RigidBody): Boolean {
+        return form.intersect(rigidBody.form)
     }
 
     override fun isOutOfBounds(bounds: Shape2d): Boolean {

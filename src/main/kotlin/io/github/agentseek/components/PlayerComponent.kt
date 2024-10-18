@@ -4,7 +4,6 @@ import io.github.agentseek.common.Point2d
 import io.github.agentseek.common.Vector2d
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.physics.Direction
-import io.github.agentseek.world.World
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
 
@@ -57,7 +56,7 @@ class PlayerComponent(gameObject: GameObject, private val speed: Int) : Abstract
     /**
      * Checks if next movement is legal.
      */
-    private fun canMove(): Boolean = !(gameObject.hitBox.isOutOfBounds(world.bounds))
+    private fun canMove(): Boolean = !(gameObject.rigidBody.isOutOfBounds(world.bounds))
 
     /**
      * Gets current blocked direction. If direction is IDLE player can move in all directions.
