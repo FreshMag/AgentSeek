@@ -14,11 +14,21 @@ data class Circle2d(val radius: Double, override var position: Point2d = Point2d
     override fun contains(point: Point2d): Boolean = Vector2d(center, point).module() <= radius
 
     override fun intersects(shape: Shape2d): Boolean =
-        when(shape) {
-            is Circle2d -> (Vector2d(center, shape.center).module() <= radius + shape.radius)
-            is Rectangle2d -> TODO()
+        when (shape) {
+            is Circle2d -> intersectWithCircle(shape)
+            is Rectangle2d -> shape.intersects(this) // Delegate to Rectangle2d's logic
             else -> false
         }
+
+
+    private fun intersectWithCircle(circle: Circle2d): Boolean {
+        val distanceX = circle.center.x - center.x
+        val distanceY = circle.center.y - center.y
+        val distance = distanceX * distanceX + distanceY * distanceY
+        val radiusSum = radius + circle.radius
+
+        return distance < radiusSum * radiusSum
+    }
 
     override fun toString(): String = "Circle2d [radius=$radius, center=$center]"
 

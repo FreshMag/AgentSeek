@@ -42,7 +42,6 @@ data class Rectangle2d(
     override fun contains(point: Point2d): Boolean =
         point.x > upperLeft.x && point.x < upperRight.x && point.y > upperLeft.y && point.y < lowerLeft.y
 
-
     /**
      * Used to determine if a rectangle is contained completely in this rectangle.
      *
@@ -66,7 +65,27 @@ data class Rectangle2d(
             this.lowerRight += (transform)
         }
 
-    override fun intersects(shape: Shape2d): Boolean = TODO()
+    override fun intersects(shape: Shape2d): Boolean =
+        when (shape) {
+            is Rectangle2d -> intersectWithRectangle(shape)
+            is Circle2d -> intersectWithCircle(shape)
+            else -> false
+        }
+
+    private fun intersectWithRectangle(rect: Rectangle2d): Boolean {
+        return !(upperLeft.x + width < rect.upperLeft.x || rect.upperLeft.x + rect.width < upperLeft.x ||
+                upperLeft.y + height < rect.upperLeft.y || rect.upperLeft.y + rect.height < upperLeft.y)
+    }
+
+    private fun intersectWithCircle(circle: Circle2d): Boolean {
+        val closestX = circle.center.x.coerceIn(upperLeft.x, upperLeft.x + width)
+        val closestY = circle.center.y.coerceIn(upperLeft.y, upperLeft.y + height)
+
+        val distanceX = circle.center.x - closestX
+        val distanceY = circle.center.y - closestY
+
+        return distanceX * distanceX + distanceY * distanceY < circle.radius * circle.radius
+    }
 
     override var center: Point2d
         get() = Point2d(
