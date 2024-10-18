@@ -78,6 +78,7 @@ object REPLParsing {
             ModifyGO::class,
             DeleteGO::class,
             WatchGO::class,
+            UnWatchGo::class,
         ],
         description = ["Game Read-Eval-Print-Loop for utility"],
         version = [
@@ -328,13 +329,34 @@ object REPLParsing {
     )
     class WatchGO : Runnable {
         @Parameters(
-            description = ["ID of the game object to modify"],
+            description = ["ID of the game object to watch"],
         )
         lateinit var id: String
         override fun run() {
             scene.world.gameObjectById(id)?.let {
                 it.addComponent(WatchComponent(it))
                 println("Begun watching GameObject with ID: $id")
+            } ?: println("ID doesn't match any GameObject")
+        }
+    }
+    @Command(
+        name = "unwatch",
+        description = ["Un-watches a previously watched GameObject"],
+        subcommands = [HelpCommand::class],
+    )
+    class UnWatchGo : Runnable {
+        @Parameters(
+            description = ["ID of the game object to un-watch"],
+        )
+        lateinit var id: String
+        override fun run() {
+            scene.world.gameObjectById(id)?.let {
+                if (it.hasComponent<WatchComponent>()) {
+                    it.removeComponent(it.getComponent<WatchComponent>()!!)
+                    println("Stopped watching GameObject with ID: $id")
+                } else {
+                    println("Wasn't watching GameObject with ID: $id")
+                }
             } ?: println("ID doesn't match any GameObject")
         }
     }

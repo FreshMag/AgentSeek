@@ -103,7 +103,7 @@ class GameObject(
     /**
      * Returns `true` if this [GameObject] has that a [Component] of class [T]
      */
-    inline fun <reified T : Component> GameObject.hasComponent(): Boolean =
+    inline fun <reified T : Component> hasComponent(): Boolean =
         components.find { it is T } != null
 
     /**
