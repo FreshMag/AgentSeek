@@ -27,6 +27,10 @@ class WorldImpl(private val eventListener: EventListener) : World {
         return !bounds.contains(position)
     }
 
+    override fun gameObjectById(id: String): GameObject? =
+        gameObjects.firstOrNull { it.id == id }
+
+
     override fun addGameObject(gameObject: GameObject) {
         try {
             gameObjects += gameObject
