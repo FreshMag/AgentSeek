@@ -70,7 +70,9 @@ object REPLParsing {
             AddGO::class,
             InspectGO::class,
             ModifyGO::class,
-            DeleteGO::class],
+            DeleteGO::class,
+            WatchGO::class,
+        ],
         description = ["Game Read-Eval-Print-Loop for utility"],
         version = [
             "@|yellow AgentSeek-REPL |@",
@@ -311,4 +313,24 @@ object REPLParsing {
         }
 
     }
+
+    @Command(
+        name = "watch",
+        description = ["Watches a GameObject, showing GameObject information at each game loop"],
+        subcommands = [HelpCommand::class],
+    )
+    class WatchGO: Runnable {
+        @Parameters(
+            description = ["ID of the game object to modify"],
+        )
+        lateinit var id: String
+        override fun run() {
+            scene.world.gameObjectById(id)?.let {
+                it.addComponent(WatchComponent(it))
+                println("Begun watching GameObject with ID: $id")
+            } ?: println("ID doesn't match any GameObject")
+        }
+    }
+
+
 }
