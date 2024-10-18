@@ -23,12 +23,6 @@ interface World {
     fun generateId(type: String): String
 
     /**
-     * Checks if a certain [position] is out of bounds.
-     * `true` if that position is out of bounds.
-     */
-    fun isOutOfBounds(position: Point2d): Boolean
-
-    /**
      * Gets a [GameObject] by id, or `null` if that object doesn't exist.
      */
     fun gameObjectById(id: String): GameObject?
@@ -37,11 +31,6 @@ interface World {
      * Add an [gameObject] to this world.
      */
     fun addGameObject(gameObject: GameObject)
-
-    /**
-     * Two-dimensional shape that represents world [bounds].
-     */
-    val bounds: Shape2d
 
     /**
      * Remove a [gameObject] from this world.

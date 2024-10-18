@@ -24,6 +24,8 @@ dependencies {
     implementation("info.picocli:picocli:4.7.6")
     // https://mvnrepository.com/artifact/org.jline/jline
     implementation("org.jline:jline:3.27.0")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.17.2")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.1")
 
 }
 

@@ -14,7 +14,7 @@ object Input {
         UP, DOWN, LEFT, RIGHT, SPACE,
     }
 
-    private var inputProvider: InputProvider? = null
+    private var inputProviders: List<InputProvider> = emptyList()
     private val inputBuffer: MutableSet<Key> = Collections.synchronizedSet(HashSet())
 
     val UP: Boolean
@@ -52,7 +52,7 @@ object Input {
      * Sets the provider for this input system.
      */
     fun injectProvider(inputProvider: InputProvider) {
-        this.inputProvider = inputProvider
+        this.inputProviders += inputProvider
         inputProvider.addListener { inputBuffer.add(it) }
     }
 

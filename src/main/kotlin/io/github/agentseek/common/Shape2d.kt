@@ -22,6 +22,6 @@ interface Shape2d {
     /**
      * Check if this [Shape2d] intersects with [shape].
      */
-    fun intersect(shape: Shape2d): Boolean
+    fun intersects(shape: Shape2d): Boolean
 
 }

@@ -13,18 +13,12 @@ import io.github.agentseek.events.EventListener
 class WorldImpl(private val eventListener: EventListener) : World {
     override var gameObjects: List<GameObject> = emptyList()
         private set
-    override val bounds: Rectangle2d =
-        Rectangle2d(BOUNDS_WIDTH, BOUNDS_HEIGHT, BOUNDS_UPPER_LEFT_X, BOUNDS_UPPER_LEFT_Y)
     private var agentSeekId = 0
 
 
     override fun generateId(type: String): String {
         agentSeekId++
         return "${type}AG@${this.agentSeekId}"
-    }
-
-    override fun isOutOfBounds(position: Point2d): Boolean {
-        return !bounds.contains(position)
     }
 
     override fun gameObjectById(id: String): GameObject? =
