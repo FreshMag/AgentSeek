@@ -2,9 +2,7 @@ package io.github.agentseek.core
 
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.components.Component
-import io.github.agentseek.components.PlayerComponent
 import io.github.agentseek.events.Event
-import io.github.agentseek.physics.CircleRigidBody
 import io.github.agentseek.physics.RigidBody
 import io.github.agentseek.view.EmptyRenderer
 import io.github.agentseek.view.Renderer
@@ -20,36 +18,30 @@ class GameObject(
      */
     var renderer: Renderer = EmptyRenderer(),
     /**
-     * This object's [RigidBody].
-     */
-    var rigidBody: RigidBody = CircleRigidBody(DEFAULT_HITBOX_RADIUS),
-    /**
      * The world of this GameObject
      */
-    val world: World
+    val world: World,
 ) {
     /**
      * Identifier for this GameObject
      */
     val id: String = world.generateId("go")
+    var rigidBody: RigidBody = RigidBody.CircleRigidBody(DEFAULT_HITBOX_RADIUS, this)
 
     /**
      * This object's current position.
      */
     var position: Point2d = Point2d(0.0, 0.0)
         set(value) {
-            rigidBody.form.position = value
+            rigidBody.shape.position = value
             field = value
         }
+        get() = rigidBody.shape.position
 
     /**
      * Gets the [List] of [Component]s added to this object.
      */
     var components: List<Component> = ArrayList()
-
-    init {
-        rigidBody.form.position = position
-    }
 
     /**
      * This method is called once every update. This will update every component
@@ -57,6 +49,7 @@ class GameObject(
      */
     internal fun onUpdate(deltaTime: Duration) {
         components.forEach { it.onUpdate(deltaTime) }
+        rigidBody.onUpdate(deltaTime)
         renderer.render(this)
     }
 
@@ -109,7 +102,7 @@ class GameObject(
     /**
      * Returns `true` if this [GameObject] is the player.
      */
-    fun isPlayer(): Boolean = hasComponent<PlayerComponent>()
+    fun isPlayer(): Boolean = TODO()
 
     /**
      * Notifies an event to the world of the GameObject
@@ -145,6 +138,6 @@ class GameObject(
         /**
          * The default HitBox radius of a GameObject.
          */
-        const val DEFAULT_HITBOX_RADIUS = 100
+        const val DEFAULT_HITBOX_RADIUS = 1.5
     }
 }

@@ -30,12 +30,14 @@ data class Rectangle2d(
      * @param upperLeftX X coordinate of the upper left vertex of the rectangle.
      * @param upperLeftY Y coordinate of the upper left vertex of the rectangle.
      */
-    constructor(width: Int, height: Int, upperLeftX: Int, upperLeftY: Int) : this(
-        Point2d(upperLeftX.toDouble(), upperLeftY.toDouble()),
-        Point2d(upperLeftX.toDouble(), (upperLeftY + height).toDouble()),
-        Point2d((upperLeftX + width).toDouble(), upperLeftY.toDouble()),
-        Point2d(upperLeftX + width.toDouble(), upperLeftY + height.toDouble())
+    constructor(width: Double, height: Double, upperLeftX: Double, upperLeftY: Double) : this(
+        Point2d(upperLeftX, upperLeftY),
+        Point2d(upperLeftX, (upperLeftY + height)),
+        Point2d((upperLeftX + width), upperLeftY),
+        Point2d(upperLeftX + width, upperLeftY + height)
     )
+
+    constructor(width: Double, height: Double) : this(width, height, 0.0, 0.0)
 
     override fun contains(point: Point2d): Boolean =
         point.x > upperLeft.x && point.x < upperRight.x && point.y > upperLeft.y && point.y < lowerLeft.y
@@ -49,8 +51,9 @@ data class Rectangle2d(
      * outer rectangle.
      */
     fun contains(rectangle: Rectangle2d): Boolean =
-        this.contains(rectangle.upperLeft) && this.contains(rectangle.lowerRight)
-                && this.contains(rectangle.upperRight) && this.contains(rectangle.lowerLeft)
+        this.contains(rectangle.upperLeft) && this.contains(rectangle.lowerRight) && this.contains(rectangle.upperRight) && this.contains(
+            rectangle.lowerLeft
+        )
 
 
     override var position: Point2d
@@ -67,8 +70,7 @@ data class Rectangle2d(
 
     override var center: Point2d
         get() = Point2d(
-            (upperLeft.x + lowerRight.x) / 2,
-            upperLeft.y + lowerRight.y / 2
+            (upperLeft.x + lowerRight.x) / 2, upperLeft.y + lowerRight.y / 2
         )
         set(value) {}
 }

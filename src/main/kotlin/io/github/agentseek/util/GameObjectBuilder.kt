@@ -3,7 +3,6 @@ package io.github.agentseek.util
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.components.Component
 import io.github.agentseek.core.GameObject
-import io.github.agentseek.physics.CircleRigidBody
 import io.github.agentseek.physics.RigidBody
 import io.github.agentseek.view.EmptyRenderer
 import io.github.agentseek.view.Renderer
@@ -26,7 +25,9 @@ class GameObjectBuilder(private val world: World) {
     /**
      * This object's [RigidBody].
      */
-    private var rigidBody: RigidBody = CircleRigidBody(GameObject.DEFAULT_HITBOX_RADIUS)
+    private var rigidBodySetter: (GameObject) -> RigidBody = {
+        RigidBody.CircleRigidBody(GameObject.DEFAULT_HITBOX_RADIUS, it)
+    }
 
     /**
      * The GameObject graphical appearance
@@ -54,15 +55,16 @@ class GameObjectBuilder(private val world: World) {
         return this
     }
 
-    fun bbox(rigidBody: RigidBody): GameObjectBuilder {
-        this.rigidBody = rigidBody
+    fun bbox(rigidBodySetter: (GameObject) -> RigidBody): GameObjectBuilder {
+        this.rigidBodySetter = rigidBodySetter
         return this
     }
 
     @Throws(IllegalStateException::class)
     fun build(): GameObject {
-        val gameObject = GameObject(renderer, rigidBody, world)
+        val gameObject = GameObject(renderer, world)
         gameObject.position = position
+        gameObject.rigidBody = rigidBodySetter(gameObject)
         componentSetters.forEach { gameObject.addComponent(it(gameObject)) }
         return gameObject
     }

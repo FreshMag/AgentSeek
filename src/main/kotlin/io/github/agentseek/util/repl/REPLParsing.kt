@@ -4,7 +4,6 @@ import io.github.agentseek.common.Point2d
 import io.github.agentseek.components.Component
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.engine.GameEngine
-import io.github.agentseek.physics.CircleRigidBody
 import io.github.agentseek.physics.RigidBody
 import io.github.agentseek.util.FastEntities.emptyGameObject
 import io.github.agentseek.util.repl.GameREPL.isRunning
@@ -147,7 +146,8 @@ object REPLParsing {
 
         @Option(
             names = ["-f", "--form"],
-            description = ["specify the form of the game object (e.g. circle(<RADIUS>), rectangle(<WIDTH>, <HEIGHT>))"],
+            description = ["specify the form of the game object (e.g. circle(<RADIUS>), rectangle(<WIDTH>, <HEIGHT>)," +
+                    "square(<SIZE>))"],
             required = false,
         )
         var form: String = "circle(${GameObject.DEFAULT_HITBOX_RADIUS})"
@@ -177,7 +177,7 @@ object REPLParsing {
             components.forEach {
                 go.addComponentFromFQName(it)
             }
-            val hitBox = parseForm(form)
+            val hitBox = parseForm(form, go)
             go.rigidBody = hitBox ?: return
             go.position = Point2d(x, y)
             go.renderer = SimpleRenderer()
@@ -185,14 +185,16 @@ object REPLParsing {
         }
     }
 
-    private fun parseForm(form: String): RigidBody? {
+    private fun parseForm(form: String, gameObject: GameObject): RigidBody? {
         try {
             val split = form.split("(")
             val shape = split[0]
             val args = split[1].substringBefore(")").split(",")
             return when (shape) {
-                "circle" -> CircleRigidBody(args[0].toInt())
-                else -> CircleRigidBody(GameObject.DEFAULT_HITBOX_RADIUS)
+                "circle" -> RigidBody.CircleRigidBody(args[0].toDouble(), gameObject)
+                "rectangle" -> RigidBody.RectangleRigidBody(args[0].toDouble(), args[1].toDouble(), gameObject)
+                "square" -> RigidBody.RectangleRigidBody(args[0].toDouble(), args[0].toDouble(), gameObject)
+                else -> throw IllegalArgumentException()
             }
         } catch (e: NumberFormatException) {
             println("Please provide an integer value between parentheses")

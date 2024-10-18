@@ -11,7 +11,6 @@ class DummyComponent(gameObject: GameObject) : AbstractComponent(gameObject) {
 
     override fun onUpdate(deltaTime: Duration) {
         log("It's me the Dummy Component! Here's my ID: ${gameObject.id}")
-        gameObject.position += Vector2d(1.0, 1.0).normalized() *
-                (deltaTime.toDouble(DurationUnit.MILLISECONDS) / 10)
+        gameObject.rigidBody.applyForce(Vector2d(1.0, 1.0))
     }
 }

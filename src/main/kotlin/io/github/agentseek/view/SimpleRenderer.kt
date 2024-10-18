@@ -11,11 +11,11 @@ import io.github.agentseek.common.Rectangle2d as Rectangle
 
 class SimpleRenderer(override val layer: Layer = Layer.GENERIC) : Renderer {
     override fun render(gameObject: GameObject) {
-        val shape: Shape? = when(gameObject.rigidBody.form) {
+        val shape: Shape? = when(gameObject.rigidBody.shape) {
             is Circle -> {
-                val radius = (gameObject.rigidBody.form as Circle).radius
-                val upperLeftScreenPoint = GameGui.toCameraPoint(gameObject.rigidBody.form.position)
-                val lowerRight = gameObject.rigidBody.form.position + Vector2d(radius * 2.0, radius * 2.0)
+                val radius = (gameObject.rigidBody.shape as Circle).radius
+                val upperLeftScreenPoint = GameGui.toCameraPoint(gameObject.rigidBody.shape.position)
+                val lowerRight = gameObject.rigidBody.shape.position + Vector2d(radius * 2.0, radius * 2.0)
                 val lowerRightScreenPoint = GameGui.toCameraPoint(lowerRight)
                 val difference = lowerRightScreenPoint - upperLeftScreenPoint
                 Ellipse2D.Double(
@@ -26,8 +26,8 @@ class SimpleRenderer(override val layer: Layer = Layer.GENERIC) : Renderer {
                 )
             }
             is Rectangle -> {
-                val upperLeftScreenPoint = GameGui.toCameraPoint((gameObject.rigidBody.form as Rectangle).upperLeft)
-                val bottomRightScreenPoint = GameGui.toCameraPoint((gameObject.rigidBody.form as Rectangle).lowerRight)
+                val upperLeftScreenPoint = GameGui.toCameraPoint((gameObject.rigidBody.shape as Rectangle).upperLeft)
+                val bottomRightScreenPoint = GameGui.toCameraPoint((gameObject.rigidBody.shape as Rectangle).lowerRight)
                 val difference = bottomRightScreenPoint - upperLeftScreenPoint
                 Rectangle2D.Double(
                     upperLeftScreenPoint.x,
