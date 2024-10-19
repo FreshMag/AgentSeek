@@ -143,7 +143,7 @@ object REPLParsing {
     )
     class AddGO : Runnable {
         @Option(
-            names = ["-f", "--form"],
+            names = ["-s", "--shape"],
             description = ["specify the form of the game object (e.g. circle(<RADIUS>), rectangle(<WIDTH>, <HEIGHT>)," +
                     "square(<SIZE>))"],
             required = false,
