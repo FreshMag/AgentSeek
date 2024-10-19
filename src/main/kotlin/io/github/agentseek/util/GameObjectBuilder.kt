@@ -39,8 +39,8 @@ class GameObjectBuilder(private val world: World) {
         return this
     }
 
-    fun position(x: Int, y: Int): GameObjectBuilder {
-        this.position = Point2d(x.toDouble(), y.toDouble())
+    fun position(x: Double, y: Double): GameObjectBuilder {
+        this.position = Point2d(x, y)
         return this
     }
 
@@ -55,7 +55,7 @@ class GameObjectBuilder(private val world: World) {
         return this
     }
 
-    fun bbox(rigidBodySetter: (GameObject) -> RigidBody): GameObjectBuilder {
+    fun rigidBody(rigidBodySetter: (GameObject) -> RigidBody): GameObjectBuilder {
         this.rigidBodySetter = rigidBodySetter
         return this
     }
@@ -63,8 +63,8 @@ class GameObjectBuilder(private val world: World) {
     @Throws(IllegalStateException::class)
     fun build(): GameObject {
         val gameObject = GameObject(renderer, world)
-        gameObject.position = position
         gameObject.rigidBody = rigidBodySetter(gameObject)
+        gameObject.position = position
         componentSetters.forEach { gameObject.addComponent(it(gameObject)) }
         return gameObject
     }
