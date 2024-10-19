@@ -4,21 +4,32 @@ package io.github.agentseek.common
  * This class represents a Circle in two dimensions, with [position] equal to its top left corner
  * and [radius]
  */
-data class Circle2d(val radius: Int, override var position: Point2d = Point2d(0.0, 0.0)) : Shape2d {
-    override var center: Point2d
-        get() = position
+data class Circle2d(val radius: Double, override var position: Point2d = Point2d(0.0, 0.0)) : Shape2d {
+    override var center: Point2d = position + Vector2d(radius, radius)
+        get() = position + Vector2d(radius, radius)
         set(value) {
-            position = Point2d(value.x - (radius / 2.0), value.y - (radius / 2.0))
+            position = Point2d(value.x - radius, value.y - radius)
+            field = value
         }
 
     override fun contains(point: Point2d): Boolean = Vector2d(center, point).module() <= radius
 
-    override fun intersect(shape: Shape2d): Boolean =
-        when(shape) {
-            is Circle2d -> (Vector2d(center, shape.center).module() <= radius + shape.radius)
-            is Rectangle2d -> TODO()
+    override fun intersects(shape: Shape2d): Boolean =
+        when (shape) {
+            is Circle2d -> intersectWithCircle(shape)
+            is Rectangle2d -> shape.intersects(this) // Delegate to Rectangle2d's logic
             else -> false
         }
+
+
+    private fun intersectWithCircle(circle: Circle2d): Boolean {
+        val distanceX = circle.center.x - center.x
+        val distanceY = circle.center.y - center.y
+        val distance = distanceX * distanceX + distanceY * distanceY
+        val radiusSum = radius + circle.radius
+
+        return distance < radiusSum * radiusSum
+    }
 
     override fun toString(): String = "Circle2d [radius=$radius, center=$center]"
 

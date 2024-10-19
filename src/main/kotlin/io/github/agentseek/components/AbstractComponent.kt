@@ -31,7 +31,7 @@ abstract class AbstractComponent(
         gameObject.notifyEvent(event)
     }
 
-    final override fun toString(): String {
+    override fun toString(): String {
         return "${this.javaClass.simpleName} [id=$id]"
     }
 

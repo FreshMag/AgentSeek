@@ -9,8 +9,7 @@ interface Shape2d {
      */
     var center: Point2d
     /**
-     * The [Shape2d] position in the 2D space, represented as a [Point2d]. Can be either the center of a circle or
-     * a top left corner of a rectangle.
+     * The [Shape2d] position in the 2D space, represented as a [Point2d].
     */
     var position: Point2d
 
@@ -22,6 +21,6 @@ interface Shape2d {
     /**
      * Check if this [Shape2d] intersects with [shape].
      */
-    fun intersect(shape: Shape2d): Boolean
+    fun intersects(shape: Shape2d): Boolean
 
 }

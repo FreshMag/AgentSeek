@@ -37,9 +37,19 @@ data class Vector2d(var x: Double, var y: Double) {
     operator fun times(factor: Double): Vector2d = Vector2d(x * factor, y * factor)
 
     /**
+     * Divides a vector by a [factor] (equivalent to v * (1/factor))
+     */
+    operator fun div(factor: Double): Vector2d = Vector2d(x / factor, y / factor)
+
+    /**
      * Sums this vector with [vector]
      */
     operator fun plus(vector: Vector2d): Vector2d = Vector2d(x + vector.x, y + vector.y)
+
+    /**
+     * Inverts this vector.
+     */
+    operator fun unaryMinus(): Vector2d = Vector2d(-x, -y)
 
     companion object {
         /**

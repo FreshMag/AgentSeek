@@ -4,7 +4,6 @@ import io.github.agentseek.common.Timer
 import io.github.agentseek.common.TimerImpl
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.events.NewLevelEvent
-import io.github.agentseek.world.World
 import kotlin.time.Duration
 
 /**
@@ -24,7 +23,7 @@ class DoorComponent(gameObject: GameObject, duration: Int) : AbstractComponent(g
     override fun onUpdate(deltaTime: Duration) {
         if (timer.isElapsed() || isCollidable) {
             this.isCollidable = true
-            if (player?.hitBox?.isCollidingWith(gameObject.hitBox) == true) {
+            if (player?.rigidBody?.isCollidingWith(gameObject.rigidBody) == true) {
                 notifyEvent(NewLevelEvent())
             }
         }

@@ -4,8 +4,7 @@ import io.github.agentseek.common.Point2d
 import io.github.agentseek.components.Component
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.engine.GameEngine
-import io.github.agentseek.physics.CircleHitBox
-import io.github.agentseek.physics.HitBox
+import io.github.agentseek.physics.RigidBody
 import io.github.agentseek.util.FastEntities.emptyGameObject
 import io.github.agentseek.util.repl.GameREPL.isRunning
 import io.github.agentseek.util.repl.GameREPL.scene
@@ -143,11 +142,10 @@ object REPLParsing {
         subcommands = [HelpCommand::class]
     )
     class AddGO : Runnable {
-        private val go = scene.emptyGameObject(false)
-
         @Option(
-            names = ["-f", "--form"],
-            description = ["specify the form of the game object (e.g. circle(<RADIUS>), rectangle(<WIDTH>, <HEIGHT>))"],
+            names = ["-s", "--shape"],
+            description = ["specify the form of the game object (e.g. circle(<RADIUS>), rectangle(<WIDTH>, <HEIGHT>)," +
+                    "square(<SIZE>))"],
             required = false,
         )
         var form: String = "circle(${GameObject.DEFAULT_HITBOX_RADIUS})"
@@ -174,25 +172,28 @@ object REPLParsing {
         var components: Array<String> = emptyArray()
 
         override fun run() {
+            val go = scene.emptyGameObject(false)
             components.forEach {
                 go.addComponentFromFQName(it)
             }
-            val hitBox = parseForm(form)
-            go.hitBox = hitBox ?: return
+            val hitBox = parseForm(form, go)
+            go.rigidBody = hitBox ?: return
             go.position = Point2d(x, y)
             go.renderer = SimpleRenderer()
             scene.world.addGameObject(go.also { println(it.id) })
         }
     }
 
-    private fun parseForm(form: String): HitBox? {
+    private fun parseForm(form: String, gameObject: GameObject): RigidBody? {
         try {
             val split = form.split("(")
             val shape = split[0]
             val args = split[1].substringBefore(")").split(",")
             return when (shape) {
-                "circle" -> CircleHitBox(args[0].toInt())
-                else -> CircleHitBox(GameObject.DEFAULT_HITBOX_RADIUS)
+                "circle" -> RigidBody.CircleRigidBody(args[0].toDouble(), gameObject)
+                "rectangle" -> RigidBody.RectangleRigidBody(args[0].toDouble(), args[1].toDouble(), gameObject)
+                "square" -> RigidBody.RectangleRigidBody(args[0].toDouble(), args[0].toDouble(), gameObject)
+                else -> throw IllegalArgumentException()
             }
         } catch (e: NumberFormatException) {
             println("Please provide an integer value between parentheses")
@@ -216,6 +217,7 @@ object REPLParsing {
         override fun run() {
             scene.world.gameObjectById(id)?.let {
                 scene.world.removeGameObject(it)
+                println("Removed $id")
             } ?: println("ID doesn't match any GameObject")
         }
     }

@@ -16,7 +16,7 @@ class CollisionWithPlayerComponent(gameObject: GameObject) : AbstractComponent(g
      */
     override fun onUpdate(deltaTime: Duration) {
         if (!this.hasAlreadyCollided) {
-            val playerIfColliding: GameObject? = player?.takeIf { it.hitBox.isCollidingWith(gameObject.hitBox) }
+            val playerIfColliding: GameObject? = player?.takeIf { it.rigidBody.isCollidingWith(gameObject.rigidBody) }
             playerIfColliding?.let {
                 gameObject.notifyEvent(EnemyCollisionEvent(it))
             }
