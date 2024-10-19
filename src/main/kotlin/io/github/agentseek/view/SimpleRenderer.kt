@@ -13,10 +13,10 @@ class SimpleRenderer(override val layer: Layer = Layer.GENERIC) : Renderer {
     override fun render(gameObject: GameObject) {
         val shape: Shape? = when(gameObject.rigidBody.shape) {
             is Circle -> {
-                val radius = (gameObject.rigidBody.shape as Circle).radius
-                val upperLeftScreenPoint = GameGui.toCameraPoint(gameObject.rigidBody.shape.position)
-                val lowerRight = gameObject.rigidBody.shape.position + Vector2d(radius * 2.0, radius * 2.0)
-                val lowerRightScreenPoint = GameGui.toCameraPoint(lowerRight)
+                val circle = gameObject.rigidBody.shape as Circle
+                val radius = circle.radius
+                val upperLeftScreenPoint = GameGui.toCameraPoint(circle.center - Vector2d(radius, radius))
+                val lowerRightScreenPoint = GameGui.toCameraPoint(circle.center + Vector2d(radius, radius))
                 val difference = lowerRightScreenPoint - upperLeftScreenPoint
                 Ellipse2D.Double(
                     upperLeftScreenPoint.x,
