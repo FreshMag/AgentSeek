@@ -26,7 +26,7 @@ class GameObject(
      * Identifier for this GameObject
      */
     val id: String = world.generateId("go")
-    var rigidBody: RigidBody = RigidBody.CircleRigidBody(DEFAULT_HITBOX_RADIUS, this)
+    var rigidBody: RigidBody = RigidBody.RectangleRigidBody(DEFAULT_SIZE, DEFAULT_SIZE, this)
 
     /**
      * This object's current position.
@@ -136,8 +136,10 @@ class GameObject(
 
     companion object {
         /**
-         * The default HitBox radius of a GameObject.
+         * The default RigidBody size of a GameObject. Note that this can have different meaning: for example for
+         * a [io.github.agentseek.physics.RigidBody.CircleRigidBody] can be its radius, instead for a
+         * [io.github.agentseek.physics.RigidBody.RectangleRigidBody] its width and height.
          */
-        const val DEFAULT_HITBOX_RADIUS = 1.5
+        const val DEFAULT_SIZE = 1.5
     }
 }
