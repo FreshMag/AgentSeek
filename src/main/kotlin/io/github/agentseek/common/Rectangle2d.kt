@@ -39,6 +39,8 @@ data class Rectangle2d(
 
     constructor(width: Double, height: Double) : this(width, height, 0.0, 0.0)
 
+    constructor(upperLeft: Point2d, width: Double, height: Double) : this(width, height, upperLeft.x, upperLeft.y)
+
     override fun contains(point: Point2d): Boolean =
         point.x > upperLeft.x && point.x < upperRight.x && point.y > upperLeft.y && point.y < lowerLeft.y
 

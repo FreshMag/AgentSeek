@@ -13,6 +13,7 @@ data class Point2d(
      */
     operator fun plus(v: Vector2d): Point2d = Point2d(x + v.x, y + v.y)
 
+    operator fun minus(v: Vector2d): Point2d = Point2d(x - v.x, y - v.y)
 
     /**
      * [Vector2d] from this point to another [point].

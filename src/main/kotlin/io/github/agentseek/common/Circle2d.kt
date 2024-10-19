@@ -5,10 +5,11 @@ package io.github.agentseek.common
  * and [radius]
  */
 data class Circle2d(val radius: Double, override var position: Point2d = Point2d(0.0, 0.0)) : Shape2d {
-    override var center: Point2d
-        get() = position
+    override var center: Point2d = position + Vector2d(radius, radius)
+        get() = position + Vector2d(radius, radius)
         set(value) {
-            position = Point2d(value.x - (radius / 2.0), value.y - (radius / 2.0))
+            position = Point2d(value.x - radius, value.y - radius)
+            field = value
         }
 
     override fun contains(point: Point2d): Boolean = Vector2d(center, point).module() <= radius
