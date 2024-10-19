@@ -5,6 +5,6 @@ import io.github.agentseek.view.GameGui
 object AgentSeek {
     @JvmStatic
     fun main(args: Array<String>): Unit {
-        GameGui.startGameGui(true)
+        GameGui.startGameGui()
     }
 }
