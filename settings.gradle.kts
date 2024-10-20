@@ -12,3 +12,4 @@ plugins {
 
 rootProject.name = "AgentSeek"
 include("engine")
+include("agentseek")

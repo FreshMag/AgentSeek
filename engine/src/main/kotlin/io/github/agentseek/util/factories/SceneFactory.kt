@@ -4,7 +4,7 @@ import io.github.agentseek.core.Game
 import io.github.agentseek.core.GameImpl
 import io.github.agentseek.physics.RigidBody
 import io.github.agentseek.util.DummyComponent
-import io.github.agentseek.view.SimpleRenderer
+import io.github.agentseek.view.swing.SimpleRenderer
 
 object SceneFactory {
     fun replScene(): Pair<Game, DummyComponent> {

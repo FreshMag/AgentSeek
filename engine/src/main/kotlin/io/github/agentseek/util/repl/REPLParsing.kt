@@ -9,7 +9,7 @@ import io.github.agentseek.util.FastEntities.emptyGameObject
 import io.github.agentseek.util.repl.GameREPL.isRunning
 import io.github.agentseek.util.repl.GameREPL.scene
 import io.github.agentseek.view.Renderer
-import io.github.agentseek.view.SimpleRenderer
+import io.github.agentseek.view.swing.SimpleRenderer
 import picocli.CommandLine.*
 import java.io.File
 import kotlin.system.exitProcess

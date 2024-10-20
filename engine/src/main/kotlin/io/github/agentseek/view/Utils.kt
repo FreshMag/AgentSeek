@@ -8,13 +8,11 @@ object Utils {
      */
     private const val WORLD_MAX_WIDTH: Double = 50.0
 
-    fun GameGui.toCameraPoint(position: Point2d): Point2d {
-        val width = screenSize.width
-        val height = screenSize.height
+    fun View.toCameraPoint(position: Point2d): Point2d {
 
-        val worldHeight = (WORLD_MAX_WIDTH * height) / width
-        val cameraX = (position.x * width) / WORLD_MAX_WIDTH
-        val cameraY = (position.y * height) / worldHeight
+        val worldHeight = (WORLD_MAX_WIDTH * screenHeight) / screenWidth
+        val cameraX = (position.x * screenWidth) / WORLD_MAX_WIDTH
+        val cameraY = (position.y * screenHeight) / worldHeight
         return Point2d(cameraX, cameraY)
     }
 }

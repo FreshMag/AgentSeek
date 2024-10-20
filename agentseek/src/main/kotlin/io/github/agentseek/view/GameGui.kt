@@ -12,8 +12,13 @@ import javax.swing.SwingUtilities
 import javax.swing.WindowConstants.EXIT_ON_CLOSE
 
 
-object GameGui {
+object GameGui : View {
     val screenSize: Dimension = Dimension(1000, 720)//Toolkit.getDefaultToolkit().screenSize
+    override val screenHeight: Int
+        get() = screenSize.height
+    override val screenWidth: Int
+        get() = screenSize.width
+
     private const val APP_NAME = "Agent Seek"
 
     private val shapesToDraw: MutableList<Shape> = Collections.synchronizedList(mutableListOf())
@@ -27,6 +32,7 @@ object GameGui {
         frame.preferredSize = screenSize
         frame.defaultCloseOperation = EXIT_ON_CLOSE
         frame.isVisible = true
+        GameEngine.view = this
         if (repl) {
             Thread {
                 GameREPL.start()
@@ -35,10 +41,6 @@ object GameGui {
             GameEngine.loadScene(SceneFactory.replScene().first)
             GameEngine.start()
         }
-    }
-
-    fun drawShape(shape: Shape) {
-        shapesToDraw.add(shape)
     }
 
     class TestingPanelGraphics : JPanel() {
@@ -65,12 +67,19 @@ object GameGui {
         }
     }
 
-    fun render() {
+    override fun render() {
         buffer = shapesToDraw.toList()
         shapesToDraw.clear()
         SwingUtilities.invokeLater {
             frame.repaint()
         }
 
+    }
+
+    override fun draw(obj: Any) {
+        when(obj) {
+            is Shape -> shapesToDraw.add(obj)
+            else -> println("Unknown object to draw: $obj")
+        }
     }
 }

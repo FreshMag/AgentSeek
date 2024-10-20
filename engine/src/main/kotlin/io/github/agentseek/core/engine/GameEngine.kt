@@ -3,7 +3,7 @@ package io.github.agentseek.core.engine
 import io.github.agentseek.core.Game
 import io.github.agentseek.core.engine.input.Input
 import io.github.agentseek.util.factories.SceneFactory
-import io.github.agentseek.view.GameGui
+import io.github.agentseek.view.View
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
@@ -16,6 +16,7 @@ object GameEngine {
     private val logger = KotlinLogging.logger {}
     private val STANDARD_STARTING_PERIOD = 50.milliseconds
     private var state: Game? = null
+    var view: View? = null
 
     /**
      * The main loop of the game engine
@@ -28,7 +29,7 @@ object GameEngine {
             log("DT $dt")
             state?.updateState(dt)
             Input.refresh()
-            GameGui.render()
+            view?.render()
         }
     }
 
