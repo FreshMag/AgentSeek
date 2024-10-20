@@ -56,6 +56,6 @@ class Camera(
      * Zooms out or in the camera by a [factor]
      */
     fun zoom(factor: Double) {
-        worldViewPortWidth *= factor
+        worldViewPortWidth /= factor
     }
 }

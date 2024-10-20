@@ -79,6 +79,7 @@ object REPLParsing {
             DeleteGO::class,
             WatchGO::class,
             UnWatchGo::class,
+            ZoomCommand::class,
         ],
         description = ["Game Read-Eval-Print-Loop for utility"],
         version = [
@@ -415,6 +416,22 @@ object REPLParsing {
 
         override fun run() {
             TODO("Not yet implemented")
+        }
+    }
+
+    @Command(
+        name = "zoom",
+        description = ["Zooms the viewport of the view's camera"],
+        subcommands = [HelpCommand::class],
+    )
+    class ZoomCommand: Runnable {
+        @Parameters(
+            paramLabel = "FACTOR", description = ["Zoom's factor. MUST be positive. If less than 1, zooms out"]
+        )
+        var factor: Double = 1.0
+
+        override fun run() {
+            GameEngine.view?.camera?.zoom(factor.takeIf { it > 0 } ?: 1.0)
         }
     }
 
