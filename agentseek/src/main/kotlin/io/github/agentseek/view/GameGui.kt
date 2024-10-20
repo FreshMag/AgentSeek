@@ -23,7 +23,7 @@ object GameGui : View {
 
     private val shapesToDraw: MutableList<Shape> = Collections.synchronizedList(mutableListOf())
     private var buffer: List<Shape> = emptyList()
-    private val frame = JFrame()
+    private val frame = JFrame(APP_NAME)
 
     fun startGameGui(repl: Boolean = false) {
         frame.name = APP_NAME
