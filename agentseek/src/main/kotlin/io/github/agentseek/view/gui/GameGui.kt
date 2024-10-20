@@ -3,6 +3,7 @@ package io.github.agentseek.view.gui
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.util.factories.SceneFactory
 import io.github.agentseek.util.repl.GameREPL
+import io.github.agentseek.view.Camera
 import io.github.agentseek.view.GameViewPanel
 import io.github.agentseek.view.View
 import java.awt.BorderLayout
@@ -24,12 +25,17 @@ object GameGui : View {
     override val screenWidth: Int
         get() = screenSize.width
 
+    override val camera: Camera = Camera(this, 50.0)
+
     private const val APP_NAME = "Agent Seek"
 
     private val shapesToDraw: MutableList<Shape> = Collections.synchronizedList(mutableListOf())
     private var shapeBuffer: List<Shape> = emptyList()
     private val frame = JFrame(APP_NAME)
 
+    /**
+     * This function is called once every frame rendering on the Graphics 2D of the GUI.
+     */
     private val gameViewRendering: (Graphics2D) -> Unit = { g2d ->
         shapeBuffer.forEach {
             g2d.draw(it)

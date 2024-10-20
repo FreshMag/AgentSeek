@@ -5,7 +5,6 @@ import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.view.Layer
 import io.github.agentseek.view.Renderer
-import io.github.agentseek.view.Utils.toCameraPoint
 import java.awt.Shape
 import java.awt.geom.Ellipse2D
 import java.awt.geom.Rectangle2D
@@ -19,8 +18,8 @@ class SimpleRenderer(override val layer: Layer = Layer.GENERIC) : Renderer {
             is Circle -> {
                 val circle = gameObject.rigidBody.shape as Circle
                 val radius = circle.radius
-                val upperLeftScreenPoint = view.toCameraPoint(circle.center - Vector2d(radius, radius))
-                val lowerRightScreenPoint = view.toCameraPoint(circle.center + Vector2d(radius, radius))
+                val upperLeftScreenPoint = view.camera.toCameraPoint(circle.center - Vector2d(radius, radius))
+                val lowerRightScreenPoint = view.camera.toCameraPoint(circle.center + Vector2d(radius, radius))
                 val difference = lowerRightScreenPoint - upperLeftScreenPoint
                 Ellipse2D.Double(
                     upperLeftScreenPoint.x,
@@ -31,8 +30,8 @@ class SimpleRenderer(override val layer: Layer = Layer.GENERIC) : Renderer {
             }
             is Rectangle -> {
                 val rectangle2d = gameObject.rigidBody.shape as Rectangle
-                val upperLeftScreenPoint = view.toCameraPoint(rectangle2d.upperLeft)
-                val bottomRightScreenPoint = view.toCameraPoint(rectangle2d.lowerRight)
+                val upperLeftScreenPoint = view.camera.toCameraPoint(rectangle2d.upperLeft)
+                val bottomRightScreenPoint = view.camera.toCameraPoint(rectangle2d.lowerRight)
                 val difference = bottomRightScreenPoint - upperLeftScreenPoint
                 Rectangle2D.Double(
                     upperLeftScreenPoint.x,
