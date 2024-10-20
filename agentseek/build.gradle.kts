@@ -21,6 +21,9 @@ application {
     mainClass.set("io.github.agentseek.AgentSeek")
 }
 
+tasks.named<JavaExec>("run") {
+    standardInput = System.`in`
+}
 
 tasks.test {
     useJUnitPlatform()
