@@ -26,7 +26,7 @@ class GameObjectBuilder(private val world: World) {
      * This object's [RigidBody].
      */
     private var rigidBodySetter: (GameObject) -> RigidBody = {
-        RigidBody.CircleRigidBody(GameObject.DEFAULT_HITBOX_RADIUS, it)
+        RigidBody.RectangleRigidBody(GameObject.DEFAULT_SIZE, GameObject.DEFAULT_SIZE, it)
     }
 
     /**

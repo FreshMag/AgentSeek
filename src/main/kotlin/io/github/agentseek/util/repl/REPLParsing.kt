@@ -148,7 +148,7 @@ object REPLParsing {
                     "square(<SIZE>))"],
             required = false,
         )
-        var form: String = "circle(${GameObject.DEFAULT_HITBOX_RADIUS})"
+        var form: String = "square(${GameObject.DEFAULT_SIZE})"
 
         @Option(
             names = ["-x"],

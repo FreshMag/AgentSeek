@@ -12,34 +12,28 @@ data class Rectangle2d(
     /**
      * The height of the rectangle.
      */
-    private val height: Double = Vector2d(upperLeft, lowerLeft).module()
+    private val height: Double = (lowerRight.y - upperRight.y)
 
     /**
      * Gets Width of the rectangle.
      *
      * @return Width of the rectangle.
      */
-    private val width: Double = Vector2d(upperLeft, upperRight).module()
+    private val width: Double = (lowerRight.x - lowerLeft.x)
 
-    /**
-     * This constructor is used to instantiate a 2D rectangle that is oriented
-     * horizontally.
-     *
-     * @param width      Width of the rectangle.
-     * @param height     Height of the rectangle.
-     * @param upperLeftX X coordinate of the upper left vertex of the rectangle.
-     * @param upperLeftY Y coordinate of the upper left vertex of the rectangle.
-     */
-    constructor(width: Double, height: Double, upperLeftX: Double, upperLeftY: Double) : this(
-        Point2d(upperLeftX, upperLeftY),
-        Point2d(upperLeftX, (upperLeftY + height)),
-        Point2d((upperLeftX + width), upperLeftY),
-        Point2d(upperLeftX + width, upperLeftY + height)
+
+    constructor(width: Double, height: Double) : this(
+        Point2d(0.0, 0.0),
+        width,
+        height,
     )
 
-    constructor(width: Double, height: Double) : this(width, height, 0.0, 0.0)
-
-    constructor(upperLeft: Point2d, width: Double, height: Double) : this(width, height, upperLeft.x, upperLeft.y)
+    constructor(upperLeft: Point2d, width: Double, height: Double) : this(
+        upperLeft,
+        upperLeft + Vector2d(0.0, height),
+        upperLeft + Vector2d(width, height),
+        upperLeft + Vector2d(width, 0.0)
+    )
 
     override fun contains(point: Point2d): Boolean =
         point.x > upperLeft.x && point.x < upperRight.x && point.y > upperLeft.y && point.y < lowerLeft.y
@@ -60,7 +54,7 @@ data class Rectangle2d(
     override var position: Point2d
         get() = upperLeft
         set(value) {
-            val transform = Vector2d(this.upperLeft, value)
+            val transform = value - upperLeft
             this.upperLeft += (transform)
             this.upperRight += (transform)
             this.lowerLeft += (transform)
@@ -75,8 +69,8 @@ data class Rectangle2d(
         }
 
     private fun intersectWithRectangle(rect: Rectangle2d): Boolean {
-        return !(upperLeft.x + width < rect.upperLeft.x || rect.upperLeft.x + rect.width < upperLeft.x ||
-                upperLeft.y + height < rect.upperLeft.y || rect.upperLeft.y + rect.height < upperLeft.y)
+        return !(upperRight.x < rect.upperLeft.x || rect.upperRight.x < upperLeft.x ||
+                lowerLeft.y < rect.upperLeft.y || rect.lowerLeft.y < upperLeft.y)
     }
 
     private fun intersectWithCircle(circle: Circle2d): Boolean {
@@ -89,9 +83,10 @@ data class Rectangle2d(
         return distanceX * distanceX + distanceY * distanceY < circle.radius * circle.radius
     }
 
-    override var center: Point2d
-        get() = Point2d(
-            (upperLeft.x + lowerRight.x) / 2, upperLeft.y + lowerRight.y / 2
-        )
-        set(value) {}
+    override var center: Point2d = Point2d((upperLeft.x + upperRight.x) / 2, upperLeft.y + lowerLeft.y / 2)
+        get() = Point2d((upperLeft.x + upperRight.x) / 2, upperLeft.y + lowerLeft.y / 2)
+        set(value) {
+            position = Point2d(value.x - (width / 2), value.y - (height / 2))
+            field = value
+        }
 }

@@ -26,8 +26,9 @@ class SimpleRenderer(override val layer: Layer = Layer.GENERIC) : Renderer {
                 )
             }
             is Rectangle -> {
-                val upperLeftScreenPoint = GameGui.toCameraPoint((gameObject.rigidBody.shape as Rectangle).upperLeft)
-                val bottomRightScreenPoint = GameGui.toCameraPoint((gameObject.rigidBody.shape as Rectangle).lowerRight)
+                val rectangle2d = gameObject.rigidBody.shape as Rectangle
+                val upperLeftScreenPoint = GameGui.toCameraPoint(rectangle2d.upperLeft)
+                val bottomRightScreenPoint = GameGui.toCameraPoint(rectangle2d.lowerRight)
                 val difference = bottomRightScreenPoint - upperLeftScreenPoint
                 Rectangle2D.Double(
                     upperLeftScreenPoint.x,
