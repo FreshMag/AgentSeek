@@ -2,7 +2,7 @@ package io.github.agentseek.util.factories
 
 import io.github.agentseek.common.Vector2d
 import io.github.agentseek.components.ConstantAccelerationComponent
-import io.github.agentseek.core.Game
+import io.github.agentseek.core.Scene
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.util.factories.SceneFactory.emptyScene
 import io.github.agentseek.view.swing.SimpleRenderer
@@ -10,7 +10,7 @@ import kotlin.random.Random
 
 object Scenes {
 
-    fun exampleScene(nObjects: Int): Game {
+    fun exampleScene(nObjects: Int): Scene {
         val emptyScene = emptyScene()
         val maxX = GameEngine.view?.camera?.viewPortWidth ?: 50.0
         val maxY = GameEngine.view?.camera?.viewPortHeight ?: 50.0
