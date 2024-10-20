@@ -1,8 +1,10 @@
 plugins {
-    java
     kotlin("jvm") version "2.0.21"
     application
 }
+
+group = "io.github.agentseek"
+version = "unspecified"
 
 repositories {
     mavenCentral()
@@ -11,31 +13,26 @@ repositories {
 val jUnitVersion = "5.10.3"
 
 dependencies {
+    // LOGGING
     implementation("io.github.oshai:kotlin-logging-jvm:7.0.0")
-    // https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12
     implementation("org.slf4j:slf4j-simple:2.0.13")
-
-
-    testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitVersion")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jUnitVersion")
-    testImplementation("io.kotest:kotest-runner-junit5-jvm:5.9.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
-    // https://mvnrepository.com/artifact/info.picocli/picocli
+    // REPL
     implementation("info.picocli:picocli:4.7.6")
-    // https://mvnrepository.com/artifact/org.jline/jline
     implementation("org.jline:jline:3.27.0")
+    // SERIALIZATION
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.17.2")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.1")
+    // COROUTINES
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
 
+    // TESTING
+    testImplementation(kotlin("test"))
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitVersion")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jUnitVersion")
+    // KOTEST
+    testImplementation("io.kotest:kotest-runner-junit5-jvm:5.9.0")
 }
 
-tasks.withType<JavaCompile> {
-    options.encoding = "UTF-8"
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
-}
 
 application {
     mainClass.set("io.github.agentseek.AgentSeek")
@@ -43,6 +40,10 @@ application {
 
 tasks.named<JavaExec>("run") {
     standardInput = System.`in`
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 java {

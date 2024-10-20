@@ -1,7 +1,5 @@
 package io.github.agentseek.world
 
-import io.github.agentseek.common.Point2d
-import io.github.agentseek.common.Shape2d
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.events.Event
 import io.github.agentseek.util.GameObjectBuilder
