@@ -4,9 +4,18 @@ import io.github.agentseek.common.Circle2d
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.common.Rectangle2d
 
+/**
+ * Represents the camera that performs transformations from world's coordinate space into a screen coordinate space.
+ */
 class Camera(
     private val view: View,
+    /**
+     * Maximum portion of the world that can be seen within this camera.
+     */
     private var worldViewPortWidth: Double = 50.0,
+    /**
+     * Position of the camera (in world's coordinates).
+     */
     private var cameraWorldPosition: Point2d = Point2d.origin(),
 ) {
     private val worldViewPortHeight
