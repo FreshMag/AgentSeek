@@ -1,11 +1,9 @@
-package io.github.agentseek.view
+package io.github.agentseek.view.gui
 
-import java.awt.BorderLayout
 import java.awt.Component
 import java.awt.Dimension
 import java.awt.Font
 import javax.swing.*
-import javax.swing.text.JTextComponent
 import kotlin.system.exitProcess
 
 

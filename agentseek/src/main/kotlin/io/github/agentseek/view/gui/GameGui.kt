@@ -1,19 +1,24 @@
-package io.github.agentseek.view
+package io.github.agentseek.view.gui
 
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.util.factories.SceneFactory
 import io.github.agentseek.util.repl.GameREPL
-import java.awt.*
+import io.github.agentseek.view.GameViewPanel
+import io.github.agentseek.view.View
+import java.awt.BorderLayout
+import java.awt.Dimension
+import java.awt.Graphics2D
+import java.awt.Shape
+import java.awt.event.ComponentAdapter
+import java.awt.event.ComponentEvent
 import java.util.*
-import javax.swing.JComponent
 import javax.swing.JFrame
-import javax.swing.JPanel
 import javax.swing.SwingUtilities
 import javax.swing.WindowConstants.EXIT_ON_CLOSE
 
 
 object GameGui : View {
-    val screenSize: Dimension = Dimension(1000, 720)//Toolkit.getDefaultToolkit().screenSize
+    private var screenSize: Dimension = Dimension(1000, 720)//Toolkit.getDefaultToolkit().screenSize
     override val screenHeight: Int
         get() = screenSize.height
     override val screenWidth: Int
@@ -22,18 +27,37 @@ object GameGui : View {
     private const val APP_NAME = "Agent Seek"
 
     private val shapesToDraw: MutableList<Shape> = Collections.synchronizedList(mutableListOf())
-    private var buffer: List<Shape> = emptyList()
+    private var shapeBuffer: List<Shape> = emptyList()
     private val frame = JFrame(APP_NAME)
 
-    fun startGameGui(repl: Boolean = false) {
+    private val gameViewRendering: (Graphics2D) -> Unit = { g2d ->
+        shapeBuffer.forEach {
+            g2d.draw(it)
+        }
+    }
+
+    fun startGameGui(useRepl: Boolean = false) {
         frame.name = APP_NAME
-        frame.add(TestingPanelGraphics(), BorderLayout.CENTER)
+        frame.add(GameViewPanel(screenSize, gameViewRendering), BorderLayout.CENTER)
         frame.size = screenSize
         frame.preferredSize = screenSize
         frame.defaultCloseOperation = EXIT_ON_CLOSE
         frame.isVisible = true
+
+        // Makes this GUI responsive
+        frame.addComponentListener(object : ComponentAdapter() {
+            override fun componentResized(e: ComponentEvent?) {
+                screenSize = e?.component?.size ?: screenSize
+            }
+        })
+        // Sets GameEngine view
         GameEngine.view = this
-        if (repl) {
+        // Starts the game view
+        start(useRepl)
+    }
+
+    private fun start(useRepl: Boolean) {
+        if (useRepl) {
             Thread {
                 GameREPL.start()
             }.start()
@@ -43,37 +67,12 @@ object GameGui : View {
         }
     }
 
-    class TestingPanelGraphics : JPanel() {
-        init {
-            layout = BorderLayout()
-            this.preferredSize = Dimension(screenSize)
-            this.add(DrawStuff(), BorderLayout.CENTER)
-            revalidate()
-            repaint()
-            this.isVisible = true //probably not necessary
-        }
-
-        private inner class DrawStuff : JComponent() {
-            override fun paintComponent(g: Graphics) {
-                super.paintComponent(g)
-                val graph2 = g as Graphics2D
-
-                graph2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-
-                buffer.forEach {
-                    graph2.draw(it)
-                }
-            }
-        }
-    }
-
     override fun render() {
-        buffer = shapesToDraw.toList()
+        shapeBuffer = shapesToDraw.toList()
         shapesToDraw.clear()
         SwingUtilities.invokeLater {
             frame.repaint()
         }
-
     }
 
     override fun draw(obj: Any) {
