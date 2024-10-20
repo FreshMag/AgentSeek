@@ -5,7 +5,7 @@ import javax.swing.*
 import kotlin.system.exitProcess
 
 
-object MenuGui : JComponent() {
+object MenuGui {
 
     private const val START_BUTTON_TEXT = "Start Game"
     private const val START_WITH_REPL_BUTTON_TEXT = "Start Game with REPL"
