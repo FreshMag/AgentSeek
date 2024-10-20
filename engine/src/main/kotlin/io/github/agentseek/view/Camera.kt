@@ -12,21 +12,23 @@ class Camera(
     /**
      * Maximum portion of the world that can be seen within this camera.
      */
-    private var worldViewPortWidth: Double = 50.0,
+    worldViewPortWidth: Double = 50.0,
     /**
      * Position of the camera (in world's coordinates).
      */
     private var cameraWorldPosition: Point2d = Point2d.origin(),
 ) {
-    private val worldViewPortHeight
-        get() = (worldViewPortWidth * view.screenHeight) / view.screenWidth
+    var viewPortWidth = worldViewPortWidth
+        private set
+    val viewPortHeight
+        get() = (viewPortWidth * view.screenHeight) / view.screenWidth
 
     /**
      * Converts a position in world's coordinates into a new position in screen's coordinates (i.e. camera coordinates)
      */
     fun toCameraPoint(worldPoint: Point2d): Point2d {
-        val cameraX = ((worldPoint.x - cameraWorldPosition.x) * view.screenWidth) / worldViewPortWidth
-        val cameraY = ((worldPoint.y - cameraWorldPosition.y) * view.screenHeight) / worldViewPortHeight
+        val cameraX = ((worldPoint.x - cameraWorldPosition.x) * view.screenWidth) / viewPortWidth
+        val cameraY = ((worldPoint.y - cameraWorldPosition.y) * view.screenHeight) / viewPortHeight
         return Point2d(cameraX, cameraY)
     }
 
@@ -34,7 +36,7 @@ class Camera(
      * Converts a length in world terms into camera terms (by a simple proportion)
      */
     fun toCameraLength(worldLength: Double): Double =
-        (worldLength / worldViewPortWidth) * view.screenWidth
+        (worldLength / viewPortWidth) * view.screenWidth
 
     /**
      * Converts a [Circle2d] in world terms into camera terms
@@ -56,6 +58,6 @@ class Camera(
      * Zooms out or in the camera by a [factor]
      */
     fun zoom(factor: Double) {
-        worldViewPortWidth /= factor
+        viewPortWidth /= factor
     }
 }

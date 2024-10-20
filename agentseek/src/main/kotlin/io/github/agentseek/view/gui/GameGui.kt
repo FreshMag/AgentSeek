@@ -1,7 +1,7 @@
 package io.github.agentseek.view.gui
 
 import io.github.agentseek.core.engine.GameEngine
-import io.github.agentseek.util.factories.SceneFactory
+import io.github.agentseek.util.factories.Scenes
 import io.github.agentseek.util.repl.GameREPL
 import io.github.agentseek.view.Camera
 import io.github.agentseek.view.GameViewPanel
@@ -16,6 +16,7 @@ import java.util.*
 import javax.swing.JFrame
 import javax.swing.SwingUtilities
 import javax.swing.WindowConstants.EXIT_ON_CLOSE
+import kotlin.random.Random
 
 
 object GameGui : View {
@@ -68,7 +69,7 @@ object GameGui : View {
                 GameREPL.start()
             }.start()
         } else {
-            GameEngine.loadScene(SceneFactory.replScene().first)
+            GameEngine.loadScene(Scenes.exampleScene(Random.nextInt(10)))
             GameEngine.start()
         }
     }
