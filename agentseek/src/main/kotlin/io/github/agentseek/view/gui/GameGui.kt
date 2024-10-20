@@ -82,7 +82,7 @@ object GameGui : View {
     }
 
     override fun draw(obj: Any) {
-        when(obj) {
+        when (obj) {
             is Shape -> shapesToDraw.add(obj)
             else -> println("Unknown object to draw: $obj")
         }

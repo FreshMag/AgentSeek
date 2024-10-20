@@ -8,19 +8,18 @@ data class Rectangle2d(
     var lowerLeft: Point2d,
     var lowerRight: Point2d,
     var upperRight: Point2d,
-) : Shape2d {
+) : Shape2d() {
     /**
      * The height of the rectangle.
      */
-    private val height: Double = (lowerRight.y - upperRight.y)
+    override val height: Double = (lowerRight.y - upperRight.y)
 
     /**
      * Gets Width of the rectangle.
      *
      * @return Width of the rectangle.
      */
-    private val width: Double = (lowerRight.x - lowerLeft.x)
-
+    override val width: Double = (lowerRight.x - lowerLeft.x)
 
     constructor(width: Double, height: Double) : this(
         Point2d(0.0, 0.0),

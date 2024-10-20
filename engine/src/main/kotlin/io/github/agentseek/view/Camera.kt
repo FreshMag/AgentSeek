@@ -1,10 +1,12 @@
 package io.github.agentseek.view
 
+import io.github.agentseek.common.Circle2d
 import io.github.agentseek.common.Point2d
+import io.github.agentseek.common.Rectangle2d
 
 class Camera(
     private val view: View,
-    private val worldViewPortWidth: Double = 50.0,
+    private var worldViewPortWidth: Double = 50.0,
     private var cameraWorldPosition: Point2d = Point2d.origin(),
 ) {
     private val worldViewPortHeight
@@ -17,5 +19,34 @@ class Camera(
         val cameraX = ((worldPoint.x - cameraWorldPosition.x) * view.screenWidth) / worldViewPortWidth
         val cameraY = ((worldPoint.y - cameraWorldPosition.y) * view.screenHeight) / worldViewPortHeight
         return Point2d(cameraX, cameraY)
+    }
+
+    /**
+     * Converts a length in world terms into camera terms (by a simple proportion)
+     */
+    fun toCameraLength(worldLength: Double): Double =
+        (worldLength / worldViewPortWidth) * view.screenWidth
+
+    /**
+     * Converts a [Circle2d] in world terms into camera terms
+     */
+    fun toCameraCircle(circle2d: Circle2d): Circle2d =
+        Circle2d(toCameraLength(circle2d.radius), toCameraPoint(circle2d.position))
+
+    /**
+     * Converts a [Rectangle2d] in world terms into camera terms
+     */
+    fun toCameraRectangle(rectangle2d: Rectangle2d): Rectangle2d =
+        Rectangle2d(
+            toCameraPoint(rectangle2d.upperLeft),
+            toCameraLength(rectangle2d.width),
+            toCameraLength(rectangle2d.height),
+        )
+
+    /**
+     * Zooms out or in the camera by a [factor]
+     */
+    fun zoom(factor: Double) {
+        worldViewPortWidth *= factor
     }
 }
