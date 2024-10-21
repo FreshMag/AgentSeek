@@ -5,6 +5,11 @@ interface View {
     val screenHeight: Int
 
     /**
+     * Camera used to render world objects into the screen
+     */
+    val camera: Camera
+
+    /**
      * Rendering logic of this view. Called every frame update.
      */
     fun render()

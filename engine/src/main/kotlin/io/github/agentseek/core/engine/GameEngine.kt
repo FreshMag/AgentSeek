@@ -1,6 +1,6 @@
 package io.github.agentseek.core.engine
 
-import io.github.agentseek.core.Game
+import io.github.agentseek.core.Scene
 import io.github.agentseek.core.engine.input.Input
 import io.github.agentseek.util.factories.SceneFactory
 import io.github.agentseek.view.View
@@ -15,7 +15,7 @@ object GameEngine {
 
     private val logger = KotlinLogging.logger {}
     private val STANDARD_STARTING_PERIOD = 50.milliseconds
-    private var state: Game? = null
+    private var state: Scene? = null
     var view: View? = null
 
     /**
@@ -33,7 +33,7 @@ object GameEngine {
         }
     }
 
-    fun loadScene(scene: Game) {
+    fun loadScene(scene: Scene) {
         state = scene
     }
 

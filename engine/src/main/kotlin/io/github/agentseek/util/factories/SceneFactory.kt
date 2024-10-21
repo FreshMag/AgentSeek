@@ -1,13 +1,13 @@
 package io.github.agentseek.util.factories
 
-import io.github.agentseek.core.Game
-import io.github.agentseek.core.GameImpl
+import io.github.agentseek.core.Scene
+import io.github.agentseek.core.SceneImpl
 import io.github.agentseek.physics.RigidBody
 import io.github.agentseek.util.DummyComponent
 import io.github.agentseek.view.swing.SimpleRenderer
 
 object SceneFactory {
-    fun replScene(): Pair<Game, DummyComponent> {
+    fun replScene(): Pair<Scene, DummyComponent> {
         val emptyScene = emptyScene()
         val dummyGO = emptyScene.world.gameObjectBuilder()
             .with { DummyComponent(it) }
@@ -24,6 +24,6 @@ object SceneFactory {
         return Pair(emptyScene, dummyGO.getComponent<DummyComponent>()!!)
     }
 
-    fun emptyScene(): Game = GameImpl()
+    fun emptyScene(): Scene = SceneImpl()
 
 }

@@ -7,7 +7,7 @@ import io.github.agentseek.world.World
 import io.github.agentseek.world.WorldImpl
 import kotlin.time.Duration
 
-class GameImpl : Game, EventListener {
+class SceneImpl : Scene, EventListener {
     override val player: GameObject?
         get() = world.gameObjects.firstOrNull(GameObject::isPlayer)
     override val world: World = WorldImpl(this)
