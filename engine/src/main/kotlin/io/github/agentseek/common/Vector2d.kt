@@ -51,6 +51,13 @@ data class Vector2d(var x: Double, var y: Double) {
      */
     operator fun unaryMinus(): Vector2d = Vector2d(-x, -y)
 
+    /**
+     * Computes the dot product of two vectors
+     */
+    fun dot(other: Vector2d): Double {
+        return this.x * other.x + this.y * other.y
+    }
+
     companion object {
         /**
          * Generate a new vector given the angle in [degrees] with x-axis.

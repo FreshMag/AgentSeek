@@ -39,6 +39,12 @@ data class Rectangle2d(
         point.x > upperLeft.x && point.x < upperRight.x && point.y > upperLeft.y && point.y < lowerLeft.y
 
     /**
+     * Returns an iterable of [Point2d] representing the vertices, clockwise ordered, starting from [upperLeft]
+     */
+    fun vertices(): Iterable<Point2d> =
+        listOf(upperLeft, upperRight, lowerRight, lowerLeft)
+
+    /**
      * Used to determine if a rectangle is contained completely in this rectangle.
      *
      * @param rectangle Rectangle inside this rectangle.
