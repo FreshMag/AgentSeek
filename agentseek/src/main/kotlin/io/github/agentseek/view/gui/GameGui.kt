@@ -3,13 +3,10 @@ package io.github.agentseek.view.gui
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.util.factories.Scenes
 import io.github.agentseek.util.repl.GameREPL
-import io.github.agentseek.view.Camera
-import io.github.agentseek.view.GameViewPanel
-import io.github.agentseek.view.View
+import io.github.agentseek.view.*
 import java.awt.BorderLayout
 import java.awt.Dimension
 import java.awt.Graphics2D
-import java.awt.Shape
 import java.awt.event.ComponentAdapter
 import java.awt.event.ComponentEvent
 import java.util.*
@@ -20,6 +17,9 @@ import kotlin.random.Random
 
 
 object GameGui : View {
+
+    data class RenderingEvent(val behavior: (Graphics2D) -> Unit)
+
     private var screenSize: Dimension = Dimension(1000, 720)//Toolkit.getDefaultToolkit().screenSize
     override val screenHeight: Int
         get() = screenSize.height
@@ -30,16 +30,16 @@ object GameGui : View {
 
     private const val APP_NAME = "Agent Seek"
 
-    private val shapesToDraw: MutableList<Shape> = Collections.synchronizedList(mutableListOf())
-    private var shapeBuffer: List<Shape> = emptyList()
+    private val renderingEvents: MutableList<RenderingEvent> = Collections.synchronizedList(mutableListOf())
+    private var eventsBuffer: List<RenderingEvent> = emptyList()
     private val frame = JFrame(APP_NAME)
 
     /**
      * This function is called once every frame rendering on the Graphics 2D of the GUI.
      */
     private val gameViewRendering: (Graphics2D) -> Unit = { g2d ->
-        shapeBuffer.forEach {
-            g2d.draw(it)
+        eventsBuffer.forEach {
+            it.behavior(g2d)
         }
     }
 
@@ -75,8 +75,8 @@ object GameGui : View {
     }
 
     override fun render() {
-        shapeBuffer = shapesToDraw.toList()
-        shapesToDraw.clear()
+        eventsBuffer = renderingEvents.toList()
+        renderingEvents.clear()
         SwingUtilities.invokeLater {
             frame.repaint()
         }
@@ -84,8 +84,10 @@ object GameGui : View {
 
     override fun draw(obj: Any) {
         when (obj) {
-            is Shape -> shapesToDraw.add(obj)
+            is RenderingEvent -> renderingEvents.add(obj)
             else -> println("Unknown object to draw: $obj")
         }
     }
+
+    override fun defaultRenderer(): Renderer = SimpleRenderer()
 }

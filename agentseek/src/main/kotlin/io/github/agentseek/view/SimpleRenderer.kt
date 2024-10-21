@@ -1,9 +1,8 @@
-package io.github.agentseek.view.swing
+package io.github.agentseek.view
 
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.engine.GameEngine
-import io.github.agentseek.view.Layer
-import io.github.agentseek.view.Renderer
+import io.github.agentseek.view.gui.GameGui
 import java.awt.Shape
 import java.awt.geom.Ellipse2D
 import java.awt.geom.Rectangle2D
@@ -37,6 +36,8 @@ class SimpleRenderer(override val layer: Layer = Layer.GENERIC) : Renderer {
             }
 
         }
-        view.draw(shape)
+        view.draw(GameGui.RenderingEvent {
+            it.draw(shape)
+        })
     }
 }

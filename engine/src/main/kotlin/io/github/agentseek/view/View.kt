@@ -18,4 +18,10 @@ interface View {
      * Draws something on the View. Can be anything depending on its implementation.
      */
     fun draw(obj: Any)
+
+    /**
+     * Returns a default renderer
+     */
+    fun defaultRenderer(): Renderer
+
 }

@@ -2,21 +2,22 @@ package io.github.agentseek.util.factories
 
 import io.github.agentseek.core.Scene
 import io.github.agentseek.core.SceneImpl
+import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.physics.RigidBody
 import io.github.agentseek.util.DummyComponent
-import io.github.agentseek.view.swing.SimpleRenderer
 
 object SceneFactory {
     fun replScene(): Pair<Scene, DummyComponent> {
         val emptyScene = emptyScene()
+        val defaultRenderer = GameEngine.view?.defaultRenderer() ?: throw IllegalStateException("Missing view")
         val dummyGO = emptyScene.world.gameObjectBuilder()
             .with { DummyComponent(it) }
-            .renderer(SimpleRenderer())
+            .renderer(defaultRenderer)
             .build()
         val colliderGO = emptyScene.world.gameObjectBuilder()
             .position(10.0, 5.0)
             .rigidBody { RigidBody.CircleRigidBody(3.0, it) }
-            .renderer(SimpleRenderer())
+            .renderer(defaultRenderer)
             .build()
 
         emptyScene.world.addGameObject(dummyGO)
