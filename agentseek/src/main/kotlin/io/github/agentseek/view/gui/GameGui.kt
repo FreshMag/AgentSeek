@@ -1,9 +1,11 @@
 package io.github.agentseek.view.gui
 
 import io.github.agentseek.core.engine.GameEngine
+import io.github.agentseek.core.engine.input.Input
 import io.github.agentseek.util.factories.Scenes
 import io.github.agentseek.util.repl.GameREPL
 import io.github.agentseek.view.*
+import io.github.agentseek.view.input.InputListener
 import java.awt.BorderLayout
 import java.awt.Dimension
 import java.awt.Graphics2D
@@ -16,7 +18,7 @@ import kotlin.random.Random
 
 typealias RenderingEvent = (Graphics2D) -> Unit
 
-object GameGui : View {
+object GameGui : View, InputListener() {
 
     private var screenSize: Dimension = Dimension(1000, 720)//Toolkit.getDefaultToolkit().screenSize
     override val screenHeight: Int
@@ -47,6 +49,8 @@ object GameGui : View {
         frame.size = screenSize
         frame.preferredSize = screenSize
         frame.defaultCloseOperation = EXIT_ON_CLOSE
+        frame.addKeyListener(this)
+        Input.injectProvider(this)
         frame.isVisible = true
 
         // Makes this GUI responsive
