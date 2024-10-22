@@ -1,6 +1,6 @@
 package io.github.agentseek.events
 
-import io.github.agentseek.core.Game
+import io.github.agentseek.core.Scene
 
 
 /**
@@ -10,5 +10,5 @@ fun interface Event {
     /**
      * Perform some actions on the [state] depending on the specified event.
      */
-    fun handle(state: Game)
+    fun handle(state: Scene)
 }

@@ -1,6 +1,6 @@
 package io.github.agentseek.util.repl
 
-import io.github.agentseek.core.Game
+import io.github.agentseek.core.Scene
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.util.DummyComponent
 import io.github.agentseek.util.factories.SceneFactory
@@ -10,7 +10,7 @@ import picocli.CommandLine
 
 
 object GameREPL {
-    lateinit var scene: Game
+    lateinit var scene: Scene
     private lateinit var dummyComponent: DummyComponent
 
     var isRunning = false

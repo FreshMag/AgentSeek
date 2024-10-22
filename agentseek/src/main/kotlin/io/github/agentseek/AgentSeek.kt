@@ -1,6 +1,6 @@
 package io.github.agentseek
 
-import io.github.agentseek.view.MenuGui
+import io.github.agentseek.view.gui.MenuGui
 
 object AgentSeek {
     @JvmStatic
