@@ -1,9 +1,6 @@
 package io.github.agentseek.physics
 
-import io.github.agentseek.common.Circle2d
-import io.github.agentseek.common.Rectangle2d
-import io.github.agentseek.common.Shape2d
-import io.github.agentseek.common.Vector2d
+import io.github.agentseek.common.*
 import io.github.agentseek.components.AbstractComponent
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.world.World
@@ -33,6 +30,12 @@ sealed class RigidBody(
      */
     class RectangleRigidBody(width: Double, height: Double, gameObject: GameObject) :
         RigidBody(Rectangle2d(width, height), gameObject)
+
+    /**
+     * A simple rigid body with a cone shape
+     */
+    class ConeRigidBody(angle: Double, length: Double, rotation: Double, gameObject: GameObject) :
+        RigidBody(Cone2d(Point2d.origin(), angle, length, rotation), gameObject)
 
     /**
      * Velocity of this [RigidBody], in meters per seconds
