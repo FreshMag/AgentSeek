@@ -28,7 +28,7 @@ object GameGui : View {
 
     private const val APP_NAME = "Agent Seek"
 
-    private val renderingContext = RenderingContext<Graphics2D>()
+    private val renderingContext = RenderingContext<Graphics2D>(camera)
     private var eventsBuffer: List<RenderingEvent> = emptyList()
     private val frame = JFrame(APP_NAME)
 
