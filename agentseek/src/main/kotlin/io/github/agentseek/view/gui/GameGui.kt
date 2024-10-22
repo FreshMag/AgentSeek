@@ -74,7 +74,6 @@ object GameGui : View {
 
     override fun render() {
         eventsBuffer = renderingContext.sinkToBuffer()
-        renderingContext.clearEvents()
         SwingUtilities.invokeLater {
             frame.repaint()
         }
