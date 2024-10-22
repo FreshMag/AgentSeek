@@ -57,7 +57,6 @@ data class Cone2d(
             is Circle2d -> intersectWithCircle(shape)
             is Rectangle2d -> intersectWithRectangle(shape)
             is Cone2d -> false
-            else -> false
         }
     }
 
