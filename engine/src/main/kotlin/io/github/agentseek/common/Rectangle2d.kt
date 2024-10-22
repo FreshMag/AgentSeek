@@ -70,7 +70,7 @@ data class Rectangle2d(
         when (shape) {
             is Rectangle2d -> intersectWithRectangle(shape)
             is Circle2d -> intersectWithCircle(shape)
-            else -> false
+            is Cone2d -> false
         }
 
     private fun intersectWithRectangle(rect: Rectangle2d): Boolean {

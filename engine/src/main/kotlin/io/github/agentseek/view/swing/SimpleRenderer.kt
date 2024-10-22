@@ -1,5 +1,6 @@
 package io.github.agentseek.view.swing
 
+import io.github.agentseek.common.Cone2d
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.view.Layer
@@ -34,6 +35,10 @@ class SimpleRenderer(override val layer: Layer = Layer.GENERIC) : Renderer {
                     converted.width,
                     converted.height,
                 )
+            }
+
+            is Cone2d -> {
+                throw IllegalStateException("No rendering provided for cones")
             }
 
         }

@@ -17,8 +17,15 @@ data class Cone2d(
      * Cone extension
      */
     var length: Double,
+    /**
+     * Rotation angle (in radians)
+     */
     var rotation: Double
-) : Shape2d {
+) : Shape2d() {
+    override val width: Double
+        get() = length * cos(rotation)
+    override val height: Double
+        get() = length * sin(rotation)
 
     override fun contains(point: Point2d): Boolean {
         val toPoint = (point - vertex).normalized()
