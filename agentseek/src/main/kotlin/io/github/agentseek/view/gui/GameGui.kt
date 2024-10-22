@@ -3,23 +3,21 @@ package io.github.agentseek.view.gui
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.util.factories.Scenes
 import io.github.agentseek.util.repl.GameREPL
-import io.github.agentseek.view.Camera
-import io.github.agentseek.view.GameViewPanel
-import io.github.agentseek.view.View
+import io.github.agentseek.view.*
 import java.awt.BorderLayout
 import java.awt.Dimension
 import java.awt.Graphics2D
-import java.awt.Shape
 import java.awt.event.ComponentAdapter
 import java.awt.event.ComponentEvent
-import java.util.*
 import javax.swing.JFrame
 import javax.swing.SwingUtilities
 import javax.swing.WindowConstants.EXIT_ON_CLOSE
 import kotlin.random.Random
 
+typealias RenderingEvent = (Graphics2D) -> Unit
 
 object GameGui : View {
+
     private var screenSize: Dimension = Dimension(1000, 720)//Toolkit.getDefaultToolkit().screenSize
     override val screenHeight: Int
         get() = screenSize.height
@@ -30,16 +28,16 @@ object GameGui : View {
 
     private const val APP_NAME = "Agent Seek"
 
-    private val shapesToDraw: MutableList<Shape> = Collections.synchronizedList(mutableListOf())
-    private var shapeBuffer: List<Shape> = emptyList()
+    private val renderingContext = RenderingContext<Graphics2D>(camera)
+    private var eventsBuffer: List<RenderingEvent> = emptyList()
     private val frame = JFrame(APP_NAME)
 
     /**
      * This function is called once every frame rendering on the Graphics 2D of the GUI.
      */
-    private val gameViewRendering: (Graphics2D) -> Unit = { g2d ->
-        shapeBuffer.forEach {
-            g2d.draw(it)
+    private val gameViewRendering: RenderingEvent = { g2d ->
+        eventsBuffer.forEach {
+            it(g2d)
         }
     }
 
@@ -69,23 +67,21 @@ object GameGui : View {
                 GameREPL.start()
             }.start()
         } else {
-            GameEngine.loadScene(Scenes.exampleScene(Random.nextInt(10)))
+            GameEngine.loadScene(Scenes.exampleScene(Random.nextInt(10, 20)))
             GameEngine.start()
         }
     }
 
     override fun render() {
-        shapeBuffer = shapesToDraw.toList()
-        shapesToDraw.clear()
+        eventsBuffer = renderingContext.sinkToBuffer()
         SwingUtilities.invokeLater {
             frame.repaint()
         }
     }
 
-    override fun draw(obj: Any) {
-        when (obj) {
-            is Shape -> shapesToDraw.add(obj)
-            else -> println("Unknown object to draw: $obj")
-        }
-    }
+    @Suppress("UNCHECKED_CAST")
+    override fun <T> getRenderingContext(): RenderingContext<T>? =
+        renderingContext as? RenderingContext<T>
+
+    override fun defaultRenderer(): Renderer<Graphics2D> = SimpleRenderer()
 }

@@ -9,7 +9,6 @@ import io.github.agentseek.util.FastEntities.emptyGameObject
 import io.github.agentseek.util.repl.GameREPL.isRunning
 import io.github.agentseek.util.repl.GameREPL.scene
 import io.github.agentseek.view.Renderer
-import io.github.agentseek.view.swing.SimpleRenderer
 import picocli.CommandLine.*
 import java.io.File
 import kotlin.system.exitProcess
@@ -51,10 +50,10 @@ object REPLParsing {
 
     fun GameObject.setRendererFromFQName(className: String) {
         try {
-            val renderer: Renderer = ClassLoader.getSystemClassLoader()
+            val renderer: Renderer<*> = ClassLoader.getSystemClassLoader()
                 .loadClass(className)
                 .getConstructor()
-                .newInstance() as Renderer
+                .newInstance() as Renderer<*>
             this.renderer = renderer
         } catch (e: ClassNotFoundException) {
             println("Renderer class $className not found")
@@ -180,7 +179,7 @@ object REPLParsing {
             val hitBox = parseForm(form, go)
             go.rigidBody = hitBox ?: return
             go.position = Point2d(x, y)
-            go.renderer = SimpleRenderer()
+            go.renderer = GameEngine.view?.defaultRenderer() ?: return
             scene.world.addGameObject(go.also { println(it.id) })
         }
     }
