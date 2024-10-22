@@ -10,12 +10,20 @@ interface View {
     val camera: Camera
 
     /**
+     * Gets the context for rendering on the view.
+     */
+    fun <T> getRenderingContext(): RenderingContext<T>?
+
+    /**
      * Rendering logic of this view. Called every frame update.
      */
     fun render()
 
     /**
-     * Draws something on the View. Can be anything depending on its implementation.
+     * Returns a default renderer
      */
-    fun draw(obj: Any)
+    fun defaultRenderer(): Renderer<*>
+
+
+
 }

@@ -32,7 +32,7 @@ class GameObjectBuilder(private val world: World) {
     /**
      * The GameObject graphical appearance
      */
-    private var renderer: Renderer = EmptyRenderer()
+    private var renderer: Renderer<*> = EmptyRenderer()
 
     fun position(position: Point2d): GameObjectBuilder {
         this.position = position
@@ -50,7 +50,7 @@ class GameObjectBuilder(private val world: World) {
         return this
     }
 
-    fun renderer(renderer: Renderer): GameObjectBuilder {
+    fun <T> renderer(renderer: Renderer<T>): GameObjectBuilder {
         this.renderer = renderer
         return this
     }

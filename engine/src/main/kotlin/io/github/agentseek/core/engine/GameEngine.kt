@@ -15,26 +15,26 @@ object GameEngine {
 
     private val logger = KotlinLogging.logger {}
     private val STANDARD_STARTING_PERIOD = 50.milliseconds
-    private var state: Scene? = null
+    private var scene: Scene? = null
     var view: View? = null
 
     /**
      * The main loop of the game engine
      */
     private val loop: GameLoop by lazy {
-        if (state == null) {
+        if (scene == null) {
             loadScene(SceneFactory.emptyScene())
         }
         GameLoop(STANDARD_STARTING_PERIOD) { dt ->
             log("DT $dt")
-            state?.updateState(dt)
+            scene?.updateState(dt)
             Input.refresh()
             view?.render()
         }
     }
 
     fun loadScene(scene: Scene) {
-        state = scene
+        this.scene = scene
     }
 
     /**
