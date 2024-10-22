@@ -41,12 +41,11 @@ object Input {
      * Returns `true` if [key] has been pressed since last update or `false` either if it hasn't been pressed or
      * the input doesn't provide a mapping for that key
      */
-    fun pressedKey(key: String): Boolean =
-        try {
-            inputBuffer.contains(Key.valueOf(key))
-        } catch (e: IllegalArgumentException) {
-            false
-        }
+    fun pressedKey(key: String): Boolean = try {
+        inputBuffer.contains(Key.valueOf(key))
+    } catch (e: IllegalArgumentException) {
+        false
+    }
 
     /**
      * Sets the provider for this input system.
