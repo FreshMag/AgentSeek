@@ -16,7 +16,7 @@ class GameObject(
     /**
      * The GameObject graphical appearance
      */
-    var renderer: Renderer = EmptyRenderer(),
+    var renderer: Renderer<*> = EmptyRenderer(),
     /**
      * The world of this GameObject
      */
@@ -50,7 +50,7 @@ class GameObject(
     internal fun onUpdate(deltaTime: Duration) {
         components.forEach { it.onUpdate(deltaTime) }
         rigidBody.onUpdate(deltaTime)
-        renderer.render(this)
+        renderer.applyOnView(this)
     }
 
     /**

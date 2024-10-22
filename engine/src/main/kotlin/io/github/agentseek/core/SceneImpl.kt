@@ -1,5 +1,6 @@
 package io.github.agentseek.core
 
+import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.events.Event
 import io.github.agentseek.events.EventHandler
 import io.github.agentseek.events.EventListener
@@ -16,7 +17,9 @@ class SceneImpl : Scene, EventListener {
     private val eventHandler: EventHandler = EventHandler(this)
 
     override fun updateState(deltaTime: Duration) {
-        world.gameObjects.forEach { it.onUpdate(deltaTime) }
+        world.gameObjects.forEach {
+            it.onUpdate(deltaTime)
+        }
         eventHandler.handleEvents()
     }
 

@@ -16,7 +16,7 @@ object Scenes {
         val maxY = GameEngine.view?.camera?.viewPortHeight ?: 50.0
         (0 until nObjects).forEach { _ ->
             val go = emptyScene.world.gameObjectBuilder()
-                .position(Random.nextDouble(maxX), Random.nextDouble(maxY))
+                .position(Random.nextDouble(10.0, maxX), Random.nextDouble(10.0, maxY))
                 .with {
                     ConstantAccelerationComponent(
                         it,

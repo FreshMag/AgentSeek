@@ -2,15 +2,15 @@ package io.github.agentseek.view
 
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.engine.GameEngine
-import io.github.agentseek.view.gui.GameGui
+import java.awt.Graphics2D
 import java.awt.Shape
 import java.awt.geom.Ellipse2D
 import java.awt.geom.Rectangle2D
 import io.github.agentseek.common.Circle2d as Circle
 import io.github.agentseek.common.Rectangle2d as Rectangle
 
-class SimpleRenderer(override val layer: Layer = Layer.GENERIC) : Renderer {
-    override fun render(gameObject: GameObject) {
+class SimpleRenderer(override val layer: Layer = Layer.GENERIC) : Renderer<Graphics2D> {
+    override fun render(gameObject: GameObject, renderingContext: RenderingContext<Graphics2D>?) {
         val view = GameEngine.view ?: return
         val shape: Shape = when (gameObject.rigidBody.shape) {
             is Circle -> {
@@ -36,8 +36,8 @@ class SimpleRenderer(override val layer: Layer = Layer.GENERIC) : Renderer {
             }
 
         }
-        view.draw(GameGui.RenderingEvent {
+        renderingContext?.render {
             it.draw(shape)
-        })
+        }
     }
 }
