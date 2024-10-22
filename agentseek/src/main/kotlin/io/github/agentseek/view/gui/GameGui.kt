@@ -35,7 +35,7 @@ object GameGui : View {
     /**
      * This function is called once every frame rendering on the Graphics 2D of the GUI.
      */
-    private val gameViewRendering: (Graphics2D) -> Unit = { g2d ->
+    private val gameViewRendering: RenderingEvent = { g2d ->
         eventsBuffer.forEach {
             it(g2d)
         }
