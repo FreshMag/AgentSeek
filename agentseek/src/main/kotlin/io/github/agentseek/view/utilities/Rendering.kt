@@ -1,6 +1,7 @@
 package io.github.agentseek.view.utilities
 
 import io.github.agentseek.common.Circle2d
+import io.github.agentseek.common.Cone2d
 import io.github.agentseek.common.Rectangle2d
 import io.github.agentseek.common.Shape2d
 import io.github.agentseek.view.RenderingContext
@@ -45,6 +46,16 @@ object Rendering {
     }
 
     /**
+     * Strokes a simple black cone starting from a [Cone2d]
+     */
+    fun RenderingContext<Graphics2D>.strokeCone(cone2d: Cone2d) {
+        val cone = camera.toCameraCone(cone2d)
+        render {
+            SwingUtilities.drawCone(it, cone)
+        }
+    }
+
+    /**
      * Strokes a simple black shape starting from a [Shape2d]
      */
     fun RenderingContext<Graphics2D>.strokeShape(shape: Shape2d) =
@@ -52,6 +63,7 @@ object Rendering {
             when (shape) {
                 is Circle2d -> strokeCircle(shape)
                 is Rectangle2d -> strokeRectangle(shape)
+                is Cone2d -> strokeCone(shape)
             }
         }
 }
