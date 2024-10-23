@@ -9,10 +9,10 @@ class InputComponent(gameObject: GameObject) : AbstractComponent(gameObject) {
     override fun onUpdate(deltaTime: Duration) {
         super.onUpdate(deltaTime)
         when {
-            Input.UP -> gameObject.rigidBody.applyForce(Vector2d(0.0, -10.0))
-            Input.DOWN -> gameObject.rigidBody.applyForce(Vector2d(0.0, 10.0))
-            Input.RIGHT -> gameObject.rigidBody.applyForce(Vector2d(-10.0, 0.0))
-            Input.LEFT -> gameObject.rigidBody.applyForce(Vector2d(10.0, 0.0))
+            Input.UP -> gameObject.rigidBody.applyForce(Vector2d(0.0, -20.0))
+            Input.DOWN -> gameObject.rigidBody.applyForce(Vector2d(0.0, 20.0))
+            Input.RIGHT -> gameObject.rigidBody.applyForce(Vector2d(-20.0, 0.0))
+            Input.LEFT -> gameObject.rigidBody.applyForce(Vector2d(20.0, 0.0))
             else -> gameObject.rigidBody.velocity = Vector2d(0.0, 0.0)
         }
     }
