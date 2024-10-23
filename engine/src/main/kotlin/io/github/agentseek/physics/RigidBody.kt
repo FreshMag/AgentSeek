@@ -3,7 +3,7 @@ package io.github.agentseek.physics
 import io.github.agentseek.common.*
 import io.github.agentseek.components.AbstractComponent
 import io.github.agentseek.core.GameObject
-import io.github.agentseek.world.World
+import io.github.agentseek.util.GameObjectUtilities.otherGameObjects
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
 
@@ -76,7 +76,7 @@ sealed class RigidBody(
     override fun onUpdate(deltaTime: Duration) {
         if (!isStatic) {
             if (!collisionResolved) {
-                gameObject.world.findColliding(this).forEach { resolveCollision(it) }
+                gameObject.findColliding().forEach { resolveCollision(it) }
             }
             val elapsed = deltaTime.toDouble(DurationUnit.SECONDS)
             velocity += acceleration * elapsed
@@ -149,9 +149,8 @@ sealed class RigidBody(
 
     companion object {
 
-        fun World.findColliding(rigidBody: RigidBody): List<RigidBody> =
-            gameObjects
-                .filterNot { it.id == rigidBody.gameObject.id }
+        fun GameObject.findColliding(): List<RigidBody> =
+            otherGameObjects()
                 .map { it.rigidBody }
                 .filter { rigidBody.isCollidingWith(it) }
                 .onEach { it.collisionResolved = true }

@@ -58,6 +58,13 @@ data class Vector2d(var x: Double, var y: Double) {
         return this.x * other.x + this.y * other.y
     }
 
+    /**
+     * Computes the component-wise product of two vectors (i.e. (v1.x * v2.x, v1.y * v2.y)
+     */
+    fun componentWiseMul(v: Vector2d): Vector2d {
+        return Vector2d(this.x * v.x,this.y * v.y)
+    }
+
     companion object {
         fun zero(): Vector2d = Vector2d(0.0, 0.0)
 
