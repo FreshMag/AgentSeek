@@ -14,7 +14,6 @@ import java.awt.event.ComponentEvent
 import javax.swing.JFrame
 import javax.swing.SwingUtilities
 import javax.swing.WindowConstants.EXIT_ON_CLOSE
-import kotlin.random.Random
 
 typealias RenderingEvent = (Graphics2D) -> Unit
 
@@ -72,7 +71,7 @@ object GameGui : View, InputListener() {
                 GameREPL.start()
             }.start()
         } else {
-            GameEngine.loadScene(Scenes.exampleScene(10))
+            GameEngine.loadScene(Scenes.exampleScene(1))
             GameEngine.start()
         }
     }
