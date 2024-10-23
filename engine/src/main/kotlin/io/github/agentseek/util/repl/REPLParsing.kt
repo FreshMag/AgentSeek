@@ -4,6 +4,7 @@ import io.github.agentseek.common.Point2d
 import io.github.agentseek.components.Component
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.engine.GameEngine
+import io.github.agentseek.physics.Rays.castRay
 import io.github.agentseek.physics.RigidBody
 import io.github.agentseek.util.FastEntities.emptyGameObject
 import io.github.agentseek.util.repl.GameREPL.isRunning
@@ -79,6 +80,7 @@ object REPLParsing {
             WatchGO::class,
             UnWatchGo::class,
             ZoomCommand::class,
+            RayCommand::class,
         ],
         description = ["Game Read-Eval-Print-Loop for utility"],
         version = [
@@ -342,6 +344,7 @@ object REPLParsing {
             } ?: println("ID doesn't match any GameObject")
         }
     }
+
     @Command(
         name = "unwatch",
         description = ["Un-watches a previously watched GameObject"],
@@ -423,7 +426,7 @@ object REPLParsing {
         description = ["Zooms the viewport of the view's camera"],
         subcommands = [HelpCommand::class],
     )
-    class ZoomCommand: Runnable {
+    class ZoomCommand : Runnable {
         @Parameters(
             paramLabel = "FACTOR", description = ["Zoom's factor. MUST be positive. If less than 1, zooms out"]
         )
@@ -431,6 +434,30 @@ object REPLParsing {
 
         override fun run() {
             GameEngine.view?.camera?.zoom(factor.takeIf { it > 0 } ?: 1.0)
+        }
+    }
+
+    @Command(
+        name = "ray",
+        description = ["Casts a ray between two GameObjects and prints the intersected game objects, sorted by distance"],
+        subcommands = [HelpCommand::class],
+    )
+    class RayCommand : Runnable {
+        @Parameters(
+            paramLabel = "FIRST_OBJ", description = ["ID of the GameObject used as origin of the ray"]
+        )
+        var firstId: String = ""
+
+        @Parameters(
+            paramLabel = "SECOND_OBJ", description = ["ID of the GameObject used as destination of the ray"]
+        )
+        var secondId: String = ""
+
+        override fun run() {
+            scene.world.gameObjectById(firstId)?.let { gameObject ->
+                val second = scene.world.gameObjectById(secondId) ?: return@let
+                println(gameObject.castRay(second).allIntersecting.map { it.id })
+            }
         }
     }
 
