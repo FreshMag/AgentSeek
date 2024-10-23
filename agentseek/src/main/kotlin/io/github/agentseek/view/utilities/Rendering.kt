@@ -1,6 +1,7 @@
 package io.github.agentseek.view.utilities
 
 import io.github.agentseek.common.Circle2d
+import io.github.agentseek.common.Cone2d
 import io.github.agentseek.common.Rectangle2d
 import io.github.agentseek.common.Shape2d
 import io.github.agentseek.view.RenderingContext
@@ -14,14 +15,14 @@ object Rendering {
      * Strokes a simple black circle starting from a [Circle2d]
      */
     fun RenderingContext<Graphics2D>.strokeCircle(circle2d: Circle2d) {
-        val converted = camera.toCameraCircle(circle2d)
+        val circle = camera.toCameraCircle(circle2d)
         render {
             it.draw(
                 Ellipse2D.Double(
-                    converted.position.x,
-                    converted.position.y,
-                    converted.width,
-                    converted.height,
+                    circle.position.x,
+                    circle.position.y,
+                    circle.width,
+                    circle.height,
                 )
             )
         }
@@ -31,16 +32,26 @@ object Rendering {
      * Strokes a simple black rectangle starting from a [Rectangle2d]
      */
     fun RenderingContext<Graphics2D>.strokeRectangle(rectangle2d: Rectangle2d) {
-        val converted = camera.toCameraRectangle(rectangle2d)
+        val rectangle = camera.toCameraRectangle(rectangle2d)
         render {
             it.draw(
                 Rectangle2D.Double(
-                    converted.position.x,
-                    converted.position.y,
-                    converted.width,
-                    converted.height,
+                    rectangle.position.x,
+                    rectangle.position.y,
+                    rectangle.width,
+                    rectangle.height,
                 )
             )
+        }
+    }
+
+    /**
+     * Strokes a simple black cone starting from a [Cone2d]
+     */
+    fun RenderingContext<Graphics2D>.strokeCone(cone2d: Cone2d) {
+        val cone = camera.toCameraCone(cone2d)
+        render {
+            SwingUtilities.drawCone(it, cone)
         }
     }
 
@@ -52,6 +63,7 @@ object Rendering {
             when (shape) {
                 is Circle2d -> strokeCircle(shape)
                 is Rectangle2d -> strokeRectangle(shape)
+                is Cone2d -> strokeCone(shape)
             }
         }
 }

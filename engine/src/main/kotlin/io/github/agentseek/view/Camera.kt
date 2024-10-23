@@ -1,6 +1,7 @@
 package io.github.agentseek.view
 
 import io.github.agentseek.common.Circle2d
+import io.github.agentseek.common.Cone2d
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.common.Rectangle2d
 
@@ -52,6 +53,17 @@ class Camera(
             toCameraPoint(rectangle2d.upperLeft),
             toCameraLength(rectangle2d.width),
             toCameraLength(rectangle2d.height),
+        )
+
+    /**
+     * Converts a [Cone2d] in world terms into camera terms
+     */
+    fun toCameraCone(cone2d: Cone2d): Cone2d =
+        Cone2d(
+            toCameraPoint(cone2d.vertex),
+            cone2d.angle,
+            toCameraLength(cone2d.length),
+            cone2d.rotation
         )
 
     /**
