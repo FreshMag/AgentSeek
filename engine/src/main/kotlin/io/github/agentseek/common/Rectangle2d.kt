@@ -98,8 +98,8 @@ data class Rectangle2d(
         return distanceX * distanceX + distanceY * distanceY < circle.radius * circle.radius
     }
 
-    override var center: Point2d = Point2d((upperLeft.x + upperRight.x) / 2, upperLeft.y + lowerLeft.y / 2)
-        get() = Point2d((upperLeft.x + upperRight.x) / 2, upperLeft.y + lowerLeft.y / 2)
+    override var center: Point2d = Point2d((upperLeft.x + upperRight.x) / 2, (upperLeft.y + lowerLeft.y) / 2)
+        get() = Point2d((upperLeft.x + upperRight.x) / 2, (upperLeft.y + lowerLeft.y) / 2)
         set(value) {
             position = Point2d(value.x - (width / 2), value.y - (height / 2))
             field = value
