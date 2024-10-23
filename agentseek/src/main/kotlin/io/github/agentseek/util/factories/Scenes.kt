@@ -6,7 +6,6 @@ import io.github.agentseek.components.InputComponent
 import io.github.agentseek.core.Scene
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.util.factories.SceneFactory.emptyScene
-import io.github.agentseek.util.serialization.YamlUtils
 import io.github.agentseek.view.SimpleRenderer
 import kotlin.random.Random
 
@@ -16,10 +15,11 @@ object Scenes {
         val emptyScene = emptyScene()
         val maxX = GameEngine.view?.camera?.viewPortWidth ?: 50.0
         val maxY = GameEngine.view?.camera?.viewPortHeight ?: 50.0
-        val go = emptyScene.world.gameObjectBuilder().position(Random.nextDouble(maxX), Random.nextDouble(maxY)).with {
-            InputComponent(it)
-        }.renderer(SimpleRenderer()).build()
-        emptyScene.world.addGameObject(go)
+        val player =
+            emptyScene.world.gameObjectBuilder().position(Random.nextDouble(maxX), Random.nextDouble(maxY)).with {
+                InputComponent(it)
+            }.renderer(SimpleRenderer()).build()
+        emptyScene.world.addGameObject(player)
         (0 until nObjects).forEach { _ ->
             val go =
                 emptyScene.world.gameObjectBuilder().position(Random.nextDouble(maxX), Random.nextDouble(maxY)).with {
@@ -27,8 +27,7 @@ object Scenes {
                         it, Vector2d(Random.nextDouble(3.0), Random.nextDouble(3.0))
                     )
                 }.renderer(SimpleRenderer()).build()
-            YamlUtils.YAMLWrite.writeDto("Ga", go)
-
+            emptyScene.world.addGameObject(go)
         }
         return emptyScene
     }
