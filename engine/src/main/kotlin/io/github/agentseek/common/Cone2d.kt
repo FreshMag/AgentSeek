@@ -24,6 +24,9 @@ data class Cone2d(
     override val height: Double
         get() = length * sin(rotation)
 
+    private val direction: Vector2d
+        get() = Vector2d(cos(angle), sin(angle))
+
     override fun contains(point: Point2d): Boolean {
         val (v1, v2, v3) = triangle
         val d1 = sign(point, v1, v2)
@@ -35,10 +38,10 @@ data class Cone2d(
     }
 
     override var center: Point2d = vertex
-        get() = vertex
+        get() = vertex + (direction * (height / 2))
         set(value) {
-            vertex = value
             field = value
+            vertex = value - (direction * height / 2.0)
         }
 
     override var position: Point2d = vertex
