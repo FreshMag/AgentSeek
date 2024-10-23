@@ -5,11 +5,16 @@ import io.github.agentseek.core.GameObject
 
 object GameObjectUtilities {
 
+    /**
+     * Returns all the other game objects except for this one
+     */
     fun GameObject.otherGameObjects(): Iterable<GameObject> =
         world.gameObjects.filterNot { it.id == this.id }
 
-    fun GameObject.center(): Point2d {
-        return rigidBody.shape.center
+    /**
+     * Returns the center of the rigid body of this object
+     */
+    fun GameObject.center(): Point2d =
+        rigidBody.shape.center
 
-    }
 }
