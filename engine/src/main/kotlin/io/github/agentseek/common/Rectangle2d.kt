@@ -44,6 +44,16 @@ data class Rectangle2d(
         listOf(upperLeft, upperRight, lowerRight, lowerLeft)
 
     /**
+     * Returns an iterable of edges, that is pairs of [Point2d] representing start and finish of each edge
+     */
+    fun edges(): Iterable<Pair<Point2d, Point2d>> = listOf(
+        Pair(upperLeft, upperRight),
+        Pair(lowerLeft, lowerRight),
+        Pair(upperLeft, lowerLeft),
+        Pair(upperRight, lowerRight),
+    )
+
+    /**
      * Used to determine if a rectangle is contained completely in this rectangle.
      *
      * @param rectangle Rectangle inside this rectangle.

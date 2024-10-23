@@ -67,7 +67,7 @@ object GameGui : View {
                 GameREPL.start()
             }.start()
         } else {
-            GameEngine.loadScene(Scenes.exampleScene(Random.nextInt(10, 20)))
+            GameEngine.loadScene(Scenes.collisionExampleScene())
             GameEngine.start()
         }
     }
