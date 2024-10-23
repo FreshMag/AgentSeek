@@ -38,6 +38,22 @@ data class Rectangle2d(
         point.x > upperLeft.x && point.x < upperRight.x && point.y > upperLeft.y && point.y < lowerLeft.y
 
     /**
+     * Returns an iterable of [Point2d] representing the vertices, clockwise ordered, starting from [upperLeft]
+     */
+    fun vertices(): Iterable<Point2d> =
+        listOf(upperLeft, upperRight, lowerRight, lowerLeft)
+
+    /**
+     * Returns an iterable of edges, that is pairs of [Point2d] representing start and finish of each edge
+     */
+    fun edges(): Iterable<Pair<Point2d, Point2d>> = listOf(
+        Pair(upperLeft, upperRight),
+        Pair(lowerLeft, lowerRight),
+        Pair(upperLeft, lowerLeft),
+        Pair(upperRight, lowerRight),
+    )
+
+    /**
      * Used to determine if a rectangle is contained completely in this rectangle.
      *
      * @param rectangle Rectangle inside this rectangle.
@@ -64,7 +80,7 @@ data class Rectangle2d(
         when (shape) {
             is Rectangle2d -> intersectWithRectangle(shape)
             is Circle2d -> intersectWithCircle(shape)
-            else -> false
+            is Cone2d -> shape.intersects(this)
         }
 
     private fun intersectWithRectangle(rect: Rectangle2d): Boolean {
@@ -82,8 +98,8 @@ data class Rectangle2d(
         return distanceX * distanceX + distanceY * distanceY < circle.radius * circle.radius
     }
 
-    override var center: Point2d = Point2d((upperLeft.x + upperRight.x) / 2, upperLeft.y + lowerLeft.y / 2)
-        get() = Point2d((upperLeft.x + upperRight.x) / 2, upperLeft.y + lowerLeft.y / 2)
+    override var center: Point2d = Point2d((upperLeft.x + upperRight.x) / 2, (upperLeft.y + lowerLeft.y) / 2)
+        get() = Point2d((upperLeft.x + upperRight.x) / 2, (upperLeft.y + lowerLeft.y) / 2)
         set(value) {
             position = Point2d(value.x - (width / 2), value.y - (height / 2))
             field = value

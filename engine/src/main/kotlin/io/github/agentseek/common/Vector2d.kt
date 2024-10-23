@@ -1,5 +1,6 @@
 package io.github.agentseek.common
 
+import kotlin.math.acos
 import kotlin.math.sqrt
 
 /**
@@ -51,16 +52,33 @@ data class Vector2d(var x: Double, var y: Double) {
      */
     operator fun unaryMinus(): Vector2d = Vector2d(-x, -y)
 
-    companion object {
-        /**
-         * Generate a new vector given the angle in [degrees] with x-axis.
-         */
-        fun fromAngle(degrees: Double): Vector2d =
-            Vector2d(
-                GameMath.cosDeg(degrees.toFloat().toDouble()),
-                GameMath.sinDeg(degrees.toFloat().toDouble())
-            )
+    /**
+     * Computes the dot product of two vectors
+     */
+    fun dot(other: Vector2d): Double {
+        return this.x * other.x + this.y * other.y
+    }
 
+    /**
+     * Returns the angle in radians formed by this vector and [other]
+     */
+    fun angleWith(other: Vector2d): Double {
+        val dotProduct = this.dot(other)
+        val magnitudeProduct = this.module() * other.module()
+        if (magnitudeProduct == 0.0) return 0.0
+        val cosTheta = (dotProduct / magnitudeProduct).coerceIn(-1.0, 1.0)
+
+        return acos(cosTheta)
+    }
+
+    /**
+     * Computes the component-wise product of two vectors (i.e. (v1.x * v2.x, v1.y * v2.y)
+     */
+    fun componentWiseMul(v: Vector2d): Vector2d {
+        return Vector2d(this.x * v.x,this.y * v.y)
+    }
+
+    companion object {
         fun zero(): Vector2d = Vector2d(0.0, 0.0)
 
         fun fromPosition(position: Point2d): Vector2d = Vector2d(position.x, position.y)

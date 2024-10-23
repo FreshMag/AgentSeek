@@ -22,6 +22,7 @@ data class Circle2d(val radius: Double, override var position: Point2d = Point2d
         when (shape) {
             is Circle2d -> intersectWithCircle(shape)
             is Rectangle2d -> shape.intersects(this)
+            is Cone2d -> shape.intersects(this)
         }
 
 
