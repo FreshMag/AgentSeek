@@ -59,15 +59,6 @@ data class Vector2d(var x: Double, var y: Double) {
     }
 
     companion object {
-        /**
-         * Generate a new vector given the angle in [degrees] with x-axis.
-         */
-        fun fromAngle(degrees: Double): Vector2d =
-            Vector2d(
-                GameMath.cosDeg(degrees.toFloat().toDouble()),
-                GameMath.sinDeg(degrees.toFloat().toDouble())
-            )
-
         fun zero(): Vector2d = Vector2d(0.0, 0.0)
 
         fun fromPosition(position: Point2d): Vector2d = Vector2d(position.x, position.y)
