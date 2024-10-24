@@ -5,7 +5,6 @@ import io.github.agentseek.common.Cone2d
 import io.github.agentseek.common.Rectangle2d
 import io.github.agentseek.common.Shape2d
 import io.github.agentseek.view.RenderingContext
-import io.github.agentseek.view.utilities.Rendering.strokeCone
 import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.geom.Ellipse2D
@@ -76,6 +75,16 @@ object Rendering {
         val cone = camera.toCameraCone(cone2d)
         render {
             SwingUtilities.fillConeWithGradient(it, cone, startColor, endColor)
+        }
+    }
+
+    /**
+     * Fills a cone with a gradient
+     */
+    fun RenderingContext<Graphics2D>.fillGradientCircle(circle2d: Circle2d, startColor: Color, endColor: Color) {
+        val circle = camera.toCameraCircle(circle2d)
+        render {
+            SwingUtilities.fillCircleWithGradient(it, circle, startColor, endColor)
         }
     }
 }

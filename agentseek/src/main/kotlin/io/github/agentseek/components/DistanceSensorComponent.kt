@@ -1,12 +1,14 @@
 package io.github.agentseek.components
 
+import io.github.agentseek.common.Circle2d
 import io.github.agentseek.common.Vector2d
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.physics.Collider
 import io.github.agentseek.physics.Rays.castRay
 import io.github.agentseek.util.GameObjectUtilities.attachRenderer
 import io.github.agentseek.util.GameObjectUtilities.center
-import io.github.agentseek.view.utilities.Rendering.strokeShape
+import io.github.agentseek.view.utilities.Rendering.fillGradientCircle
+import java.awt.Color
 import kotlin.time.Duration
 
 class DistanceSensorComponent(
@@ -20,7 +22,7 @@ class DistanceSensorComponent(
     override fun init() {
         sensorCollider.center = gameObject.center()
         gameObject.attachRenderer { _, context ->
-            context?.strokeShape(sensorCollider.shape)
+            context?.fillGradientCircle(sensorCollider.shape as Circle2d, Color.RED, Color(255, 255, 0, 0))
         }
     }
 
@@ -48,9 +50,9 @@ class DistanceSensorComponent(
                 } else {
                     antiClockwise
                 }
-            direction = ((previousDirection * 2.5) + forwardDirection).normalized() * 1.25
+            direction = ((previousDirection * 2.5) + forwardDirection).normalized() * 5.0
         } else {
-            previousDirection = ((forwardDirection * 1.25) + previousDirection).normalized() * 1.25
+            previousDirection = ((forwardDirection * 1.25) + previousDirection).normalized() * 5.0
             direction = previousDirection
         }
         gameObject.rigidBody.velocity = direction

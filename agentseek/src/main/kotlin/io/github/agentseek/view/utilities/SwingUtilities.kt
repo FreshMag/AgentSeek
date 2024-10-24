@@ -1,11 +1,10 @@
 package io.github.agentseek.view.utilities
 
+import io.github.agentseek.common.Circle2d
 import io.github.agentseek.common.Cone2d
 import io.github.agentseek.common.Point2d
-import java.awt.Color
-import java.awt.GradientPaint
-import java.awt.Graphics2D
-import java.awt.Stroke
+import java.awt.*
+import java.awt.geom.Point2D
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -91,5 +90,31 @@ object SwingUtilities {
         g.transform = originalTransform
         g.paint = originalPaint
         g.stroke = originalStroke
+    }
+
+    fun fillCircleWithGradient(g: Graphics2D, circle2d: Circle2d, startColor: Color, endColor: Color) {
+        val originalPaint = g.paint
+        val (centerX, centerY) = circle2d.center
+        val center = Point2D.Double(centerX, centerY)
+        val dist = floatArrayOf(0.0f, 1.0f)
+        val colors = arrayOf(startColor, endColor)
+
+        val radialGradient = RadialGradientPaint(
+            center,
+            circle2d.radius.toFloat(),
+            dist,
+            colors
+        )
+
+        g.paint = radialGradient
+
+        g.fillOval(
+            (centerX - circle2d.radius).toInt(),
+            (centerY - circle2d.radius).toInt(),
+            (circle2d.radius * 2).toInt(),
+            (circle2d.radius * 2).toInt()
+        )
+
+        g.paint = originalPaint
     }
 }
