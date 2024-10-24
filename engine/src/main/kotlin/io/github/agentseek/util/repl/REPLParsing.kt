@@ -456,7 +456,7 @@ object REPLParsing {
         override fun run() {
             scene.world.gameObjectById(firstId)?.let { gameObject ->
                 val second = scene.world.gameObjectById(secondId) ?: return@let
-                println(gameObject.castRay(second).allIntersecting.map { it.id })
+                println(gameObject.castRay(second).allIntersecting.map { it.gameObject.id })
             }
         }
     }

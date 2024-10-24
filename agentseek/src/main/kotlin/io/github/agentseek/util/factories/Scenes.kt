@@ -2,6 +2,7 @@ package io.github.agentseek.util.factories
 
 import io.github.agentseek.common.Vector2d
 import io.github.agentseek.components.ConstantAccelerationComponent
+import io.github.agentseek.components.DistanceSensorComponent
 import io.github.agentseek.components.InputComponent
 import io.github.agentseek.components.SightSensorComponent
 import io.github.agentseek.core.Scene
@@ -18,19 +19,31 @@ object Scenes {
         val emptyScene = emptyScene()
         val maxX = GameEngine.view?.camera?.viewPortWidth ?: 50.0
         val maxY = GameEngine.view?.camera?.viewPortHeight ?: 50.0
-        val player =
-            emptyScene.world.gameObjectBuilder().position(10.0, 10.0)
-                .with { InputComponent(it) }
-                .with { SightSensorComponent(it, 10.0, Math.PI / 3) }
-                .renderer(SimpleRenderer()).build()
-        emptyScene.world.addGameObject(player)
-        (0 until nObjects).forEach { _ ->
-            val go =
-                emptyScene.world.gameObjectBuilder()
-                    .position(Random.nextDouble(maxX), Random.nextDouble(maxY))
-                    .renderer(SimpleRenderer()).build()
+//        val player =
+//            emptyScene.world.gameObjectBuilder().position(10.0, 10.0)
+//                .with { InputComponent(it) }
+//                .with { SightSensorComponent(it, 10.0, Math.PI / 3) }
+//                .renderer(SimpleRenderer()).build()
+//        emptyScene.world.addGameObject(player)
 
-            emptyScene.world.addGameObject(go)
+        val agent =
+            emptyScene.world.gameObjectBuilder().position(0.0, 0.0)
+                .rigidBody { RigidBody.CircleRigidBody(0.5, it) }
+                .with { DistanceSensorComponent(it, 1.5) }
+                .with { SightSensorComponent(it, 20.0, Math.PI / 6) }
+                .renderer(SimpleRenderer()).build()
+
+        emptyScene.world.addGameObject(agent)
+        (0 until nObjects).forEach { i ->
+            (0 until nObjects).forEach { j ->
+                val go =
+                    emptyScene.world.gameObjectBuilder()
+                        .position(5.0 + i * 5.0, 5.0 + j * 5.0)
+                        .renderer(SimpleRenderer()).build()
+
+                emptyScene.world.addGameObject(go)
+
+            }
         }
         return emptyScene
     }

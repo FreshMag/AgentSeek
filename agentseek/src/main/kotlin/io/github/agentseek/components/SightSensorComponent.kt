@@ -6,7 +6,8 @@ import io.github.agentseek.physics.Collider
 import io.github.agentseek.physics.Rays.castRay
 import io.github.agentseek.util.GameObjectUtilities.attachRenderer
 import io.github.agentseek.util.GameObjectUtilities.center
-import io.github.agentseek.view.utilities.Rendering.strokeShape
+import io.github.agentseek.view.utilities.Rendering.fillGradientCone
+import java.awt.Color
 import kotlin.time.Duration
 
 class SightSensorComponent(gameObject: GameObject, coneLength: Double, coneAperture: Double) :
@@ -18,7 +19,7 @@ class SightSensorComponent(gameObject: GameObject, coneLength: Double, coneApert
     override fun init() {
         sensorCollider.position = gameObject.position
         gameObject.attachRenderer { _, context ->
-            context?.strokeShape(sensorCollider.shape)
+            context?.fillGradientCone(sensorCollider.shape as Cone2d, Color.YELLOW, Color(255, 255, 0, 0))
         }
     }
 
@@ -34,8 +35,9 @@ class SightSensorComponent(gameObject: GameObject, coneLength: Double, coneApert
         if (colliding.isNotEmpty()) {
             colliding.forEach {
                 val go = it.gameObject
-                if (gameObject.castRay(go).firstIntersecting?.id == go.id) {
-                    println("I'm seeing ${go.id}!")
+                val intersection = gameObject.castRay(go).firstIntersecting
+                if (intersection?.gameObject?.id == go.id) {
+                    //println("I'm seeing ${go.id} at distance ${intersection.distance}!")
                 }
             }
         }
