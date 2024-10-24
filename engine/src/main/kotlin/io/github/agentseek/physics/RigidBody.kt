@@ -1,9 +1,9 @@
 package io.github.agentseek.physics
 
-import io.github.agentseek.common.*
+import io.github.agentseek.common.Shape2d
+import io.github.agentseek.common.Vector2d
 import io.github.agentseek.components.AbstractComponent
 import io.github.agentseek.core.GameObject
-import io.github.agentseek.util.GameObjectUtilities.otherGameObjects
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
 
@@ -12,30 +12,38 @@ import kotlin.time.DurationUnit
  */
 sealed class RigidBody(
     /**
-     * Gets the [shape] of the collider of this Rigid body.
+     * Collider used for collisions of this RigidBody
      */
-    val shape: Shape2d,
+    val collider: Collider,
     /**
      * [GameObject] with this Rigid body
      */
     gameObject: GameObject
 ) : AbstractComponent(gameObject) {
-    /**
-     * A simple rigid body with a circular shape
-     */
-    class CircleRigidBody(radius: Double, gameObject: GameObject) : RigidBody(Circle2d(radius), gameObject)
 
     /**
-     * A simple rigid body with a rectangular shape
+     * Gets the [shape] of the collider of this Rigid body.
+     */
+    val shape: Shape2d
+        get() = collider.shape
+
+    /**
+     * A simple rigid body with a circular collider
+     */
+    class CircleRigidBody(radius: Double, gameObject: GameObject) :
+        RigidBody(Collider.CircleCollider(radius, gameObject), gameObject)
+
+    /**
+     * A simple rigid body with a rectangular collider
      */
     class RectangleRigidBody(width: Double, height: Double, gameObject: GameObject) :
-        RigidBody(Rectangle2d(width, height), gameObject)
+        RigidBody(Collider.RectangleCollider(width, height, gameObject), gameObject)
 
     /**
-     * A simple rigid body with a cone shape
+     * A simple rigid body with a cone collider
      */
     class ConeRigidBody(angle: Double, length: Double, rotation: Double, gameObject: GameObject) :
-        RigidBody(Cone2d(Point2d.origin(), angle, length, rotation), gameObject)
+        RigidBody(Collider.ConeCollider(angle, length, rotation, gameObject), gameObject)
 
     /**
      * Velocity of this [RigidBody], in meters per seconds
@@ -66,21 +74,18 @@ sealed class RigidBody(
     private var collisionResolved = false
     private var collisionCallbacks = emptyList<(GameObject) -> Unit>()
 
-    /**
-     * Checks if this hit box is colliding with another [rigidBody], intersecting their two-dimensional shapes.
-     */
-    fun isCollidingWith(rigidBody: RigidBody): Boolean {
-        return shape.intersects(rigidBody.shape)
-    }
-
     override fun onUpdate(deltaTime: Duration) {
         if (!isStatic) {
             if (!collisionResolved) {
-                findColliding().onEach { it.collisionResolved = true }.forEach { resolveCollision(it) }
+                collider.findColliding().onEach {
+                    it.rigidBody.collisionResolved = true
+                }.forEach {
+                    resolveCollision(it.rigidBody)
+                }
             }
             val elapsed = deltaTime.toDouble(DurationUnit.SECONDS)
             velocity += acceleration * elapsed
-            shape.position += velocity * elapsed
+            collider.position += velocity * elapsed
         }
         acceleration = Vector2d.zero()
         collisionResolved = false
@@ -126,13 +131,9 @@ sealed class RigidBody(
     }
 
     /**
-     * Finds the rigid bodies colliding with this rigid body
+     * Utility function to skip passing through the associated collider
      */
-    fun findColliding(): List<RigidBody> =
-        gameObject.otherGameObjects()
-            .map { it.rigidBody }
-            .filter { isCollidingWith(it) }
-            .toList()
+    fun isCollidingWith(rigidBody: RigidBody): Boolean = collider.isCollidingWith(rigidBody.collider)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -155,5 +156,6 @@ sealed class RigidBody(
     override fun toString(): String {
         return "RigidBody(shape=$shape, velocity=$velocity)"
     }
+
 
 }
