@@ -4,11 +4,9 @@ import io.github.agentseek.common.Cone2d
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.physics.Rays.castRay
 import io.github.agentseek.physics.RigidBody
+import io.github.agentseek.util.GameObjectUtilities.attachRenderer
 import io.github.agentseek.util.GameObjectUtilities.center
-import io.github.agentseek.view.RenderingContext
-import io.github.agentseek.view.SimpleRenderer
 import io.github.agentseek.view.utilities.Rendering.strokeShape
-import java.awt.Graphics2D
 import kotlin.time.Duration
 
 class SightSensorComponent(gameObject: GameObject, coneLength: Double, coneAperture: Double) :
@@ -19,12 +17,8 @@ class SightSensorComponent(gameObject: GameObject, coneLength: Double, coneApert
 
     override fun init() {
         sensorRigidBody.shape.position = gameObject.position
-        val originalRenderer = gameObject.renderer
-        gameObject.renderer = object : SimpleRenderer() {
-            override fun render(gameObject: GameObject, renderingContext: RenderingContext<Graphics2D>?) {
-                renderingContext?.strokeShape(sensorRigidBody.shape)
-                originalRenderer.applyOnView(gameObject)
-            }
+        gameObject.attachRenderer { _, context ->
+            context?.strokeShape(sensorRigidBody.shape)
         }
     }
 
