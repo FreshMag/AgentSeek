@@ -1,6 +1,7 @@
 package io.github.agentseek.common
 
 import kotlin.math.acos
+import kotlin.math.atan2
 import kotlin.math.sqrt
 
 /**
@@ -69,6 +70,10 @@ data class Vector2d(var x: Double, var y: Double) {
         val cosTheta = (dotProduct / magnitudeProduct).coerceIn(-1.0, 1.0)
 
         return acos(cosTheta)
+    }
+
+    fun angle(): Double {
+        return atan2(y, x)
     }
 
     /**

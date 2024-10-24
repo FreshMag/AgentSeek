@@ -3,13 +3,19 @@ package io.github.agentseek.view.utilities
 import io.github.agentseek.common.Cone2d
 import java.awt.Color
 import java.awt.Graphics2D
+import java.awt.Stroke
+import java.awt.geom.AffineTransform
 import kotlin.math.cos
 import kotlin.math.sin
+
 
 object SwingUtilities {
 
     fun drawCone(g: Graphics2D, cone: Cone2d) {
         val originalTransform = g.transform
+        val originalColor: Color = g.color
+        val originalStroke: Stroke = g.stroke
+
 
         g.translate(cone.vertex.x, cone.vertex.y)
 
@@ -38,5 +44,7 @@ object SwingUtilities {
         g.drawLine(0, 0, endX.toInt(), endY.toInt())
 
         g.transform = originalTransform
+        g.color = originalColor
+        g.stroke = originalStroke
     }
 }

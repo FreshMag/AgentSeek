@@ -76,7 +76,7 @@ sealed class RigidBody(
     override fun onUpdate(deltaTime: Duration) {
         if (!isStatic) {
             if (!collisionResolved) {
-                gameObject.findColliding().forEach { resolveCollision(it) }
+                findColliding().onEach { it.collisionResolved = true }.forEach { resolveCollision(it) }
             }
             val elapsed = deltaTime.toDouble(DurationUnit.SECONDS)
             velocity += acceleration * elapsed
@@ -125,6 +125,15 @@ sealed class RigidBody(
         acceleration += force * (1 / mass)
     }
 
+    /**
+     * Finds the rigid bodies colliding with this rigid body
+     */
+    fun findColliding(): List<RigidBody> =
+        gameObject.otherGameObjects()
+            .map { it.rigidBody }
+            .filter { isCollidingWith(it) }
+            .toList()
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is RigidBody) return false
@@ -145,17 +154,6 @@ sealed class RigidBody(
 
     override fun toString(): String {
         return "RigidBody(shape=$shape, velocity=$velocity)"
-    }
-
-    companion object {
-
-        fun GameObject.findColliding(): List<RigidBody> =
-            otherGameObjects()
-                .map { it.rigidBody }
-                .filter { rigidBody.isCollidingWith(it) }
-                .onEach { it.collisionResolved = true }
-                .toList()
-
     }
 
 }
