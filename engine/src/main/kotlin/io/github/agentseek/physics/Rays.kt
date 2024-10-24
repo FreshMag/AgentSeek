@@ -30,8 +30,7 @@ object Rays {
             get() = findAllIntersecting()
 
         private fun findFirstIntersecting(): GameObject? =
-            gameObject.otherGameObjects()
-                .firstOrNull { it.rigidBody.shape.rayIntersect(this) }
+            findAllIntersecting().firstOrNull()
 
         private fun findAllIntersecting(): List<GameObject> =
             gameObject.otherGameObjects()
