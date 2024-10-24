@@ -13,6 +13,12 @@ sealed class Collider(val shape: Shape2d, val gameObject: GameObject) {
             field = value
         }
 
+    var center: Point2d = shape.center
+        get() = shape.center
+        set(value) {
+            shape.center = value
+            field = value
+        }
     /**
      * Traverses the rigid body of the parent game object. Note that this Collider might not be associated with that
      * rigid body

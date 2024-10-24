@@ -1,8 +1,6 @@
 package io.github.agentseek.common
 
-import kotlin.math.acos
-import kotlin.math.atan2
-import kotlin.math.sqrt
+import kotlin.math.*
 
 /**
  * Two-dimensional vector, with a [x] component and [y] component
@@ -81,6 +79,34 @@ data class Vector2d(var x: Double, var y: Double) {
      */
     fun componentWiseMul(v: Vector2d): Vector2d {
         return Vector2d(this.x * v.x,this.y * v.y)
+    }
+
+    /**
+     * Gets the perpendicular vector (anti-clock wise) to this one
+     */
+    fun perpendicular(): Vector2d {
+        return Vector2d(-y, x)
+    }
+
+    /**
+     * Finds the rotated vector by [angle] (in radians)
+     */
+    fun rotateRadians(angle: Double): Vector2d {
+        val cosTheta = cos(angle)
+        val sinTheta = sin(angle)
+
+        val newX = x * cosTheta - y * sinTheta
+        val newY = x * sinTheta + y * cosTheta
+
+        return Vector2d(newX, newY)
+    }
+
+    /**
+     * Finds the rotated vector by [angle] (in degrees)
+     */
+    fun rotateDegrees(degrees: Double): Vector2d {
+        val radians = Math.toRadians(degrees)
+        return this.rotateRadians(radians)
     }
 
     companion object {
