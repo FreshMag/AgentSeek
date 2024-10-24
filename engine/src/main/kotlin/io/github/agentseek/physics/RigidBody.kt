@@ -76,7 +76,7 @@ sealed class RigidBody(
     override fun onUpdate(deltaTime: Duration) {
         if (!isStatic) {
             if (!collisionResolved) {
-                findColliding().forEach { resolveCollision(it) }
+                findColliding().onEach { it.collisionResolved = true }.forEach { resolveCollision(it) }
             }
             val elapsed = deltaTime.toDouble(DurationUnit.SECONDS)
             velocity += acceleration * elapsed
@@ -132,7 +132,6 @@ sealed class RigidBody(
         gameObject.otherGameObjects()
             .map { it.rigidBody }
             .filter { isCollidingWith(it) }
-            .onEach { it.collisionResolved = true }
             .toList()
 
     override fun equals(other: Any?): Boolean {
