@@ -15,6 +15,7 @@ class DistanceSensorComponent(
 ) : AbstractComponent(gameObject) {
     private val sensorCollider: Collider = Collider.CircleCollider(radius, gameObject)
     private var previousDirection = Vector2d.zero()
+    private var forwardDirection = Vector2d(1.0, 1.0)
 
     override fun init() {
         sensorCollider.center = gameObject.center()
@@ -26,6 +27,7 @@ class DistanceSensorComponent(
     override fun onUpdate(deltaTime: Duration) {
         sensorCollider.center = gameObject.center()
         val colliding = sensorCollider.findColliding()
+        var direction = previousDirection
         if (colliding.isNotEmpty()) {
             val checked = mutableSetOf<String>()
             val danger = colliding.fold(Vector2d.zero()) { resultant, collider ->
@@ -37,7 +39,7 @@ class DistanceSensorComponent(
                 } else {
                     resultant
                 }
-            }
+            } / sensorCollider.shape.width
             val clockwise = danger.rotateDegrees(-135.0)
             val antiClockwise = danger.rotateDegrees(135.0)
             previousDirection =
@@ -46,10 +48,11 @@ class DistanceSensorComponent(
                 } else {
                     antiClockwise
                 }
-            gameObject.rigidBody.velocity = previousDirection * 1.25
+            direction = ((previousDirection * 2.5) + forwardDirection).normalized() * 1.25
         } else {
-            previousDirection = Vector2d(1.0, 1.0)
-            gameObject.rigidBody.velocity = previousDirection
+            previousDirection = ((forwardDirection * 1.25) + previousDirection).normalized() * 1.25
+            direction = previousDirection
         }
+        gameObject.rigidBody.velocity = direction
     }
 }
