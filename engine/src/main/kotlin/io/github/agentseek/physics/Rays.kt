@@ -20,24 +20,27 @@ object Rays {
         /**
          * Returns the first GameObject intersecting with this Ray
          */
-        val firstIntersecting: GameObject?
+        val firstIntersecting: Intersection?
             get() = findFirstIntersecting()
 
         /**
          * Returns all GameObjects intersecting with this Ray
          */
-        val allIntersecting: List<GameObject>
+        val allIntersecting: List<Intersection>
             get() = findAllIntersecting()
 
-        private fun findFirstIntersecting(): GameObject? =
+        private fun findFirstIntersecting(): Intersection? =
             findAllIntersecting().firstOrNull()
 
-        private fun findAllIntersecting(): List<GameObject> =
+        private fun findAllIntersecting(): List<Intersection> =
             gameObject.otherGameObjects()
-                .filter { it.rigidBody.shape.rayIntersect(this) }
-                .sortedBy { (gameObject.position - it.position).module() }
+                .mapNotNull {
+                    it.rigidBody.shape.rayIntersection(this)?.let { distance -> Intersection(it, distance) }
+                }.sortedBy { it.distance }
 
     }
+
+    data class Intersection(val gameObject: GameObject, val distance: Double)
 
     /**
      * Casts a ray from this GameObject with a specified direction (vector 2d)
@@ -53,7 +56,7 @@ object Rays {
     /**
      * Checks if this Shape intersects with a [Ray]
      */
-    fun Shape2d.rayIntersect(ray: Ray): Boolean =
+    fun Shape2d.rayIntersection(ray: Ray): Double? =
         when (this) {
             is Circle2d -> this.circleRayIntersect(ray)
             is Rectangle2d -> this.rectangleRayIntersect(ray)
@@ -61,7 +64,7 @@ object Rays {
         }
 
 
-    private fun Circle2d.circleRayIntersect(ray: Ray): Boolean {
+    private fun Circle2d.circleRayIntersect(ray: Ray): Double? {
         val oc = ray.gameObject.center() - center
         val direction = ray.direction
 
@@ -72,28 +75,38 @@ object Rays {
 
         val discriminant = b * b - 4 * a * c
         // Since this method treats the ray as an infinite straight line, we need to exclude "backwards" shapes
-        return discriminant >= 0 && abs(ray.direction.angleWith(oc)) >= Math.PI / 2
+        if (discriminant < 0 || abs(ray.direction.angleWith(oc)) > Math.PI / 2) return null
+
+        val t1 = (-b - sqrt(discriminant)) / (2.0 * a)
+        val t2 = (-b + sqrt(discriminant)) / (2.0 * a)
+
+        val tNear = min(t1, t2)
+
+        if (tNear < 0) return null
+
+        return tNear * direction.module()
     }
 
-    private fun Rectangle2d.rectangleRayIntersect(ray: Ray): Boolean {
-        val rayOrigin = ray.gameObject.center()
-        val direction = ray.direction
+    private fun Rectangle2d.rectangleRayIntersect(ray: Ray): Double? {
+        val invDir = Vector2d(1.0 / ray.direction.x, 1.0 / ray.direction.y)
 
-        val minX = upperLeft.x
-        val maxX = lowerRight.x
-        val minY = upperLeft.y
-        val maxY = lowerRight.y
-        val t1 = (minX - rayOrigin.x) / direction.x
-        val t2 = (maxX - rayOrigin.x) / direction.x
-        val t3 = (minY - rayOrigin.y) / direction.y
-        val t4 = (maxY - rayOrigin.y) / direction.y
-        val tMin = maxOf(min(t1, t2), min(t3, t4))
-        val tMax = minOf(max(t1, t2), max(t3, t4))
+        val tMin = (upperLeft - ray.gameObject.center()).componentWiseMul(invDir)
+        val tMax = (lowerRight - ray.gameObject.center()).componentWiseMul(invDir)
 
-        return tMin <= tMax && tMax >= 0.0
+        val t1 = min(tMin.x, tMax.x)
+        val t2 = max(tMin.x, tMax.x)
+        val t3 = min(tMin.y, tMax.y)
+        val t4 = max(tMin.y, tMax.y)
+
+        val tNear = max(t1, t3)
+        val tFar = min(t2, t4)
+
+        if (tNear > tFar || tFar < 0.0) return null
+
+        return tNear * ray.direction.module()
     }
 
-    private fun Cone2d.coneRayIntersect(ray: Ray): Boolean {
+    private fun Cone2d.coneRayIntersect(ray: Ray): Double? {
         val oc = ray.gameObject.center() - vertex
         val cosThetaSq = cos(angle) * cos(angle)
 
@@ -106,6 +119,13 @@ object Rays {
 
         val discriminant = b * b - 4 * a * c
         // Since this method treats the ray as an infinite straight line, we need to exclude "backwards" shapes
-        return discriminant >= 0 && abs(ray.direction.angleWith(oc)) >= Math.PI / 2
+        if (discriminant < 0 || abs(ray.direction.angleWith(oc)) > Math.PI / 2) return null
+        val t1 = (-b - sqrt(discriminant)) / (2.0 * a)
+        val t2 = (-b + sqrt(discriminant)) / (2.0 * a)
+
+        val tNear = min(t1, t2)
+
+        if (tNear < 0) return null
+        return tNear * direction.module()
     }
 }

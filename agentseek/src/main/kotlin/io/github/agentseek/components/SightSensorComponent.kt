@@ -34,8 +34,9 @@ class SightSensorComponent(gameObject: GameObject, coneLength: Double, coneApert
         if (colliding.isNotEmpty()) {
             colliding.forEach {
                 val go = it.gameObject
-                if (gameObject.castRay(go).firstIntersecting?.id == go.id) {
-                    println("I'm seeing ${go.id}!")
+                val intersection = gameObject.castRay(go).firstIntersecting
+                if (intersection?.gameObject?.id == go.id) {
+                    println("I'm seeing ${go.id} at distance ${intersection.distance}!")
                 }
             }
         }
