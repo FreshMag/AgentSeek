@@ -46,7 +46,7 @@ class DistanceSensorComponent(
                 } else {
                     antiClockwise
                 }
-            gameObject.rigidBody.velocity =  previousDirection * 1.25
+            gameObject.rigidBody.velocity = previousDirection * 1.25
         } else {
             previousDirection = Vector2d(1.0, 1.0)
             gameObject.rigidBody.velocity = previousDirection

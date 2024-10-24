@@ -30,6 +30,7 @@ object Scenes {
             emptyScene.world.gameObjectBuilder().position(0.0, 0.0)
                 .rigidBody { RigidBody.CircleRigidBody(0.5, it) }
                 .with { DistanceSensorComponent(it, 1.5) }
+                .with { SightSensorComponent(it, 20.0, Math.PI / 6) }
                 .renderer(SimpleRenderer()).build()
 
         emptyScene.world.addGameObject(agent)
