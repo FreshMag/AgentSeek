@@ -2,6 +2,7 @@ package io.github.agentseek.components
 
 import io.github.agentseek.common.Cone2d
 import io.github.agentseek.core.GameObject
+import io.github.agentseek.physics.Rays.castRay
 import io.github.agentseek.physics.RigidBody
 import io.github.agentseek.util.GameObjectUtilities.center
 import io.github.agentseek.view.RenderingContext
@@ -10,7 +11,8 @@ import io.github.agentseek.view.utilities.Rendering.strokeShape
 import java.awt.Graphics2D
 import kotlin.time.Duration
 
-class SightSensorComponent(gameObject: GameObject, coneLength: Double, coneAperture: Double) : AbstractComponent(gameObject) {
+class SightSensorComponent(gameObject: GameObject, coneLength: Double, coneAperture: Double) :
+    AbstractComponent(gameObject) {
 
     private val sensorRigidBody: RigidBody = RigidBody.ConeRigidBody(coneAperture, coneLength, 0.0, gameObject)
     private var lastPos = gameObject.position
@@ -34,8 +36,14 @@ class SightSensorComponent(gameObject: GameObject, coneLength: Double, coneApert
             (sensorRigidBody.shape as? Cone2d)?.rotation = angle
             lastPos = gameObject.position
         }
-        if (sensorRigidBody.findColliding().isNotEmpty()) {
-            println("I'm seeing something!")
+        val colliding = sensorRigidBody.findColliding()
+        if (colliding.isNotEmpty()) {
+            colliding.forEach {
+                val go = it.gameObject
+                if (gameObject.castRay(go).firstIntersecting?.id == go.id) {
+                    println("I'm seeing ${go.id}!")
+                }
+            }
         }
     }
 
