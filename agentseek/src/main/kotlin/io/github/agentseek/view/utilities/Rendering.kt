@@ -16,9 +16,11 @@ object Rendering {
     /**
      * Strokes a simple black circle starting from a [Circle2d]
      */
-    fun RenderingContext<Graphics2D>.strokeCircle(circle2d: Circle2d) {
+    fun RenderingContext<Graphics2D>.strokeCircle(circle2d: Circle2d, color: Color) {
         val circle = camera.toCameraCircle(circle2d)
         render {
+            val previousColor = it.color
+            it.color = color
             it.draw(
                 Ellipse2D.Double(
                     circle.position.x,
@@ -27,15 +29,18 @@ object Rendering {
                     circle.height,
                 )
             )
+            it.color = previousColor
         }
     }
 
     /**
      * Strokes a simple black rectangle starting from a [Rectangle2d]
      */
-    fun RenderingContext<Graphics2D>.strokeRectangle(rectangle2d: Rectangle2d) {
+    fun RenderingContext<Graphics2D>.strokeRectangle(rectangle2d: Rectangle2d, color: Color) {
         val rectangle = camera.toCameraRectangle(rectangle2d)
         render {
+            val previousColor = it.color
+            it.color = color
             it.draw(
                 Rectangle2D.Double(
                     rectangle.position.x,
@@ -44,28 +49,29 @@ object Rendering {
                     rectangle.height,
                 )
             )
+            it.color = previousColor
         }
     }
 
     /**
      * Strokes a simple black cone starting from a [Cone2d]
      */
-    fun RenderingContext<Graphics2D>.strokeCone(cone2d: Cone2d) {
+    fun RenderingContext<Graphics2D>.strokeCone(cone2d: Cone2d, color: Color) {
         val cone = camera.toCameraCone(cone2d)
         render {
-            SwingUtilities.strokeCone(it, cone)
+            SwingUtilities.strokeCone(it, cone, color)
         }
     }
 
     /**
      * Strokes a simple black shape starting from a [Shape2d]
      */
-    fun RenderingContext<Graphics2D>.strokeShape(shape: Shape2d) =
+    fun RenderingContext<Graphics2D>.strokeShape(shape: Shape2d, color: Color) =
         render {
             when (shape) {
-                is Circle2d -> strokeCircle(shape)
-                is Rectangle2d -> strokeRectangle(shape)
-                is Cone2d -> strokeCone(shape)
+                is Circle2d -> strokeCircle(shape, color)
+                is Rectangle2d -> strokeRectangle(shape, color)
+                is Cone2d -> strokeCone(shape, color)
             }
         }
 
