@@ -50,6 +50,7 @@ object GameGui : View, InputListener() {
         frame.preferredSize = screenSize
         frame.defaultCloseOperation = EXIT_ON_CLOSE
         frame.addKeyListener(this)
+        frame.addMouseListener(this)
         Input.injectProvider(this)
         frame.isVisible = true
 
