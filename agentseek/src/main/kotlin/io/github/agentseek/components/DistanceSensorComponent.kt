@@ -13,11 +13,9 @@ import kotlin.time.Duration
 
 class DistanceSensorComponent(
     gameObject: GameObject,
-    radius: Double
+    private val radius: Double
 ) : AbstractComponent(gameObject) {
     private val sensorCollider: Collider = Collider.CircleCollider(radius, gameObject)
-    private var previousDirection = Vector2d.zero()
-    private var forwardDirection = Vector2d(1.0, 1.0)
 
     override fun init() {
         sensorCollider.center = gameObject.center()
@@ -26,35 +24,31 @@ class DistanceSensorComponent(
         }
     }
 
-    override fun onUpdate(deltaTime: Duration) {
-        sensorCollider.center = gameObject.center()
+    /**
+     * Gets the resultant obtained adding all vectors of distances from nearby objects within [radius]
+     */
+    fun getDistancesResultant(): Vector2d {
         val colliding = sensorCollider.findColliding()
-        var direction = previousDirection
-        if (colliding.isNotEmpty()) {
+        return if (colliding.isNotEmpty()) {
             val checked = mutableSetOf<String>()
             val danger = colliding.fold(Vector2d.zero()) { resultant, collider ->
                 val go = collider.gameObject
                 val ray = gameObject.castRay(go)
                 val intersection = ray.firstIntersecting ?: return@fold resultant
                 if (intersection.gameObject.id !in checked) {
+                    checked.add(intersection.gameObject.id)
                     resultant + (ray.direction * intersection.distance)
                 } else {
                     resultant
                 }
-            } / sensorCollider.shape.width
-            val clockwise = danger.rotateDegrees(-135.0)
-            val antiClockwise = danger.rotateDegrees(135.0)
-            previousDirection =
-                if (clockwise.angleWith(previousDirection) < antiClockwise.angleWith(previousDirection)) {
-                    clockwise
-                } else {
-                    antiClockwise
-                }
-            direction = ((previousDirection * 2.5) + forwardDirection).normalized() * 5.0
+            }
+            danger.normalized() * (radius - danger.module())
         } else {
-            previousDirection = ((forwardDirection * 1.25) + previousDirection).normalized() * 5.0
-            direction = previousDirection
+            Vector2d.zero()
         }
-        gameObject.rigidBody.velocity = direction
+    }
+
+    override fun onUpdate(deltaTime: Duration) {
+        sensorCollider.center = gameObject.center()
     }
 }
