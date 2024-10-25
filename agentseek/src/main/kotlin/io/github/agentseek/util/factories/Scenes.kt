@@ -1,10 +1,7 @@
 package io.github.agentseek.util.factories
 
 import io.github.agentseek.common.Vector2d
-import io.github.agentseek.components.ConstantAccelerationComponent
-import io.github.agentseek.components.DistanceSensorComponent
-import io.github.agentseek.components.FieldMovementComponent
-import io.github.agentseek.components.SightSensorComponent
+import io.github.agentseek.components.*
 import io.github.agentseek.core.Scene
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.physics.RigidBody
@@ -30,7 +27,8 @@ object Scenes {
                 .rigidBody { RigidBody.CircleRigidBody(0.5, it) }
                 .with { DistanceSensorComponent(it, 2.0) }
                 .with { FieldMovementComponent(it) }
-                .with { SightSensorComponent(it, 20.0, Math.PI / 6) }
+                .with { TestMouseComponent(it) }
+                //.with { SightSensorComponent(it, 20.0, Math.PI / 6) }
                 .renderer(SimpleRenderer()).build()
 
         emptyScene.world.addGameObject(agent)

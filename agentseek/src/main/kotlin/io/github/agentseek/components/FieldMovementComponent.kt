@@ -20,6 +20,11 @@ class FieldMovementComponent(gameObject: GameObject) : AbstractComponent(gameObj
     }
 
     override fun onUpdate(deltaTime: Duration) {
+        if (forwardDirection.module() < 0.5) {
+            gameObject.rigidBody.velocity = Vector2d.zero()
+            return
+        }
+
         val distances = sensor.getDistancesResultant()
         val direction: Vector2d = previousDirection +
             if (distances != Vector2d.zero()) {

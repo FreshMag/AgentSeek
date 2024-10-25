@@ -34,6 +34,15 @@ class Camera(
     }
 
     /**
+     * Converts a position in camera's coordinates (screen) into a new position in world's coordinates
+     */
+    fun toWorldPoint(cameraPoint: Point2d): Point2d {
+        val worldX = (cameraPoint.x * viewPortWidth) / view.screenWidth + cameraWorldPosition.x
+        val worldY = (cameraPoint.y * viewPortHeight) / view.screenHeight + cameraWorldPosition.y
+        return Point2d(worldX, worldY)
+    }
+
+    /**
      * Converts a length in world terms into camera terms (by a simple proportion)
      */
     fun toCameraLength(worldLength: Double): Double =
