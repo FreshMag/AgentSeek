@@ -8,10 +8,12 @@ import kotlin.time.Duration
 
 @Requires(DistanceSensorComponent::class)
 class FieldMovementComponent(gameObject: GameObject) : AbstractComponent(gameObject) {
-    lateinit var sensor: DistanceSensorComponent
+    private lateinit var sensor: DistanceSensorComponent
     private var previousDirection = Vector2d.zero()
     private val forwardDirection
-        get() = Point2d(50.0, 50.0) - gameObject.center()
+        get() = objective - gameObject.center()
+
+    var objective: Point2d = Point2d(50.0, 50.0)
 
     override fun init() {
         sensor = gameObject.getComponent<DistanceSensorComponent>()!!
