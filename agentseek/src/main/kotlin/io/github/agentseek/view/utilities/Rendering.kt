@@ -7,6 +7,7 @@ import io.github.agentseek.common.Shape2d
 import io.github.agentseek.view.RenderingContext
 import java.awt.Color
 import java.awt.Graphics2D
+import java.awt.Stroke
 import java.awt.geom.Ellipse2D
 import java.awt.geom.Rectangle2D
 
