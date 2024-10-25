@@ -2,11 +2,13 @@ package io.github.agentseek.core
 
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.components.Component
+import io.github.agentseek.components.Requires
 import io.github.agentseek.events.Event
 import io.github.agentseek.physics.RigidBody
 import io.github.agentseek.view.EmptyRenderer
 import io.github.agentseek.view.Renderer
 import io.github.agentseek.world.World
+import kotlin.reflect.full.findAnnotation
 import kotlin.time.Duration
 
 /**
@@ -54,11 +56,25 @@ class GameObject(
     }
 
     /**
-     * Adds a [component] to this object.
+     * Adds a [component] to this object. Throws an [IllegalStateException] if this GameObject already has that
+     * component or if some internal requirements of the component to be added are not satisfied.
      */
     @Throws(IllegalStateException::class)
     fun addComponent(component: Component) {
         check(!components.any { component.javaClass.isInstance(it) })
+        val componentClass = component::class
+        val requiredComponents = componentClass.findAnnotation<Requires>()?.required
+        if (requiredComponents != null) {
+            val missingComponents = requiredComponents.filter { required ->
+                components.none { required.isInstance(it) }
+            }
+            if (missingComponents.isNotEmpty()) {
+                throw IllegalStateException(
+                    "Cannot add ${componentClass.simpleName} because it requires " +
+                        requiredComponents.joinToString(", ") { it.simpleName.toString() }
+                )
+            }
+        }
         components += component
         component.init()
     }
