@@ -7,6 +7,7 @@ import io.github.agentseek.core.Scene
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.physics.RigidBody
 import io.github.agentseek.util.factories.SceneFactory.emptyScene
+import io.github.agentseek.util.serialization.YAMLWrite
 import io.github.agentseek.view.SimpleRenderer
 import io.github.agentseek.view.gui.GameGui
 
@@ -32,7 +33,7 @@ object Scenes {
                 //.with { FieldMovementComponent(it) }
                 //.with { TestMouseComponent(it) }
                 .renderer(SimpleRenderer()).build()
-
+        YAMLWrite.writeDto("go", agent)
         emptyScene.world.addGameObject(agent)
         (0 until nObjects).forEach { i ->
             (0 until nObjects).forEach { j ->
