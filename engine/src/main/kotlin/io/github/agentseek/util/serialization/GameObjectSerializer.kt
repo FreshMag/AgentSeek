@@ -6,11 +6,18 @@ import com.fasterxml.jackson.databind.SerializerProvider
 import io.github.agentseek.core.GameObject
 
 class GameObjectSerializer : JsonSerializer<GameObject>() {
-    override fun serialize(gameObject: GameObject?, generator: JsonGenerator?, provider: SerializerProvider?) {
-//        val gen = generator ?: return
-//        val go = gameObject ?: return
-//        gen.writeStartObject()
-//        gen.writeStringField("id", go.id)
+    override fun serialize(gameObject: GameObject, generator: JsonGenerator, provider: SerializerProvider) {
+        generator.writeStartObject()
+        generator.writeFieldName("components")
+        generator.writeStartArray()
+        generator.writeStartObject()
+        gameObject.components.forEach {
+            generator.writeStringField("class", it::class.qualifiedName)
+        }
+        generator.writeEndObject()
+        generator.writeEndArray()
+        generator.writeEndObject()
+
     }
 
 }

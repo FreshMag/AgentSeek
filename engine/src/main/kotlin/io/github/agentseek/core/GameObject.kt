@@ -1,10 +1,12 @@
 package io.github.agentseek.core
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.components.Component
 import io.github.agentseek.components.Requires
 import io.github.agentseek.events.Event
 import io.github.agentseek.physics.RigidBody
+import io.github.agentseek.util.serialization.GameObjectSerializer
 import io.github.agentseek.view.EmptyRenderer
 import io.github.agentseek.view.Renderer
 import io.github.agentseek.world.World
@@ -14,6 +16,8 @@ import kotlin.time.Duration
 /**
  * Main class of the model. It handles almost every entity present in the [World].
  */
+
+@JsonSerialize(using = GameObjectSerializer::class)
 class GameObject(
     /**
      * The GameObject graphical appearance
@@ -71,7 +75,7 @@ class GameObject(
             if (missingComponents.isNotEmpty()) {
                 throw IllegalStateException(
                     "Cannot add ${componentClass.simpleName} because it requires " +
-                        requiredComponents.joinToString(", ") { it.simpleName.toString() }
+                            requiredComponents.joinToString(", ") { it.simpleName.toString() }
                 )
             }
         }
