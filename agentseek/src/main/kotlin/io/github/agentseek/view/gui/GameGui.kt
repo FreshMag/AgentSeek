@@ -45,12 +45,13 @@ object GameGui : View, InputListener() {
 
     fun startGameGui(useRepl: Boolean = false) {
         frame.name = APP_NAME
-        frame.add(GameViewPanel(screenSize, gameViewRendering), BorderLayout.CENTER)
+        val panel = GameViewPanel(screenSize, gameViewRendering)
+        frame.add(panel, BorderLayout.CENTER)
         frame.size = screenSize
         frame.preferredSize = screenSize
         frame.defaultCloseOperation = EXIT_ON_CLOSE
         frame.addKeyListener(this)
-        frame.addMouseListener(this)
+        panel.addMouseListener(this)
         Input.injectProvider(this)
         frame.isVisible = true
 

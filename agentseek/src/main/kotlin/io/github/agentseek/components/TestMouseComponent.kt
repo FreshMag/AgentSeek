@@ -4,6 +4,8 @@ import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.core.engine.input.Input
 import io.github.agentseek.view.Camera
+import io.github.agentseek.view.utilities.VFX
+import java.awt.Color
 import kotlin.time.Duration
 
 @Requires(FieldMovementComponent::class)
@@ -21,7 +23,9 @@ class TestMouseComponent(gameObject: GameObject) : AbstractComponent(gameObject)
     override fun onUpdate(deltaTime: Duration) {
         val mouse = Input.mouseClicked()
         if (mouse != null) {
-            movement.objective = camera.toWorldPoint(mouse)
+            val worldPoint = camera.toWorldPoint(mouse)
+            //movement.objective = worldPoint
+            VFX.expandingCircle(worldPoint, Color.BLACK, 1)
         }
     }
 }

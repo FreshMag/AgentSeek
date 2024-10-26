@@ -6,6 +6,7 @@ import io.github.agentseek.core.engine.input.Input
 import io.github.agentseek.util.factories.SceneFactory
 import io.github.agentseek.view.View
 import io.github.oshai.kotlinlogging.KotlinLogging
+import java.util.Collections
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -16,7 +17,7 @@ object GameEngine {
 
     private val logger = KotlinLogging.logger {}
     private val STANDARD_STARTING_PERIOD = 50.milliseconds
-    private val scheduledActions: MutableMap<String, TimedAction> = mutableMapOf()
+    private var scheduledActions: Map<String, TimedAction> = mapOf()
 
     private var scene: Scene? = null
     var view: View? = null
@@ -47,9 +48,9 @@ object GameEngine {
     /**
      * Schedules a new action to be performed every [period].
      */
-    fun schedule(period: Duration, action: () -> Unit): String {
+    fun schedule(period: Duration, action: TimedAction.() -> Unit): String {
         val id = "scheduled@${scheduledActions.keys.size}"
-        scheduledActions[id] = TimedAction(period, action)
+        scheduledActions += id to TimedAction(id, period, action)
         return id
     }
 
@@ -57,7 +58,7 @@ object GameEngine {
      * Cancels a scheduled action.
      */
     fun cancel(id: String) {
-        scheduledActions.remove(id)
+        scheduledActions -= id
     }
 
     /**

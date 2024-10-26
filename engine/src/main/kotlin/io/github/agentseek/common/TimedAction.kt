@@ -1,9 +1,10 @@
 package io.github.agentseek.common
 
+import io.github.agentseek.core.engine.GameEngine
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
 
-class TimedAction(period: Duration, val action: () -> Unit) {
+class TimedAction(val id: String, period: Duration, val action: TimedAction.() -> Unit) {
 
     private val timer: Timer = TimerImpl(period.toDouble(DurationUnit.MILLISECONDS)).also { it.startTimer() }
 
@@ -13,4 +14,9 @@ class TimedAction(period: Duration, val action: () -> Unit) {
             timer.reset()
         }
     }
+
+    fun cancel() {
+        GameEngine.cancel(id)
+    }
+
 }
