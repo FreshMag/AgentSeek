@@ -18,4 +18,9 @@ interface Timer {
      * Sets a new [wait] time in milliseconds.
      */
     fun setWaitTime(wait: Double)
+
+    /**
+     * Resets the timer.
+     */
+    fun reset()
 }

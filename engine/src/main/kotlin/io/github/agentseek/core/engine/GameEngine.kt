@@ -1,5 +1,6 @@
 package io.github.agentseek.core.engine
 
+import io.github.agentseek.common.TimedAction
 import io.github.agentseek.core.Scene
 import io.github.agentseek.core.engine.input.Input
 import io.github.agentseek.util.factories.SceneFactory
@@ -15,6 +16,8 @@ object GameEngine {
 
     private val logger = KotlinLogging.logger {}
     private val STANDARD_STARTING_PERIOD = 50.milliseconds
+    private val scheduledActions: MutableMap<String, TimedAction> = mutableMapOf()
+
     private var scene: Scene? = null
     var view: View? = null
 
@@ -29,12 +32,32 @@ object GameEngine {
             log("DT $dt")
             scene?.updateState(dt)
             Input.refresh()
+            scheduledActions.values.forEach { it.applyIfElapsed() }
             view?.render()
         }
     }
 
+    /**
+     * Loads a scene into the engine
+     */
     fun loadScene(scene: Scene) {
         this.scene = scene
+    }
+
+    /**
+     * Schedules a new action to be performed every [period].
+     */
+    fun schedule(period: Duration, action: () -> Unit): String {
+        val id = "scheduled@${scheduledActions.keys.size}"
+        scheduledActions[id] = TimedAction(period, action)
+        return id
+    }
+
+    /**
+     * Cancels a scheduled action.
+     */
+    fun cancel(id: String) {
+        scheduledActions.remove(id)
     }
 
     /**

@@ -43,7 +43,7 @@ class TimerImpl(waitTime: Double) : Timer {
     /**
      * Resets the Timer.
      */
-    private fun reset() {
+    override fun reset() {
         startMills = 0.0
     }
 }
