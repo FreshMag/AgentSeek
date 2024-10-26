@@ -1,7 +1,10 @@
 package io.github.agentseek.util.factories
 
 import io.github.agentseek.common.Vector2d
-import io.github.agentseek.components.*
+import io.github.agentseek.components.ConstantAccelerationComponent
+import io.github.agentseek.components.DistanceSensorComponent
+import io.github.agentseek.components.FieldMovementComponent
+import io.github.agentseek.components.TestMouseComponent
 import io.github.agentseek.core.Scene
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.physics.RigidBody
@@ -25,10 +28,11 @@ object Scenes {
         val agent =
             emptyScene.world.gameObjectBuilder().position(0.0, 0.0)
                 .rigidBody { RigidBody.CircleRigidBody(0.5, it) }
+//                .with { NoiseEmitterComponent(it, 3.0) }
+//                .with { InputComponent(it) }
                 .with { DistanceSensorComponent(it, 2.0) }
                 .with { FieldMovementComponent(it) }
                 .with { TestMouseComponent(it) }
-                //.with { SightSensorComponent(it, 20.0, Math.PI / 6) }
                 .renderer(SimpleRenderer()).build()
 
         emptyScene.world.addGameObject(agent)
@@ -41,6 +45,7 @@ object Scenes {
                             RigidBody.RectangleRigidBody(2.0, 2.0, it)
                                 .also { body -> body.isStatic = true }
                         }
+                        //.with { NoiseSensorComponent(it, 3.0) }
                         .renderer(SimpleRenderer())
                         .build()
 
