@@ -7,13 +7,9 @@ import kotlin.time.Duration
 
 class InputComponent(gameObject: GameObject) : AbstractComponent(gameObject) {
     override fun onUpdate(deltaTime: Duration) {
-        super.onUpdate(deltaTime)
-        when {
-            Input.UP -> gameObject.rigidBody.applyForce(Vector2d(0.0, -20.0))
-            Input.DOWN -> gameObject.rigidBody.applyForce(Vector2d(0.0, 20.0))
-            Input.RIGHT -> gameObject.rigidBody.applyForce(Vector2d(-20.0, 0.0))
-            Input.LEFT -> gameObject.rigidBody.applyForce(Vector2d(20.0, 0.0))
-            else -> gameObject.rigidBody.velocity = Vector2d(0.0, 0.0)
-        }
+        gameObject.rigidBody.velocity = Vector2d(
+            if (Input.RIGHT) 2.0 else if (Input.LEFT) -2.0 else 0.0,
+            if (Input.UP) -2.0 else if (Input.DOWN) 2.0 else 0.0
+        )
     }
 }

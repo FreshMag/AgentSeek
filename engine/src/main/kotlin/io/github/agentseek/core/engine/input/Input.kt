@@ -78,7 +78,7 @@ object Input {
      */
     fun injectProvider(inputProvider: InputProvider) {
         this.inputProviders += inputProvider
-        inputProvider.addKeyListener { keyInputBuffer.add(it) }
+        inputProvider.addKeyListener({ keyInputBuffer.add(it) }, { keyInputBuffer.remove(it) })
         inputProvider.addMouseListener { mouseInputBuffer.add(it) }
     }
 
@@ -86,7 +86,7 @@ object Input {
      * Refreshes the input buffer, clearing all the previous input events.
      */
     internal fun refresh() {
-        keyInputBuffer.clear()
+
         mouseInputBuffer.clear()
     }
 }

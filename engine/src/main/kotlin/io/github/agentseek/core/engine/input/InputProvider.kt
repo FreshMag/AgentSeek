@@ -7,7 +7,7 @@ interface InputProvider {
     /**
      * Adds a key listener for this provider
      */
-    fun addKeyListener(listener: (Input.Key) -> Unit)
+    fun addKeyListener(keyPressedListener: (Input.Key) -> Unit, keyReleasedListener: (Input.Key) -> Unit)
 
     /**
      * Adds a mouse listener for this provider
