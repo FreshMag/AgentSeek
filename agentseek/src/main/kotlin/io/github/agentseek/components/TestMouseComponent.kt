@@ -4,7 +4,7 @@ import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.core.engine.input.Input
 import io.github.agentseek.view.Camera
-import io.github.agentseek.view.utilities.VFX
+import io.github.agentseek.view.animations.VFX
 import java.awt.Color
 import kotlin.time.Duration
 
@@ -25,7 +25,8 @@ class TestMouseComponent(gameObject: GameObject) : AbstractComponent(gameObject)
         if (mouse != null) {
             val worldPoint = camera.toWorldPoint(mouse)
             //movement.objective = worldPoint
-            VFX.expandingCircle(worldPoint, Color.BLACK, 1)
+            //VFX.expandingCircle(worldPoint, Color.BLACK, 1)
+            VFX.fadingText(worldPoint, "!", Color.BLACK, 40)
         }
     }
 }
