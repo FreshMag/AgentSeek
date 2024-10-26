@@ -1,17 +1,13 @@
 package io.github.agentseek.util.factories
 
 import io.github.agentseek.common.Vector2d
-import io.github.agentseek.components.ConstantAccelerationComponent
-import io.github.agentseek.components.DistanceSensorComponent
-import io.github.agentseek.components.InputComponent
-import io.github.agentseek.components.SightSensorComponent
+import io.github.agentseek.components.*
 import io.github.agentseek.core.Scene
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.physics.RigidBody
 import io.github.agentseek.util.factories.SceneFactory.emptyScene
 import io.github.agentseek.view.SimpleRenderer
 import io.github.agentseek.view.gui.GameGui
-import kotlin.random.Random
 
 object Scenes {
 
@@ -29,8 +25,10 @@ object Scenes {
         val agent =
             emptyScene.world.gameObjectBuilder().position(0.0, 0.0)
                 .rigidBody { RigidBody.CircleRigidBody(0.5, it) }
-                .with { DistanceSensorComponent(it, 1.5) }
-                .with { SightSensorComponent(it, 20.0, Math.PI / 6) }
+                .with { DistanceSensorComponent(it, 2.0) }
+                .with { FieldMovementComponent(it) }
+                .with { TestMouseComponent(it) }
+                //.with { SightSensorComponent(it, 20.0, Math.PI / 6) }
                 .renderer(SimpleRenderer()).build()
 
         emptyScene.world.addGameObject(agent)
@@ -39,7 +37,12 @@ object Scenes {
                 val go =
                     emptyScene.world.gameObjectBuilder()
                         .position(5.0 + i * 5.0, 5.0 + j * 5.0)
-                        .renderer(SimpleRenderer()).build()
+                        .rigidBody {
+                            RigidBody.RectangleRigidBody(2.0, 2.0, it)
+                                .also { body -> body.isStatic = true }
+                        }
+                        .renderer(SimpleRenderer())
+                        .build()
 
                 emptyScene.world.addGameObject(go)
 
@@ -59,7 +62,7 @@ object Scenes {
 
         val toCollideGO = emptyScene.world.gameObjectBuilder()
             .position(10.0, 10.0)
-            .rigidBody { RigidBody.ConeRigidBody(Math.PI / 2, 7.0,  Math.PI / 7, it) }
+            .rigidBody { RigidBody.ConeRigidBody(Math.PI / 2, 7.0, Math.PI / 7, it) }
             .renderer(GameGui.defaultRenderer())
             .build()
         emptyScene.world.addGameObject(toCollideGO)

@@ -5,7 +5,12 @@ package io.github.agentseek.core.engine.input
  */
 interface InputProvider {
     /**
-     * Adds a listener for this provider
+     * Adds a key listener for this provider
      */
-    fun addListener(listener: (Input.Key) -> Unit)
+    fun addKeyListener(listener: (Input.Key) -> Unit)
+
+    /**
+     * Adds a mouse listener for this provider
+     */
+    fun addMouseListener(listener: (Input.Mouse) -> Unit)
 }
