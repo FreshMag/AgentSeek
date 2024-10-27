@@ -15,7 +15,7 @@ class NoiseSensorComponent(gameObject: GameObject, radius: Double) : AbstractCom
     private val noiseSensorCollider: Collider = Collider.CircleCollider(radius, gameObject)
     private var lastPos = gameObject.position
 
-    init {
+    override fun init() {
         noiseSensorCollider.shape.center = gameObject.center()
         gameObject.attachRenderer { _, renderingContext ->
             renderingContext?.fillGradientCircle(
