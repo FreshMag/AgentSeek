@@ -29,7 +29,7 @@ private val mapper: ObjectMapper
         return mapper
     }
 
-object YAMLParse {
+internal object YAMLParse {
     /**
      * Takes in a data class (with ::class) and parses it by the fileName provided, returning the appropriate class
      * originally provided with parsed data.
@@ -51,8 +51,8 @@ object YAMLParse {
     }
 }
 
-object YAMLWrite {
+internal object YAMLWrite {
     fun writeDto(fileName: String, content: Any) {
-        mapper.writerWithDefaultPrettyPrinter().writeValue(File("$fileName.yaml"), content)
+        mapper.writerWithDefaultPrettyPrinter().writeValue(File(fileName), content)
     }
 }
