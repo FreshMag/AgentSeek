@@ -17,7 +17,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.primaryConstructor
 
-class GameObjectDeserializer(private val world: World) : JsonDeserializer<GameObject>() {
+internal class GameObjectDeserializer(private val world: World) : JsonDeserializer<GameObject>() {
 
     private fun getArguments(parameters: List<KParameter>, argumentsNode: JsonNode): MutableMap<KParameter, Any?> {
         val args = mutableMapOf<KParameter, Any?>()
@@ -38,6 +38,8 @@ class GameObjectDeserializer(private val world: World) : JsonDeserializer<GameOb
     override fun deserialize(parser: JsonParser, context: DeserializationContext): GameObject {
         val node: JsonNode = parser.codec.readTree(parser)
         val go = GameObject(world = world)
+
+        go.name = node.get("name").asText()
 
         // Rigid body
         val rigidBodyNode = node["rigidBody"]

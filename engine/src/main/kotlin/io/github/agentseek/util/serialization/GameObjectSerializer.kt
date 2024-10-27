@@ -9,7 +9,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.jvm.isAccessible
 
-class GameObjectSerializer : JsonSerializer<GameObject>() {
+internal class GameObjectSerializer : JsonSerializer<GameObject>() {
     private fun isFirstParameterAGameObject(componentClass: KClass<out Component>): Boolean =
         componentClass
             .primaryConstructor
@@ -49,6 +49,8 @@ class GameObjectSerializer : JsonSerializer<GameObject>() {
 
     override fun serialize(gameObject: GameObject, generator: JsonGenerator, provider: SerializerProvider) {
         generator.writeStartObject()
+
+        generator.writeStringField("name", gameObject.name)
 
         // Rigid body
         generator.writeFieldName("rigidBody")
