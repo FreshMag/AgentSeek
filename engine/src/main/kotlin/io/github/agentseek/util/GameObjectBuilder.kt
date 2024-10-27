@@ -18,6 +18,11 @@ class GameObjectBuilder(private val world: World) {
     var position: Point2d = Point2d.origin()
 
     /**
+     * Name for the game object
+     */
+    var name: String = ""
+
+    /**
      * Gets the [List] of [Component]s added to this object.
      */
     private var componentSetters: MutableList<(GameObject) -> Component> = mutableListOf()
@@ -60,11 +65,17 @@ class GameObjectBuilder(private val world: World) {
         return this
     }
 
+    fun name(name: String): GameObjectBuilder {
+        this.name = name
+        return this
+    }
+
     @Throws(IllegalStateException::class)
     fun build(): GameObject {
         val gameObject = GameObject(renderer, world)
         gameObject.rigidBody = rigidBodySetter(gameObject)
         gameObject.position = position
+        gameObject.name = name
         componentSetters.forEach { gameObject.addComponent(it(gameObject)) }
         return gameObject
     }

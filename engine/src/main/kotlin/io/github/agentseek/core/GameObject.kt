@@ -33,6 +33,13 @@ class GameObject(
     var rigidBody: RigidBody = RigidBody.RectangleRigidBody(this, DEFAULT_SIZE, DEFAULT_SIZE)
 
     /**
+     * An optional, recognizable name for this GameObject.
+     *
+     * Note: objects with the same name will be saved as a **single** file from a [Scene]
+     */
+    var name: String = ""
+
+    /**
      * This object's current position.
      */
     var position: Point2d = Point2d(0.0, 0.0)
