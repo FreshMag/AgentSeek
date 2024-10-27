@@ -2,7 +2,9 @@ package io.github.agentseek.util.factories
 
 import io.github.agentseek.common.Vector2d
 import io.github.agentseek.components.ConstantAccelerationComponent
-import io.github.agentseek.components.InputComponent
+import io.github.agentseek.components.DistanceSensorComponent
+import io.github.agentseek.components.FieldMovementComponent
+import io.github.agentseek.components.TestMouseComponent
 import io.github.agentseek.core.Scene
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.physics.RigidBody
@@ -26,12 +28,14 @@ object Scenes {
 
         val agent =
             emptyScene.world.gameObjectBuilder().position(0.0, 0.0)
-                .rigidBody { RigidBody.CircleRigidBody(0.5, it) }
+                .rigidBody { it ->
+                    RigidBody.CircleRigidBody(0.5, it)
+                }
 //                .with { NoiseEmitterComponent(it, 3.0) }
-                .with { InputComponent(it) }
-                //.with { DistanceSensorComponent(it, 2.0) }
-                //.with { FieldMovementComponent(it) }
-                //.with { TestMouseComponent(it) }
+                //.with { InputComponent(it) }
+                .with { DistanceSensorComponent(it, 2.0) }
+                .with { FieldMovementComponent(it) }
+                .with { TestMouseComponent(it) }
                 .renderer(SimpleRenderer()).build()
         YAMLWrite.writeDto("go", agent)
         emptyScene.world.addGameObject(agent)

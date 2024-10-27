@@ -14,12 +14,10 @@ open class InputListener : KeyListener, MouseListener, InputProvider {
     private var mouseListeners = mutableListOf<(Input.Mouse) -> Unit>()
     private var pressedKeySet = mutableSetOf<Int>()
 
-    private var inputKey: Input.Key? = null
-
     override fun keyTyped(e: KeyEvent) {}
 
     override fun keyPressed(e: KeyEvent) {
-        inputKey = getMappedInput(e)
+        val inputKey = getMappedInput(e)
         inputKey?.let {
             pressedKeySet.add(e.keyCode)
             keyListeners.forEach { listener -> listener.first(it) }
@@ -28,7 +26,7 @@ open class InputListener : KeyListener, MouseListener, InputProvider {
 
     override fun keyReleased(e: KeyEvent) {
         pressedKeySet.remove(e.keyCode)
-        inputKey = getMappedInput(e)
+        val inputKey = getMappedInput(e)
         inputKey?.let {
             keyListeners.forEach { listener ->
                 listener.second(it)
