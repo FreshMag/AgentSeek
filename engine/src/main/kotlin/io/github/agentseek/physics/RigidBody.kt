@@ -60,12 +60,7 @@ sealed class RigidBody(
      * Whether this [RigidBody] can move or not. If `true`, the [GameObject] cannot move.
      */
     var isStatic: Boolean = false
-
-    /**
-     * Is `true`, this [RigidBody] bounces of with negative velocity when it hits a static rigid body.
-     */
-    var doesBounce: Boolean = true
-
+    
 
     /**
      * Acceleration of this [RigidBody] in m/s^2
@@ -93,7 +88,7 @@ sealed class RigidBody(
 
     private fun resolveCollision(rigidBody: RigidBody) {
         if (rigidBody.isStatic) {
-            this.velocity = if (doesBounce) -velocity else Vector2d.zero()
+            this.velocity = (collider.center - rigidBody.collider.center).normalized() * velocity.module()
         } else {
             val m1 = this.mass
             val m2 = rigidBody.mass
