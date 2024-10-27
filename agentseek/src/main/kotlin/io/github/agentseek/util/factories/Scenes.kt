@@ -38,12 +38,12 @@ object Scenes {
                 .with { FieldMovementComponent(it) }
                 .with { TestMouseComponent(it) }
                 .renderer(SimpleRenderer()).build()
-        agent.save("./", "Agent")
-        val go = emptyScene.world.loadGameObject("./", "Agent")!!
-        println(go)
-        emptyScene.world.addGameObject(go)
-        (0 until nObjects).forEach { i ->
-            (0 until nObjects).forEach { j ->
+//        agent.save("./", "Agent")
+//        val go = emptyScene.world.loadGameObject("./", "Agent")!!
+//        println(go)
+        emptyScene.world.addGameObject(agent)
+        (0 until 2).forEach { i ->
+            (0 until 2).forEach { j ->
                 val go =
                     emptyScene.world.gameObjectBuilder()
                         .position(5.0 + i * 5.0, 5.0 + j * 5.0)
@@ -53,12 +53,14 @@ object Scenes {
                         }
                         //.with { NoiseSensorComponent(it, 3.0) }
                         .renderer(SimpleRenderer())
+                        .name("Obstacle")
                         .build()
 
                 emptyScene.world.addGameObject(go)
 
             }
         }
+        emptyScene.save("./", "Test", true)
         return emptyScene
     }
 

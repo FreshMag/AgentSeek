@@ -22,6 +22,7 @@ private val mapper: ObjectMapper
             val module = SimpleModule()
                 .addSerializer(GameObject::class.java, GameObjectSerializer())
                 .addSerializer(Scene::class.java, SceneSerializer())
+                .addDeserializer(Scene::class.java, SceneDeserializer())
             registerModule(module)
             registerModule(deserializingModule)
         }
