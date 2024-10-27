@@ -6,14 +6,14 @@ import io.github.agentseek.core.engine.input.Input
 import kotlin.time.Duration
 
 class InputComponent(gameObject: GameObject) : AbstractComponent(gameObject) {
+    companion object {
+        const val STANDARD_VELOCITY = 2.0
+    }
+
     override fun onUpdate(deltaTime: Duration) {
-        super.onUpdate(deltaTime)
-        when {
-            Input.UP -> gameObject.rigidBody.applyForce(Vector2d(0.0, -10.0))
-            Input.DOWN -> gameObject.rigidBody.applyForce(Vector2d(0.0, 10.0))
-            Input.RIGHT -> gameObject.rigidBody.applyForce(Vector2d(-10.0, 0.0))
-            Input.LEFT -> gameObject.rigidBody.applyForce(Vector2d(10.0, 0.0))
-            else -> gameObject.rigidBody.velocity = Vector2d(0.0, 0.0)
-        }
+        gameObject.rigidBody.velocity = Vector2d(
+            if (Input.RIGHT) STANDARD_VELOCITY else if (Input.LEFT) -STANDARD_VELOCITY else 0.0,
+            if (Input.UP) -STANDARD_VELOCITY else if (Input.DOWN) STANDARD_VELOCITY else 0.0
+        )
     }
 }

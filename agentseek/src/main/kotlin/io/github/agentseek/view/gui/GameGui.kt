@@ -14,7 +14,6 @@ import java.awt.event.ComponentEvent
 import javax.swing.JFrame
 import javax.swing.SwingUtilities
 import javax.swing.WindowConstants.EXIT_ON_CLOSE
-import kotlin.random.Random
 
 typealias RenderingEvent = (Graphics2D) -> Unit
 
