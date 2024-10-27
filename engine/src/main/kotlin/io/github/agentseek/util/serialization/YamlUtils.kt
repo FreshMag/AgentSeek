@@ -2,8 +2,11 @@ package io.github.agentseek.util.serialization
 
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import io.github.agentseek.core.GameObject
+import io.github.agentseek.core.Scene
 import java.io.File
 import java.nio.file.FileSystems
 import java.nio.file.Files
@@ -11,7 +14,12 @@ import kotlin.reflect.KClass
 
 private val mapper: ObjectMapper
     get() {
-        val mapper = ObjectMapper(YAMLFactory()).registerKotlinModule()
+        val mapper = ObjectMapper(YAMLFactory()).registerKotlinModule().apply {
+            val module = SimpleModule()
+                .addSerializer(GameObject::class.java, GameObjectSerializer())
+                .addSerializer(Scene::class.java, SceneSerializer())
+            registerModule(module)
+        }
         mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true)
         return mapper
     }

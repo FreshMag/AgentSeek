@@ -16,8 +16,6 @@ import kotlin.time.Duration
 /**
  * Main class of the model. It handles almost every entity present in the [World].
  */
-
-@JsonSerialize(using = GameObjectSerializer::class)
 class GameObject(
     /**
      * The GameObject graphical appearance
