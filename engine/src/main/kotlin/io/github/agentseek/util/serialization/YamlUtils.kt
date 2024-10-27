@@ -7,10 +7,14 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.Scene
+import io.github.agentseek.world.World
 import java.io.File
 import java.nio.file.FileSystems
 import java.nio.file.Files
 import kotlin.reflect.KClass
+
+
+private val deserializingModule = SimpleModule("DeserializingModule")
 
 private val mapper: ObjectMapper
     get() {
@@ -19,6 +23,7 @@ private val mapper: ObjectMapper
                 .addSerializer(GameObject::class.java, GameObjectSerializer())
                 .addSerializer(Scene::class.java, SceneSerializer())
             registerModule(module)
+            registerModule(deserializingModule)
         }
         mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true)
         return mapper
@@ -38,6 +43,11 @@ object YAMLParse {
         } catch (e: NoSuchFileException) {
             return null
         }
+    }
+
+    fun parseGameObject(world: World, fileName: String): GameObject? {
+        deserializingModule.addDeserializer(GameObject::class.java, GameObjectDeserializer(world))
+        return parseDto(fileName, GameObject::class)
     }
 }
 

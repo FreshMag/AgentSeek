@@ -22,8 +22,8 @@ object GameObjectUtilities {
     /**
      * Attaches another [Renderer] to this GameObject, allowing extensible rendering behavior
      */
-    fun <T> GameObject.attachRenderer(renderingBehavior: (GameObject, RenderingContext<*>?) -> Unit) {
-        this.renderer.attachRenderer(renderingBehavior)
+    fun <T> GameObject.attachRenderer(renderingBehavior: (GameObject, RenderingContext<T>?) -> Unit) {
+        (this.renderer as Renderer<T>).attachRenderer(renderingBehavior)
     }
 
 }

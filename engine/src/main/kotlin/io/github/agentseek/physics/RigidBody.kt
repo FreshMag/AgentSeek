@@ -42,7 +42,7 @@ sealed class RigidBody(
     /**
      * A simple rigid body with a cone collider
      */
-    class ConeRigidBody(angle: Double, length: Double, rotation: Double, gameObject: GameObject) :
+    class ConeRigidBody(gameObject: GameObject, angle: Double, length: Double, rotation: Double) :
         RigidBody(gameObject, Collider.ConeCollider(angle, length, rotation, gameObject))
 
     /**

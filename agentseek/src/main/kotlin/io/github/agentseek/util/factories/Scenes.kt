@@ -9,6 +9,7 @@ import io.github.agentseek.core.Scene
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.physics.RigidBody
 import io.github.agentseek.util.factories.SceneFactory.emptyScene
+import io.github.agentseek.util.serialization.YAMLParse
 import io.github.agentseek.util.serialization.YAMLWrite
 import io.github.agentseek.view.SimpleRenderer
 import io.github.agentseek.view.gui.GameGui
@@ -38,7 +39,9 @@ object Scenes {
                 .with { TestMouseComponent(it) }
                 .renderer(SimpleRenderer()).build()
         YAMLWrite.writeDto("go", agent)
-        emptyScene.world.addGameObject(agent)
+        val go = YAMLParse.parseGameObject(emptyScene.world, "go.yaml")!!
+        println(go)
+        emptyScene.world.addGameObject(go)
         (0 until nObjects).forEach { i ->
             (0 until nObjects).forEach { j ->
                 val go =
@@ -70,7 +73,7 @@ object Scenes {
 
         val toCollideGO = emptyScene.world.gameObjectBuilder()
             .position(10.0, 10.0)
-            .rigidBody { RigidBody.ConeRigidBody(Math.PI / 2, 7.0, Math.PI / 7, it) }
+            .rigidBody { RigidBody.ConeRigidBody(it, Math.PI / 2, 7.0, Math.PI / 7) }
             .renderer(GameGui.defaultRenderer())
             .build()
         emptyScene.world.addGameObject(toCollideGO)
