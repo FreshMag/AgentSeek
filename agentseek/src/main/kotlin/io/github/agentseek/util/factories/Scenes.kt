@@ -29,7 +29,7 @@ object Scenes {
         val agent =
             emptyScene.world.gameObjectBuilder().position(0.0, 0.0)
                 .rigidBody { it ->
-                    RigidBody.CircleRigidBody(0.5, it)
+                    RigidBody.CircleRigidBody(it, 0.5)
                 }
 //                .with { NoiseEmitterComponent(it, 3.0) }
                 //.with { InputComponent(it) }
@@ -45,7 +45,7 @@ object Scenes {
                     emptyScene.world.gameObjectBuilder()
                         .position(5.0 + i * 5.0, 5.0 + j * 5.0)
                         .rigidBody {
-                            RigidBody.RectangleRigidBody(2.0, 2.0, it)
+                            RigidBody.RectangleRigidBody(it, 2.0, 2.0)
                                 .also { body -> body.isStatic = true }
                         }
                         //.with { NoiseSensorComponent(it, 3.0) }
@@ -64,7 +64,7 @@ object Scenes {
         val movingGO = emptyScene.world.gameObjectBuilder()
             .position(0.0, 0.0)
             .with { ConstantAccelerationComponent(it, Vector2d(2.0, 2.0)) }
-            .rigidBody { RigidBody.CircleRigidBody(5.0, it) }
+            .rigidBody { RigidBody.CircleRigidBody(it, 5.0) }
             .renderer(GameGui.defaultRenderer())
             .build()
 

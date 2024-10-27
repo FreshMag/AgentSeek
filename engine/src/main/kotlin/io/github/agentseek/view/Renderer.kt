@@ -23,6 +23,12 @@ interface Renderer<T> {
     fun applyOnView(gameObject: GameObject) {
         render(gameObject, getRenderingContext())
     }
+
+    /**
+     * Attaches another rendering behavior to this renderer
+     */
+    fun attachRenderer(renderingBehavior: (GameObject, RenderingContext<T>?) -> Unit) {}
+
     /**
      * Utility function to make it easier to get the [RenderingContext] of the currently used view.
      * `null` if a [RenderingContext] of that type is currently unavailable.

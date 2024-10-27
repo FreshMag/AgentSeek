@@ -192,9 +192,9 @@ object REPLParsing {
             val shape = split[0]
             val args = split[1].substringBefore(")").split(",")
             return when (shape) {
-                "circle" -> RigidBody.CircleRigidBody(args[0].toDouble(), gameObject)
-                "rectangle" -> RigidBody.RectangleRigidBody(args[0].toDouble(), args[1].toDouble(), gameObject)
-                "square" -> RigidBody.RectangleRigidBody(args[0].toDouble(), args[0].toDouble(), gameObject)
+                "circle" -> RigidBody.CircleRigidBody(gameObject, args[0].toDouble())
+                "rectangle" -> RigidBody.RectangleRigidBody(gameObject, args[0].toDouble(), args[1].toDouble())
+                "square" -> RigidBody.RectangleRigidBody(gameObject, args[0].toDouble(), args[0].toDouble())
                 else -> throw IllegalArgumentException()
             }
         } catch (e: NumberFormatException) {

@@ -26,7 +26,7 @@ class GameObjectBuilder(private val world: World) {
      * This object's [RigidBody].
      */
     private var rigidBodySetter: (GameObject) -> RigidBody = {
-        RigidBody.RectangleRigidBody(GameObject.DEFAULT_SIZE, GameObject.DEFAULT_SIZE, it)
+        RigidBody.RectangleRigidBody(it, GameObject.DEFAULT_SIZE, GameObject.DEFAULT_SIZE)
     }
 
     /**

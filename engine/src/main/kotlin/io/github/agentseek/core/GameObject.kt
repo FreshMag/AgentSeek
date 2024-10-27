@@ -30,7 +30,7 @@ class GameObject(
      * Identifier for this GameObject
      */
     val id: String = world.generateId("go")
-    var rigidBody: RigidBody = RigidBody.RectangleRigidBody(DEFAULT_SIZE, DEFAULT_SIZE, this)
+    var rigidBody: RigidBody = RigidBody.RectangleRigidBody(this, DEFAULT_SIZE, DEFAULT_SIZE)
 
     /**
      * This object's current position.
