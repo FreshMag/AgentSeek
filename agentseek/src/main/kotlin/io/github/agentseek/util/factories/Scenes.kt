@@ -27,9 +27,11 @@ object Scenes {
 
         val agent =
             emptyScene.world.gameObjectBuilder().position(0.0, 0.0)
-                .rigidBody { RigidBody.CircleRigidBody(0.5, it) }
+                .rigidBody { it ->
+                    RigidBody.CircleRigidBody(0.5, it)
+                }
 //                .with { NoiseEmitterComponent(it, 3.0) }
-//                .with { InputComponent(it) }
+                //.with { InputComponent(it) }
                 .with { DistanceSensorComponent(it, 2.0) }
                 .with { FieldMovementComponent(it) }
                 .with { TestMouseComponent(it) }
