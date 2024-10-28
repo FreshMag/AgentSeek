@@ -10,6 +10,25 @@ import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.jvm.isAccessible
 
 internal class GameObjectSerializer : JsonSerializer<GameObject>() {
+
+    override fun serialize(gameObject: GameObject, generator: JsonGenerator, provider: SerializerProvider) {
+        generator.writeStartObject()
+
+        generator.writeStringField("name", gameObject.name)
+
+        // Rigid body
+        gameObject.writeRigidBody(generator)
+
+        // Components
+        gameObject.writeComponents(generator)
+
+        // Renderer
+        gameObject.writeRenderer(generator)
+
+        generator.writeEndObject()
+
+    }
+
     private fun isFirstParameterAGameObject(componentClass: KClass<out Component>): Boolean =
         componentClass
             .primaryConstructor
@@ -46,29 +65,24 @@ internal class GameObjectSerializer : JsonSerializer<GameObject>() {
         generator.writeEndArray()
     }
 
-
-    override fun serialize(gameObject: GameObject, generator: JsonGenerator, provider: SerializerProvider) {
-        generator.writeStartObject()
-
-        generator.writeStringField("name", gameObject.name)
-
-        // Rigid body
+    private fun GameObject.writeRigidBody(generator: JsonGenerator) {
         generator.writeFieldName("rigidBody")
         generator.writeStartObject()
         generator.writeFieldName("shape")
         generator.writeStartObject()
-        generator.writeObjectField("type", gameObject.rigidBody.shape::class.qualifiedName!!)
-        generator.writeObjectField("params", gameObject.rigidBody.shape)
+        generator.writeObjectField("type", this.rigidBody.shape::class.qualifiedName!!)
+        generator.writeObjectField("params", this.rigidBody.shape)
         generator.writeEndObject()
-        generator.writeObjectField("mass", gameObject.rigidBody.mass)
-        generator.writeObjectField("velocity", gameObject.rigidBody.velocity)
-        generator.writeObjectField("static", gameObject.rigidBody.isStatic)
+        generator.writeObjectField("mass", this.rigidBody.mass)
+        generator.writeObjectField("velocity", this.rigidBody.velocity)
+        generator.writeObjectField("static", this.rigidBody.isStatic)
         generator.writeEndObject()
+    }
 
-        // Components
+    private fun GameObject.writeComponents(generator: JsonGenerator) {
         generator.writeFieldName("components")
         generator.writeStartArray()
-        gameObject.components.forEach {
+        this.components.forEach {
             generator.writeStartObject()
 
             val componentClass = it::class
@@ -80,16 +94,15 @@ internal class GameObjectSerializer : JsonSerializer<GameObject>() {
             generator.writeEndObject()
         }
         generator.writeEndArray()
+    }
 
-        // Renderer
+    private fun GameObject.writeRenderer(generator: JsonGenerator) {
         generator.writeFieldName("renderer")
         generator.writeStartObject()
-        generator.writeStringField("class", gameObject.renderer::class.qualifiedName!!)
-        writeObjectArguments(gameObject.renderer, generator)
+        generator.writeStringField("class", this.renderer::class.qualifiedName!!)
+        writeObjectArguments(this.renderer, generator)
         generator.writeEndObject()
-
-        generator.writeEndObject()
-
     }
+
 
 }

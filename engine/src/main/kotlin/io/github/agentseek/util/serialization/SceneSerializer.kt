@@ -6,34 +6,43 @@ import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.Scene
-import java.nio.file.Paths
 
 internal class SceneSerializer : JsonSerializer<Scene>() {
+
+    private fun writeGameObject(
+        gameObject: GameObject,
+        generator: JsonGenerator,
+        serializedNames: MutableSet<String>,
+        serializer: JsonSerializer<Any>,
+        provider: SerializerProvider,
+    ) {
+        if (serializeGameObjectsWithName && gameObject.name.isNotBlank()) {
+            if (!serializedNames.contains(gameObject.name)) {
+                serializedNames += gameObject.name
+                gameObject.save(gameObjectSerializePath)
+            }
+            generator.writeStartObject()
+            generator.writeStringField("resource", gameObject.name)
+            generator.writeFieldName("position")
+            jacksonObjectMapper().writeValue(generator, gameObject.position)
+            generator.writeEndObject()
+        } else {
+            serializer.serialize(gameObject, generator, provider)
+        }
+    }
+
     override fun serialize(scene: Scene, generator: JsonGenerator, provider: SerializerProvider) {
         generator.writeStartObject()
+
+        // GameObjects
         generator.writeFieldName("gameObjects")
-        generator.writeStartArray()
         val serializer = provider.findValueSerializer(GameObject::class.java)
-        val serializedNames = mutableListOf<String>()
-        scene.gameObjects.forEach { gameObject ->
-            if (serializeGameObjectsWithName && gameObject.name.isNotBlank()) {
-                val path =
-                    if (!serializedNames.contains(gameObject.name)) {
-                        serializedNames += gameObject.name
-                        gameObject.save(gameObjectSerializePath)
-                    } else {
-                        Paths.get(gameObjectSerializePath, "${gameObject.name}.gameObject.yaml").toString()
-                    }
-                generator.writeStartObject()
-                generator.writeStringField("path", path)
-                generator.writeFieldName("position")
-                jacksonObjectMapper().writeValue(generator, gameObject.position)
-                generator.writeEndObject()
-            } else {
-                serializer.serialize(gameObject, generator, provider)
-            }
-        }
+        val serializedNames = mutableSetOf<String>()
+        generator.writeStartArray()
+        scene.gameObjects.forEach { writeGameObject(it, generator, serializedNames, serializer, provider) }
         generator.writeEndArray()
+
+        // Flags
         generator.writeFieldName("flags")
         jacksonObjectMapper().writeValue(generator, scene.flags)
         generator.writeEndObject()
