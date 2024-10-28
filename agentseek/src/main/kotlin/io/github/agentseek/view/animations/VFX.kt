@@ -21,7 +21,6 @@ object VFX {
         val radiusStep = 1.0
         var iteration = 1
         val maxIterations = maxRadius.toInt()
-
         GameEngine.schedule(DEFAULT_SCHEDULE_TIME_MILLIS.milliseconds / speed) {
             if (startingCircle.radius >= maxRadius) {
                 cancel()

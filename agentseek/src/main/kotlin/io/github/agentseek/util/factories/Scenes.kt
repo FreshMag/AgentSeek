@@ -33,6 +33,7 @@ object Scenes {
                 //.with { FieldMovementComponent(it) }
                 //.with { TestMouseComponent(it) }
                 .with { NoiseEmitterComponent(it, 3.0) }
+                .with { NoiseEmitterVisualComponent(it) }
                 .renderer(SimpleRenderer()).build()
 
         emptyScene.world.addGameObject(agent)
@@ -46,7 +47,7 @@ object Scenes {
                                 .also { body -> body.isStatic = true }
                         }
                         .with { NoiseSensorComponent(it, 3.0) }
-                        .with { NoiseSensorVisualComponent(it) }
+                        //.with { NoiseSensorVisualComponent(it) }
                         .renderer(SimpleRenderer())
                         .build()
 
