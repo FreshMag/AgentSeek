@@ -2,9 +2,9 @@ package io.github.agentseek.common
 
 /**
  * This class is an implementation of Timer interface and is used to measure a time range.
- * @param waitTime Time to wait.
+ * @param waitTimeMillis Time to wait.
  */
-class TimerImpl(waitTime: Double) : Timer {
+class TimerImpl(waitTimeMillis: Double) : Timer {
     private var startMills = 0.0
     private var elapsedMills: Double
 
@@ -19,7 +19,7 @@ class TimerImpl(waitTime: Double) : Timer {
      */
     init {
         reset()
-        elapsedMills = waitTime
+        elapsedMills = waitTimeMillis
     }
 
     override fun isElapsed(): Boolean {

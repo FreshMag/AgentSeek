@@ -72,7 +72,7 @@ object GameGui : View, InputListener() {
                 GameREPL.start()
             }.start()
         } else {
-            GameEngine.loadScene(Scenes.exampleScene(10))
+            GameEngine.loadScene(Scenes.exampleScene(1))
             GameEngine.start()
         }
     }

@@ -14,6 +14,7 @@ import kotlin.time.Duration
 class NoiseSensorComponent(gameObject: GameObject, radius: Double) : AbstractComponent(gameObject) {
     private val noiseSensorCollider: Collider = Collider.CircleCollider(radius, gameObject)
     private var lastPos = gameObject.position
+    private var noiseFound = false
 
     override fun init() {
         noiseSensorCollider.shape.center = gameObject.center()
@@ -35,10 +36,14 @@ class NoiseSensorComponent(gameObject: GameObject, radius: Double) : AbstractCom
             go.getComponent<NoiseEmitterComponent>()?.let { noiseComponent ->
                 noiseComponent.getNoiseEmitterCollider()?.let {
                     if (it.isCollidingWith(noiseSensorCollider)) {
-                        println("trovato rumorista")
+                        noiseFound = true
+                    } else {
+                        noiseFound = false
                     }
                 }
             }
         }
     }
+
+    fun getNoiseFound(): Boolean = noiseFound
 }
