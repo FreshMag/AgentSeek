@@ -12,13 +12,13 @@ import kotlin.time.DurationUnit
  */
 sealed class RigidBody(
     /**
+     * [GameObject] with this Rigid body
+     */
+    gameObject: GameObject,
+    /**
      * Collider used for collisions of this RigidBody
      */
     val collider: Collider,
-    /**
-     * [GameObject] with this Rigid body
-     */
-    gameObject: GameObject
 ) : AbstractComponent(gameObject) {
 
     /**
@@ -30,20 +30,20 @@ sealed class RigidBody(
     /**
      * A simple rigid body with a circular collider
      */
-    class CircleRigidBody(radius: Double, gameObject: GameObject) :
-        RigidBody(Collider.CircleCollider(radius, gameObject), gameObject)
+    class CircleRigidBody(gameObject: GameObject, radius: Double) :
+        RigidBody(gameObject, Collider.CircleCollider(radius, gameObject))
 
     /**
      * A simple rigid body with a rectangular collider
      */
-    class RectangleRigidBody(width: Double, height: Double, gameObject: GameObject) :
-        RigidBody(Collider.RectangleCollider(width, height, gameObject), gameObject)
+    class RectangleRigidBody(gameObject: GameObject, width: Double, height: Double) :
+        RigidBody(gameObject, Collider.RectangleCollider(width, height, gameObject))
 
     /**
      * A simple rigid body with a cone collider
      */
-    class ConeRigidBody(angle: Double, length: Double, rotation: Double, gameObject: GameObject) :
-        RigidBody(Collider.ConeCollider(angle, length, rotation, gameObject), gameObject)
+    class ConeRigidBody(gameObject: GameObject, angle: Double, length: Double, rotation: Double) :
+        RigidBody(gameObject, Collider.ConeCollider(angle, length, rotation, gameObject))
 
     /**
      * Velocity of this [RigidBody], in meters per seconds
