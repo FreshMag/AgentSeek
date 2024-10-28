@@ -15,13 +15,13 @@ class NoiseSensorVisualComponent(gameObject: GameObject) : AbstractComponent(gam
     }
 
     override fun onUpdate(deltaTime: Duration) {
-        if (noiseSensor.getNoiseFound() && hasTImeElapsed()) {
+        if (noiseSensor.getNoiseFound() && hasTimeElapsed()) {
             lastFoundMillis = System.currentTimeMillis()
             VFX.fadingText(gameObject.position, "?", Color.BLACK, 40)
         }
     }
 
-    private fun hasTImeElapsed(): Boolean {
+    private fun hasTimeElapsed(): Boolean {
         val currentTime = System.currentTimeMillis()
         return lastFoundMillis == null || currentTime - lastFoundMillis!! >= DEFAULT_TIME_BETWEEN_UPDATES
     }
