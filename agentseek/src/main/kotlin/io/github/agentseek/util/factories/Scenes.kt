@@ -9,7 +9,7 @@ import io.github.agentseek.core.Scene
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.physics.RigidBody
 import io.github.agentseek.util.factories.SceneFactory.emptyScene
-import io.github.agentseek.util.serialization.loadGameObject
+import io.github.agentseek.util.serialization.Scenes
 import io.github.agentseek.util.serialization.save
 import io.github.agentseek.view.SimpleRenderer
 import io.github.agentseek.view.gui.GameGui
@@ -60,8 +60,9 @@ object Scenes {
 
             }
         }
+        emptyScene.flags["name"] = "Test"
         emptyScene.save("./", "Test", true)
-        return emptyScene
+        return Scenes.load("./", "Test")!!
     }
 
     fun collisionExampleScene(): Scene {

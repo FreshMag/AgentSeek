@@ -20,7 +20,12 @@ fun GameObject.save(directory: String, name: String = this.name): String {
  * Loads a [GameObject] of [name] from a YAML file in [directory].
  */
 fun World.loadGameObject(directory: String, name: String): GameObject? =
-    YAMLParse.parseGameObject(this, Paths.get(directory, "$name.gameObject.yaml").toString())
+    loadGameObject(Paths.get(directory, "$name.gameObject.yaml").toString())
+
+/**
+ * Loads a [GameObject] reading it from a YAML file at [path].
+ */
+fun World.loadGameObject(path: String): GameObject? = YAMLParse.parseGameObject(this, path)
 
 /**
  * Saves a [Scene] into a YAML file. Returns the path to the saved file
@@ -38,5 +43,5 @@ object Scenes {
      * Loads a [Scene] from a YAML file.
      */
     fun load(directory: String, name: String): Scene? =
-        YAMLParse.parseDto(Paths.get(directory, "$name.scene.yaml").toString(), Scene::class)
+        YAMLParse.parseDto<Scene>(Paths.get(directory, "$name.scene.yaml").toString())
 }

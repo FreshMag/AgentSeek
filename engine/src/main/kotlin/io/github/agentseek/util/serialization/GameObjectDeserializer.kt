@@ -10,6 +10,7 @@ import com.fasterxml.jackson.module.kotlin.treeToValue
 import io.github.agentseek.common.*
 import io.github.agentseek.components.Component
 import io.github.agentseek.core.GameObject
+import io.github.agentseek.core.engine.GameEngine.log
 import io.github.agentseek.physics.RigidBody
 import io.github.agentseek.view.Renderer
 import io.github.agentseek.world.World
@@ -38,8 +39,8 @@ internal class GameObjectDeserializer(private val world: World) : JsonDeserializ
     override fun deserialize(parser: JsonParser, context: DeserializationContext): GameObject {
         val node: JsonNode = parser.codec.readTree(parser)
         val go = GameObject(world = world)
-
-        go.name = node.get("name").asText()
+        log(node.path("name")::class.toString())
+        go.name = node["name"].asText()
 
         // Rigid body
         val rigidBodyNode = node["rigidBody"]
