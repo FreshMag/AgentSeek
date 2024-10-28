@@ -11,7 +11,7 @@ class TimerImpl(waitTime: Double) : Timer {
     /**
      * Checks if the timer is already working.
      */
-    private val isStarted: Boolean
+    val isStarted: Boolean
         get() = startMills != 0.0
 
     /**
@@ -23,7 +23,7 @@ class TimerImpl(waitTime: Double) : Timer {
     }
 
     override fun isElapsed(): Boolean {
-        if (isStarted && System.currentTimeMillis() - startMills > elapsedMills) {
+        if (System.currentTimeMillis() - startMills > elapsedMills) {
             reset()
             return true
         }
@@ -31,9 +31,7 @@ class TimerImpl(waitTime: Double) : Timer {
     }
 
     override fun startTimer() {
-        if (!isStarted) {
-            startMills = System.currentTimeMillis().toDouble()
-        }
+        startMills = System.currentTimeMillis().toDouble()
     }
 
     override fun setWaitTime(wait: Double) {
@@ -43,7 +41,7 @@ class TimerImpl(waitTime: Double) : Timer {
     /**
      * Resets the Timer.
      */
-    private fun reset() {
+    override fun reset() {
         startMills = 0.0
     }
 }
