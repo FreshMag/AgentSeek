@@ -1,7 +1,7 @@
 MAS helloworld {
 
 	infrastructure: Centralised
-
+       environment: io.github.agentseek.env.AgentSeekEnvironment
 	agents:
 		agent1 hello_agent;
 
