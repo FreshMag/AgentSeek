@@ -14,7 +14,7 @@ class DoorComponent(gameObject: GameObject, duration: Int) : AbstractComponent(g
      * Checks if the door is collidable.
      */
     private var isCollidable: Boolean = false
-    private val timer: Timer = TimerImpl(duration.toDouble())
+    private val timer: Timer = TimerImpl(duration.toLong())
 
     override fun init() {
         timer.startTimer()

@@ -28,7 +28,7 @@ class HealthIntComponent(
      * @return True if this component is currently immortal.
      */
     private var isImmortal: Boolean = false
-    private val timer: Timer = TimerImpl(WAIT_TIME)
+    private val timer: Timer = TimerImpl(WAIT_TIME.toLong())
 
     override fun onUpdate(deltaTime: Duration) {
         if (timer.isElapsed()) {
