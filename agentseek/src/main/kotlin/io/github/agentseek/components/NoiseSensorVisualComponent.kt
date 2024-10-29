@@ -17,7 +17,13 @@ class NoiseSensorVisualComponent(gameObject: GameObject) : AbstractComponent(gam
     override fun onUpdate(deltaTime: Duration) {
         if (noiseSensor.getNoiseFound() && hasTimeElapsed()) {
             lastNoiseHeardTimeMillis = System.currentTimeMillis()
-            VFX.fadingText(gameObject.position, "?", Color.BLACK, 40, DEFAULT_SUSPICIOUS_TIME_MILLIS)
+            VFX.fadingText(
+                worldPosition = gameObject.position,
+                text = "?",
+                color = Color.BLACK,
+                size = 40,
+                durationMillis = 50
+            )
         }
     }
 
