@@ -11,10 +11,13 @@ import java.awt.Color
 import kotlin.time.Duration
 
 class SightSensorComponent(gameObject: GameObject, coneLength: Double, coneAperture: Double) :
-    AbstractComponent(gameObject) {
+    AbstractComponent(gameObject), Sensor<SightSensorComponent.Perception> {
+
+    data class Perception(val gameObject: GameObject, val distance: Double)
 
     private val sensorCollider: Collider = Collider.ConeCollider(coneAperture, coneLength, 0.0, gameObject)
     private var lastPos = gameObject.position
+    private var reactions = listOf<(Perception) -> Unit>()
 
     override fun init() {
         sensorCollider.position = gameObject.position
@@ -37,10 +40,15 @@ class SightSensorComponent(gameObject: GameObject, coneLength: Double, coneApert
                 val go = it.gameObject
                 val intersection = gameObject.castRay(go).firstIntersecting
                 if (intersection?.gameObject?.id == go.id) {
-                    //println("I'm seeing ${go.id} at distance ${intersection.distance}!")
+                    val perception = Perception(intersection.gameObject, intersection.distance)
+                    reactions.forEach { it(perception) }
                 }
             }
         }
+    }
+
+    override fun addReaction(reaction: (Perception) -> Unit) {
+        reactions += reaction
     }
 
 }

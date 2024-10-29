@@ -1,0 +1,35 @@
+---
+name: "physics/BorderHorizontal"
+rigidBody:
+  shape:
+    type: "io.github.agentseek.common.Rectangle2d"
+    params:
+      upperLeft:
+        x: -47.5
+        "y": 0.0
+      lowerLeft:
+        x: -47.5
+        "y": 36.0
+      lowerRight:
+        x: 2.5
+        "y": 36.0
+      upperRight:
+        x: 2.5
+        "y": 0.0
+      height: 36.0
+      width: 50.0
+      center:
+        x: -22.5
+        "y": 18.0
+      position:
+        x: -47.5
+        "y": 0.0
+  mass: 1.0
+  velocity:
+    x: 0.0
+    "y": 0.0
+  static: true
+components: []
+renderer:
+  class: "io.github.agentseek.view.SimpleRenderer"
+  arguments: []
