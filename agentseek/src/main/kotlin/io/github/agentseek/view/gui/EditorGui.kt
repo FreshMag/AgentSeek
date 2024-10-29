@@ -10,6 +10,7 @@ import io.github.agentseek.view.*
 import io.github.agentseek.view.Renderer
 import io.github.agentseek.view.editor.Utilities.addClickListener
 import io.github.agentseek.view.editor.Utilities.addGameObjectDialog
+import io.github.agentseek.view.editor.Utilities.duplicateBehavior
 import io.github.agentseek.view.editor.Utilities.keyListener
 import io.github.agentseek.view.editor.Utilities.moveBehavior
 import java.awt.BorderLayout
@@ -107,6 +108,17 @@ object EditorGui : View {
         val editMenu = JMenu("Edit")
         val addItem = JMenuItem("Add GameObject")
         val moveItem = JMenuItem("Move center")
+        val duplicateItem = JMenuItem("Duplicate GameObject").also {
+            it.addActionListener {
+                duplicateBehavior(panel, frame, scene.world)
+            }
+        }
+        val deleteItem = JMenuItem("Delete GameObject").also {
+            it.addActionListener {
+                println("Deleting ${selectedGo?.id}")
+                selectedGo?.delete()
+            }
+        }
 
         addItem.addActionListener {
             addGameObjectDialog(frame, scene)
@@ -115,6 +127,8 @@ object EditorGui : View {
 
         editMenu.add(addItem)
         editMenu.add(moveItem)
+        editMenu.add(duplicateItem)
+        editMenu.add(deleteItem)
 
         val engineMenu = JMenu("Engine")
         val doOneItem = JMenuItem("Do 1")
@@ -130,7 +144,7 @@ object EditorGui : View {
         menuBar.add(engineMenu)
 
         frame.jMenuBar = menuBar
-        frame.addKeyListener(keyListener(panel, frame))
+        frame.addKeyListener(keyListener(panel, frame, scene))
     }
 
     override fun render() {

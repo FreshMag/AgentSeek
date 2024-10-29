@@ -1,13 +1,21 @@
 package io.github.agentseek.view.editor
 
+import io.github.agentseek.common.Circle2d
+import io.github.agentseek.common.Cone2d
 import io.github.agentseek.common.Point2d
+import io.github.agentseek.common.Rectangle2d
+import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.Scene
 import io.github.agentseek.core.engine.GameEngine
+import io.github.agentseek.physics.RigidBody
+import io.github.agentseek.util.GameObjectUtilities.center
 import io.github.agentseek.util.serialization.loadGameObject
+import io.github.agentseek.util.serialization.save
 import io.github.agentseek.view.Renderer
 import io.github.agentseek.view.SimpleRenderer
 import io.github.agentseek.view.gui.EditorGui
 import io.github.agentseek.view.gui.EditorGui.selectedGo
+import io.github.agentseek.world.World
 import java.awt.Cursor
 import java.awt.GridLayout
 import java.awt.event.KeyEvent
@@ -122,7 +130,7 @@ object Utilities {
                     val go = scene.gameObjects.firstOrNull { it.rigidBody.shape.contains(point) }
                     go?.let {
                         println("Selected ${it.id}")
-                        EditorGui.selectedGo = it
+                        selectedGo = it
                     }
                 }
             }
@@ -138,13 +146,23 @@ object Utilities {
         })
     }
 
-    fun keyListener(jPanel: JPanel, jFrame: JFrame): KeyListener =
+    fun keyListener(jPanel: JPanel, jFrame: JFrame, scene: Scene): KeyListener =
         object : KeyListener {
 
             override fun keyPressed(e: KeyEvent) {
                 when (e.keyCode) {
                     KeyEvent.VK_SPACE -> GameEngine.doOne()
                     KeyEvent.VK_M -> moveBehavior(jPanel, jFrame)
+                    KeyEvent.VK_D ->
+                        duplicateBehavior(
+                            jPanel,
+                            jFrame,
+                            scene.world,
+                        )
+                    KeyEvent.VK_BACK_SPACE -> {
+                        println("Deleting ${selectedGo?.id}")
+                        selectedGo?.delete()
+                    }
                 }
             }
 
@@ -176,5 +194,43 @@ object Utilities {
             override fun mouseExited(e: MouseEvent?) {}
 
         })
+    }
+
+    fun duplicateBehavior(panel: JPanel, frame: JFrame, world: World) {
+        val previous = panel.mouseListeners.first()
+        panel.removeMouseListener(previous)
+        frame.cursor = Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR)
+
+        panel.addMouseListener(object : MouseListener {
+            override fun mouseClicked(e: MouseEvent?) {
+                val x = e?.x ?: return
+                val y = e.y
+                GameEngine.view?.camera?.toWorldPoint(Point2d(x.toDouble(), y.toDouble()))?.let {
+                    if (selectedGo != null) {
+                        println("Duplicated ${selectedGo?.id} to (${it.x}, ${it.y})")
+                        val go = duplicate(world, selectedGo!!)
+                        go.rigidBody.shape.center = it
+                        world.addGameObject(go)
+                        panel.removeMouseListener(this)
+                        panel.addMouseListener(previous)
+                        frame.cursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR)
+                    }
+                }
+            }
+
+            override fun mousePressed(e: MouseEvent?) {}
+            override fun mouseReleased(e: MouseEvent?) {}
+            override fun mouseEntered(e: MouseEvent?) {}
+            override fun mouseExited(e: MouseEvent?) {}
+
+        })
+
+    }
+
+    fun duplicate(world: World, original: GameObject): GameObject {
+        val path = original.save("./", original.name)
+        val go = world.loadGameObject(path)!!
+        File(path).delete()
+        return go
     }
 }
