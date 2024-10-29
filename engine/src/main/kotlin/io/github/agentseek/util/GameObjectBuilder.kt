@@ -49,6 +49,10 @@ class GameObjectBuilder(private val world: World) {
         return this
     }
 
+    fun position(x: Int, y: Int): GameObjectBuilder {
+        this.position = Point2d(x.toDouble(), y.toDouble())
+        return this
+    }
 
     fun with(componentSetter: (GameObject) -> Component): GameObjectBuilder {
         componentSetters.add(componentSetter)
@@ -78,5 +82,9 @@ class GameObjectBuilder(private val world: World) {
         gameObject.name = name
         componentSetters.forEach { gameObject.addComponent(it(gameObject)) }
         return gameObject
+    }
+
+    fun buildAndAddToWorld() {
+        world.addGameObject(build())
     }
 }
