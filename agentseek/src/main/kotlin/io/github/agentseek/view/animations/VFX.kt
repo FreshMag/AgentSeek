@@ -15,10 +15,7 @@ object VFX {
     private const val DEFAULT_SCHEDULE_TIME_MILLIS = 50
 
     fun expandingCircle(
-        worldPosition: Point2d,
-        color: Color,
-        speed: Int,
-        maxRadius: Double = 10.0
+        worldPosition: Point2d, color: Color, speed: Int, maxRadius: Double = 10.0
     ) {
         val context: RenderingContext<Graphics2D> = GameEngine.view?.getRenderingContext() ?: return
         var startingCircle = Circle2d(0.0)
