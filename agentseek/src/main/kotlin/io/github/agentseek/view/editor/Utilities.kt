@@ -7,7 +7,11 @@ import io.github.agentseek.util.serialization.loadGameObject
 import io.github.agentseek.view.Renderer
 import io.github.agentseek.view.SimpleRenderer
 import io.github.agentseek.view.gui.EditorGui
+import io.github.agentseek.view.gui.EditorGui.selectedGo
+import java.awt.Cursor
 import java.awt.GridLayout
+import java.awt.event.KeyEvent
+import java.awt.event.KeyListener
 import java.awt.event.MouseEvent
 import java.awt.event.MouseListener
 import java.io.File
@@ -134,4 +138,43 @@ object Utilities {
         })
     }
 
+    fun keyListener(jPanel: JPanel, jFrame: JFrame): KeyListener =
+        object : KeyListener {
+
+            override fun keyPressed(e: KeyEvent) {
+                when (e.keyCode) {
+                    KeyEvent.VK_SPACE -> GameEngine.doOne()
+                    KeyEvent.VK_M -> moveBehavior(jPanel, jFrame)
+                }
+            }
+
+            override fun keyTyped(e: KeyEvent) {}
+            override fun keyReleased(e: KeyEvent?) {}
+        }
+
+    fun moveBehavior(panel: JPanel, frame: JFrame) {
+        val previous = panel.mouseListeners.first()
+        panel.removeMouseListener(previous)
+        frame.cursor = Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR)
+
+        panel.addMouseListener(object : MouseListener {
+            override fun mouseClicked(e: MouseEvent?) {
+                val x = e?.x ?: return
+                val y = e.y
+                GameEngine.view?.camera?.toWorldPoint(Point2d(x.toDouble(), y.toDouble()))?.let {
+                    println("Moved ${selectedGo?.id} to (${it.x}, ${it.y})")
+                    selectedGo?.rigidBody?.shape?.center = it
+                    panel.removeMouseListener(this)
+                    panel.addMouseListener(previous)
+                    frame.cursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR)
+                }
+            }
+
+            override fun mousePressed(e: MouseEvent?) {}
+            override fun mouseReleased(e: MouseEvent?) {}
+            override fun mouseEntered(e: MouseEvent?) {}
+            override fun mouseExited(e: MouseEvent?) {}
+
+        })
+    }
 }

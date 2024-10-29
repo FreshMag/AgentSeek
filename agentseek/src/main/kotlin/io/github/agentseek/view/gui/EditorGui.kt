@@ -1,6 +1,5 @@
 package io.github.agentseek.view.gui
 
-import io.github.agentseek.common.Point2d
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.Scene
 import io.github.agentseek.core.engine.GameEngine
@@ -11,13 +10,13 @@ import io.github.agentseek.view.*
 import io.github.agentseek.view.Renderer
 import io.github.agentseek.view.editor.Utilities.addClickListener
 import io.github.agentseek.view.editor.Utilities.addGameObjectDialog
+import io.github.agentseek.view.editor.Utilities.keyListener
+import io.github.agentseek.view.editor.Utilities.moveBehavior
 import java.awt.BorderLayout
 import java.awt.Dimension
 import java.awt.Graphics2D
 import java.awt.event.ComponentAdapter
 import java.awt.event.ComponentEvent
-import java.awt.event.MouseEvent
-import java.awt.event.MouseListener
 import java.io.File
 import javax.swing.*
 import javax.swing.WindowConstants.EXIT_ON_CLOSE
@@ -55,11 +54,9 @@ object EditorGui : View {
             this.scene = emptyScene()
         }
         frame.name = APP_NAME
-        frame.add(panel, BorderLayout.CENTER)
         frame.size = screenSize
         frame.preferredSize = screenSize
         frame.defaultCloseOperation = EXIT_ON_CLOSE
-        frame.isVisible = true
 
         frame.addComponentListener(object : ComponentAdapter() {
             override fun componentResized(e: ComponentEvent?) {
@@ -69,12 +66,16 @@ object EditorGui : View {
 
         addJMenu()
 
+        frame.add(panel, BorderLayout.CENTER)
+
         panel.addClickListener(scene!!)
 
         GameEngine.view = this
         Thread {
             GameREPL.start(this.scene)
         }.start()
+
+        frame.isVisible = true
     }
 
     private fun addJMenu() {
@@ -110,27 +111,7 @@ object EditorGui : View {
         addItem.addActionListener {
             addGameObjectDialog(frame, scene)
         }
-        moveItem.addActionListener {
-            val previous = panel.mouseListeners.first()
-            panel.removeMouseListener(previous)
-            panel.addMouseListener(object : MouseListener {
-                override fun mouseClicked(e: MouseEvent?) {
-                    val x = e?.x ?: return
-                    val y = e.y
-                    GameEngine.view?.camera?.toWorldPoint(Point2d(x.toDouble(), y.toDouble()))?.let{
-                        println("Moved ${selectedGo?.id} to (${it.x}, ${it.y})")
-                        selectedGo?.position = it
-                        panel.removeMouseListener(this)
-                        panel.addMouseListener(previous)
-                    }
-                }
-                override fun mousePressed(e: MouseEvent?) {}
-                override fun mouseReleased(e: MouseEvent?) {}
-                override fun mouseEntered(e: MouseEvent?) {}
-                override fun mouseExited(e: MouseEvent?) {}
-
-            })
-        }
+        moveItem.addActionListener { moveBehavior(panel, frame) }
 
         editMenu.add(addItem)
         editMenu.add(moveItem)
@@ -149,6 +130,7 @@ object EditorGui : View {
         menuBar.add(engineMenu)
 
         frame.jMenuBar = menuBar
+        frame.addKeyListener(keyListener(panel, frame))
     }
 
     override fun render() {
