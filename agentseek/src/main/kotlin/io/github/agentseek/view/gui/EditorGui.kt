@@ -1,5 +1,7 @@
 package io.github.agentseek.view.gui
 
+import io.github.agentseek.common.Point2d
+import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.Scene
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.util.factories.SceneFactory.emptyScene
@@ -7,18 +9,19 @@ import io.github.agentseek.util.repl.GameREPL
 import io.github.agentseek.util.serialization.save
 import io.github.agentseek.view.*
 import io.github.agentseek.view.Renderer
+import io.github.agentseek.view.editor.Utilities.addClickListener
 import io.github.agentseek.view.editor.Utilities.addGameObjectDialog
-import io.github.agentseek.view.editor.Utilities.loadGameObjectDialog
 import java.awt.BorderLayout
 import java.awt.Dimension
 import java.awt.Graphics2D
 import java.awt.event.ComponentAdapter
 import java.awt.event.ComponentEvent
+import java.awt.event.MouseEvent
+import java.awt.event.MouseListener
 import java.io.File
 import javax.swing.*
 import javax.swing.WindowConstants.EXIT_ON_CLOSE
 import kotlin.system.exitProcess
-import kotlin.time.Duration.Companion.milliseconds
 
 object EditorGui : View {
     private var screenSize: Dimension = Dimension(1000, 720)//Toolkit.getDefaultToolkit().screenSize
@@ -35,12 +38,14 @@ object EditorGui : View {
     private val frame = JFrame(APP_NAME)
     private var selectedPath: String? = null
     private lateinit var scene: Scene
+    var selectedGo: GameObject? = null
 
     private val gameViewRendering: RenderingEvent = { g2d ->
         eventsBuffer.forEach {
             it(g2d)
         }
     }
+    private var panel: JPanel = GameViewPanel(screenSize, gameViewRendering)
 
     fun start(scene: Scene? = null, selectedPath: String? = null) {
         if (scene != null && selectedPath != null) {
@@ -50,7 +55,6 @@ object EditorGui : View {
             this.scene = emptyScene()
         }
         frame.name = APP_NAME
-        val panel = GameViewPanel(screenSize, gameViewRendering)
         frame.add(panel, BorderLayout.CENTER)
         frame.size = screenSize
         frame.preferredSize = screenSize
@@ -64,6 +68,8 @@ object EditorGui : View {
         })
 
         addJMenu()
+
+        panel.addClickListener(scene!!)
 
         GameEngine.view = this
         Thread {
@@ -99,12 +105,35 @@ object EditorGui : View {
 
         val editMenu = JMenu("Edit")
         val addItem = JMenuItem("Add GameObject")
+        val moveItem = JMenuItem("Move center")
 
         addItem.addActionListener {
             addGameObjectDialog(frame, scene)
         }
+        moveItem.addActionListener {
+            val previous = panel.mouseListeners.first()
+            panel.removeMouseListener(previous)
+            panel.addMouseListener(object : MouseListener {
+                override fun mouseClicked(e: MouseEvent?) {
+                    val x = e?.x ?: return
+                    val y = e.y
+                    GameEngine.view?.camera?.toWorldPoint(Point2d(x.toDouble(), y.toDouble()))?.let{
+                        println("Moved ${selectedGo?.id} to (${it.x}, ${it.y})")
+                        selectedGo?.position = it
+                        panel.removeMouseListener(this)
+                        panel.addMouseListener(previous)
+                    }
+                }
+                override fun mousePressed(e: MouseEvent?) {}
+                override fun mouseReleased(e: MouseEvent?) {}
+                override fun mouseEntered(e: MouseEvent?) {}
+                override fun mouseExited(e: MouseEvent?) {}
+
+            })
+        }
 
         editMenu.add(addItem)
+        editMenu.add(moveItem)
 
         val engineMenu = JMenu("Engine")
         val doOneItem = JMenuItem("Do 1")

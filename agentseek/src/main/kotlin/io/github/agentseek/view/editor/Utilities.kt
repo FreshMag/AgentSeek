@@ -1,11 +1,15 @@
 package io.github.agentseek.view.editor
 
+import io.github.agentseek.common.Point2d
 import io.github.agentseek.core.Scene
+import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.util.serialization.loadGameObject
-import io.github.agentseek.view.EmptyRenderer
 import io.github.agentseek.view.Renderer
 import io.github.agentseek.view.SimpleRenderer
+import io.github.agentseek.view.gui.EditorGui
 import java.awt.GridLayout
+import java.awt.event.MouseEvent
+import java.awt.event.MouseListener
 import java.io.File
 import javax.swing.*
 
@@ -103,6 +107,31 @@ object Utilities {
 
         addDialog.setSize(400, 300)
         addDialog.isVisible = true
+    }
+
+    fun JPanel.addClickListener(scene: Scene) {
+        addMouseListener(object : MouseListener {
+            override fun mouseClicked(e: MouseEvent?) {
+                val x = e?.x ?: return
+                val y = e.y
+                GameEngine.view?.camera?.toWorldPoint(Point2d(x.toDouble(), y.toDouble()))?.let { point ->
+                    val go = scene.gameObjects.firstOrNull { it.rigidBody.shape.contains(point) }
+                    go?.let {
+                        println("Selected ${it.id}")
+                        EditorGui.selectedGo = it
+                    }
+                }
+            }
+
+            override fun mousePressed(e: MouseEvent?) {}
+
+            override fun mouseReleased(e: MouseEvent?) {}
+
+            override fun mouseEntered(e: MouseEvent?) {}
+
+            override fun mouseExited(e: MouseEvent?) {}
+
+        })
     }
 
 }
