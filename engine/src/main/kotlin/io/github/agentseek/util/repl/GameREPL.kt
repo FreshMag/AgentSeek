@@ -7,6 +7,8 @@ import io.github.agentseek.util.factories.SceneFactory
 import org.jline.reader.LineReaderBuilder
 import org.jline.terminal.TerminalBuilder
 import picocli.CommandLine
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.nanoseconds
 
 
 object GameREPL {

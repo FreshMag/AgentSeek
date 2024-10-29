@@ -4,16 +4,21 @@ import io.github.agentseek.core.Scene
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.util.factories.SceneFactory.emptyScene
 import io.github.agentseek.util.repl.GameREPL
+import io.github.agentseek.util.serialization.save
 import io.github.agentseek.view.*
+import io.github.agentseek.view.Renderer
+import io.github.agentseek.view.editor.Utilities.addGameObjectDialog
+import io.github.agentseek.view.editor.Utilities.loadGameObjectDialog
 import java.awt.BorderLayout
 import java.awt.Dimension
 import java.awt.Graphics2D
 import java.awt.event.ComponentAdapter
 import java.awt.event.ComponentEvent
-import javax.swing.JFrame
-import javax.swing.SwingUtilities
+import java.io.File
+import javax.swing.*
 import javax.swing.WindowConstants.EXIT_ON_CLOSE
-import kotlin.time.Duration.Companion.seconds
+import kotlin.system.exitProcess
+import kotlin.time.Duration.Companion.milliseconds
 
 object EditorGui : View {
     private var screenSize: Dimension = Dimension(1000, 720)//Toolkit.getDefaultToolkit().screenSize
@@ -25,10 +30,10 @@ object EditorGui : View {
     private const val APP_NAME = "Agent Seek - Editor"
 
     override val camera: Camera = Camera(this, 50.0)
-    private val renderingContext = RenderingContext<Graphics2D>(GameGui.camera)
+    private val renderingContext = RenderingContext<Graphics2D>(camera)
     private var eventsBuffer: List<RenderingEvent> = emptyList()
     private val frame = JFrame(APP_NAME)
-    private var selectedPath: String = "./"
+    private var selectedPath: String? = null
     private lateinit var scene: Scene
 
     private val gameViewRendering: RenderingEvent = { g2d ->
@@ -57,10 +62,64 @@ object EditorGui : View {
                 screenSize = e?.component?.size ?: screenSize
             }
         })
+
+        addJMenu()
+
         GameEngine.view = this
         Thread {
             GameREPL.start(this.scene)
         }.start()
+    }
+
+    private fun addJMenu() {
+        val menuBar = JMenuBar()
+        val fileMenu = JMenu("File")
+        val saveItem = JMenuItem("Save")
+        val exitItem = JMenuItem("Exit")
+
+        saveItem.addActionListener {
+            val fileChooser = JFileChooser(File("./"))
+            fileChooser.dialogTitle = "Save File"
+            fileChooser.fileSelectionMode = JFileChooser.FILES_ONLY
+            val result = fileChooser.showSaveDialog(frame)
+
+            if (result == JFileChooser.APPROVE_OPTION) {
+                val selectedFile = fileChooser.selectedFile
+                scene.save(selectedFile.parent, selectedFile.nameWithoutExtension)
+            }
+        }
+
+        exitItem.addActionListener {
+            exitProcess(0)
+        }
+
+        fileMenu.add(saveItem)
+        fileMenu.addSeparator()
+        fileMenu.add(exitItem)
+
+        val editMenu = JMenu("Edit")
+        val addItem = JMenuItem("Add GameObject")
+
+        addItem.addActionListener {
+            addGameObjectDialog(frame, scene)
+        }
+
+        editMenu.add(addItem)
+
+        val engineMenu = JMenu("Engine")
+        val doOneItem = JMenuItem("Do 1")
+
+        doOneItem.addActionListener {
+            GameEngine.doOne()
+        }
+
+        engineMenu.add(doOneItem)
+
+        menuBar.add(fileMenu)
+        menuBar.add(editMenu)
+        menuBar.add(engineMenu)
+
+        frame.jMenuBar = menuBar
     }
 
     override fun render() {
