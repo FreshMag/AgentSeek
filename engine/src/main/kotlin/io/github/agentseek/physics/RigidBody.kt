@@ -60,6 +60,9 @@ sealed class RigidBody(
      * Whether this [RigidBody] can move or not. If `true`, the [GameObject] cannot move.
      */
     var isStatic: Boolean = false
+
+
+    private var safePoint = collider.center
     
 
     /**
@@ -72,7 +75,11 @@ sealed class RigidBody(
     override fun onUpdate(deltaTime: Duration) {
         if (!isStatic) {
             if (!collisionResolved) {
-                collider.findColliding().onEach {
+                collider.findColliding().also {
+                    if (it.isEmpty()) {
+                        safePoint = collider.center
+                    }
+                }.onEach {
                     it.rigidBody.collisionResolved = true
                 }.forEach {
                     resolveCollision(it.rigidBody)
@@ -88,7 +95,8 @@ sealed class RigidBody(
 
     private fun resolveCollision(rigidBody: RigidBody) {
         if (rigidBody.isStatic) {
-            this.velocity = (collider.center - rigidBody.collider.center).normalized() * velocity.module()
+            val connector = (safePoint - collider.center).normalized()
+            this.velocity = connector * velocity.module()
         } else {
             val m1 = this.mass
             val m2 = rigidBody.mass

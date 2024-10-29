@@ -8,4 +8,8 @@ object Scenes {
     fun exampleScene(): Scene {
         return loadSceneFromResource("SimpleCollision")!!
     }
+
+    fun mapBordersScene(): Scene {
+        return loadSceneFromResource("SimpleMapBorders")!!
+    }
 }
