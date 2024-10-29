@@ -113,7 +113,7 @@ object MenuGui {
         editorButton.addActionListener {
             frame.isVisible = false
             val scene = this.loadSceneFromResource(selectedPath)!!
-            EditorGui.start(scene = scene)
+            EditorGui.start(scene = scene, selectedPath)
         }
 
         val emptyEditorButton = JButton(START_EDITOR_EMPTY_TEXT).apply {
