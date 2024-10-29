@@ -1,6 +1,7 @@
 package io.github.agentseek.components
 
 import io.github.agentseek.common.Circle2d
+import io.github.agentseek.common.Point2d
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.physics.Collider
 import io.github.agentseek.util.GameObjectUtilities.attachRenderer
@@ -11,9 +12,10 @@ import io.github.agentseek.view.utilities.Rendering.strokeCircle
 import java.awt.Color
 import kotlin.time.Duration
 
-class NoiseSensorComponent(gameObject: GameObject, radius: Double) : AbstractComponent(gameObject) {
+class NoiseSensorComponent(gameObject: GameObject, radius: Double) : AbstractComponent(gameObject), Sensor<Point2d> {
     private val noiseSensorCollider: Collider = Collider.CircleCollider(radius, gameObject)
     private var lastPos = gameObject.position
+    private var reactions = listOf<(Point2d) -> Unit>()
 
     override fun init() {
         noiseSensorCollider.shape.center = gameObject.center()
@@ -33,12 +35,16 @@ class NoiseSensorComponent(gameObject: GameObject, radius: Double) : AbstractCom
         if (lastPos != gameObject.center()) lastPos = gameObject.center()
         gameObject.otherGameObjects().forEach { go ->
             go.getComponent<NoiseEmitterComponent>()?.let { noiseComponent ->
-                noiseComponent.getNoiseEmitterCollider()?.let {
-                    if (it.isCollidingWith(noiseSensorCollider)) {
-                        println("trovato rumorista")
+                noiseComponent.getNoiseEmitterCollider()?.let { collider ->
+                    if (collider.isCollidingWith(noiseSensorCollider)) {
+                        reactions.forEach { it(collider.center) }
                     }
                 }
             }
         }
+    }
+
+    override fun addReaction(reaction: (Point2d) -> Unit) {
+        reactions += reaction
     }
 }
