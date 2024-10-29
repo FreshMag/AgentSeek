@@ -15,7 +15,7 @@ class NoiseEmitterComponent(gameObject: GameObject, radius: Double) : AbstractCo
     private var isEmittingNoise = false
     private var lastPos = gameObject.position
     override fun init() {
-        noiseEmitterCollider.shape.center = gameObject.center()
+        noiseEmitterCollider.center = gameObject.center()
         gameObject.attachRenderer { _, renderingContext ->
             renderingContext?.fillGradientCircle(
                 noiseEmitterCollider.shape as Circle2d, Color(245, 154, 165), Color(255, 255, 0, 0)
@@ -27,7 +27,7 @@ class NoiseEmitterComponent(gameObject: GameObject, radius: Double) : AbstractCo
     }
 
     override fun onUpdate(deltaTime: Duration) {
-        noiseEmitterCollider.shape.center = gameObject.center()
+        noiseEmitterCollider.center = gameObject.center()
         if (lastPos != gameObject.center()) {
             lastPos = gameObject.center()
             isEmittingNoise = true
