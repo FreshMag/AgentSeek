@@ -3,6 +3,7 @@ package io.github.agentseek.components
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.physics.Collider
 import io.github.agentseek.util.GameObjectUtilities.center
+import kotlin.math.absoluteValue
 import kotlin.time.Duration
 
 private enum class NoiseLevel {
@@ -17,11 +18,13 @@ class NoiseEmitterComponent(gameObject: GameObject, private val radius: Double) 
     private var isEmittingNoise = false
     private var lastPos = gameObject.center()
     private var noiseEmitterCollider: Collider = Collider.CircleCollider(radius, gameObject)
+
     override fun init() {
         noiseEmitterCollider.center = gameObject.center()
     }
 
     override fun onUpdate(deltaTime: Duration) {
+        println(getNoiseLevel())
         val noiseRadius = when (getNoiseLevel()) {
             NoiseLevel.LOW -> radius / 2
             NoiseLevel.DEFAULT -> radius
@@ -44,7 +47,7 @@ class NoiseEmitterComponent(gameObject: GameObject, private val radius: Double) 
     }
 
     private fun getNoiseLevel(): NoiseLevel {
-        return if (gameObject.rigidBody.velocity.x >= STANDARD_VELOCITY || gameObject.rigidBody.velocity.y >= STANDARD_VELOCITY) {
+        return if (gameObject.rigidBody.velocity.x.absoluteValue >= STANDARD_VELOCITY || gameObject.rigidBody.velocity.y.absoluteValue >= STANDARD_VELOCITY) {
             NoiseLevel.DEFAULT
         } else {
             NoiseLevel.LOW
