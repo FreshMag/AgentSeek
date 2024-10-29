@@ -32,7 +32,7 @@ object Scenes {
                 //.with { DistanceSensorComponent(it, 2.0) }
                 //.with { FieldMovementComponent(it) }
                 //.with { TestMouseComponent(it) }
-                .with { NoiseEmitterComponent(it, 3.0) }
+                .with { NoiseEmitterComponent(it, 6.0) }
                 .with { NoiseEmitterVisualComponent(it) }
                 .renderer(SimpleRenderer()).build()
 
@@ -47,7 +47,7 @@ object Scenes {
                                 .also { body -> body.isStatic = true }
                         }
                         .with { NoiseSensorComponent(it, 3.0) }
-                        //.with { NoiseSensorVisualComponent(it) }
+                        .with { NoiseSensorVisualComponent(it) }
                         .renderer(SimpleRenderer())
                         .build()
 

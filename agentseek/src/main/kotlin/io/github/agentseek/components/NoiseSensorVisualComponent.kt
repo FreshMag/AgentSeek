@@ -22,7 +22,7 @@ class NoiseSensorVisualComponent(gameObject: GameObject) : AbstractComponent(gam
                 text = "?",
                 color = Color.BLACK,
                 size = 40,
-                durationMillis = 50
+                durationMillis = 3000
             )
         }
     }
@@ -32,7 +32,7 @@ class NoiseSensorVisualComponent(gameObject: GameObject) : AbstractComponent(gam
         return lastNoiseHeardTimeMillis == null || currentTime - lastNoiseHeardTimeMillis!! >= DEFAULT_SUSPICIOUS_TIME_MILLIS
     }
 
-    companion object {
+    private companion object {
         const val DEFAULT_SUSPICIOUS_TIME_MILLIS = 3000
     }
 }
