@@ -6,7 +6,7 @@ import kotlin.time.DurationUnit
 
 class TimedAction(val id: String, period: Duration, val action: TimedAction.() -> Unit) {
 
-    private val timer: Timer = TimerImpl(period.toDouble(DurationUnit.MILLISECONDS)).also { it.startTimer() }
+    private val timer: Timer = TimerImpl(period.toLong(DurationUnit.MILLISECONDS)).also { it.startTimer() }
 
     fun applyIfElapsed() {
         if (timer.isElapsed()) {

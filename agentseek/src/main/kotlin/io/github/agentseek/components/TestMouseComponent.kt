@@ -26,7 +26,7 @@ class TestMouseComponent(gameObject: GameObject) : AbstractComponent(gameObject)
             val worldPoint = camera.toWorldPoint(mouse)
             //movement.objective = worldPoint
             //VFX.expandingCircle(worldPoint, Color.BLACK, 1)
-            VFX.fadingText(worldPoint, "!", Color.BLACK, 40)
+            VFX.fadingText(worldPoint, "!", Color.BLACK, 40, 500)
         }
     }
 }

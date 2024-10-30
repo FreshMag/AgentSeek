@@ -75,6 +75,7 @@ open class InputListener : KeyListener, MouseListener, InputProvider {
         KeyEvent.VK_S -> Input.Key.DOWN
         KeyEvent.VK_D -> Input.Key.RIGHT
         KeyEvent.VK_A -> Input.Key.LEFT
+        KeyEvent.VK_SHIFT -> Input.Key.SHIFT
         else -> null
     }
 }

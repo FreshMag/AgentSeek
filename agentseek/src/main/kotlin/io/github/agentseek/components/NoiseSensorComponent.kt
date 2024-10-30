@@ -1,50 +1,42 @@
 package io.github.agentseek.components
 
 import io.github.agentseek.common.Circle2d
-import io.github.agentseek.common.Point2d
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.physics.Collider
 import io.github.agentseek.util.GameObjectUtilities.attachRenderer
 import io.github.agentseek.util.GameObjectUtilities.center
 import io.github.agentseek.util.GameObjectUtilities.otherGameObjects
-import io.github.agentseek.view.utilities.Rendering.fillGradientCircle
 import io.github.agentseek.view.utilities.Rendering.strokeCircle
 import java.awt.Color
 import kotlin.time.Duration
 
-class NoiseSensorComponent(gameObject: GameObject, radius: Double) : AbstractComponent(gameObject), Sensor<Point2d> {
+class NoiseSensorComponent(gameObject: GameObject, radius: Double) : AbstractComponent(gameObject) {
     private val noiseSensorCollider: Collider = Collider.CircleCollider(radius, gameObject)
     private var lastPos = gameObject.position
-    private var reactions = listOf<(Point2d) -> Unit>()
+    private var noiseFound = false
 
     override fun init() {
-        noiseSensorCollider.shape.center = gameObject.center()
+        noiseSensorCollider.center = gameObject.center()
         gameObject.attachRenderer { _, renderingContext ->
-            renderingContext?.fillGradientCircle(
-                noiseSensorCollider.shape as Circle2d, Color(137, 245, 230), Color(255, 255, 0, 0)
-            )
             renderingContext?.strokeCircle(
-                noiseSensorCollider.shape as Circle2d,
-                color = Color.BLACK
+                noiseSensorCollider.shape as Circle2d, color = Color.BLACK
             )
         }
     }
 
     override fun onUpdate(deltaTime: Duration) {
-        noiseSensorCollider.shape.center = gameObject.center()
+        noiseSensorCollider.center = gameObject.center()
         if (lastPos != gameObject.center()) lastPos = gameObject.center()
         gameObject.otherGameObjects().forEach { go ->
             go.getComponent<NoiseEmitterComponent>()?.let { noiseComponent ->
-                noiseComponent.getNoiseEmitterCollider()?.let { collider ->
-                    if (collider.isCollidingWith(noiseSensorCollider)) {
-                        reactions.forEach { it(collider.center) }
+                noiseComponent.getNoiseEmitterCollider()?.let {
+                    if (it.isCollidingWith(noiseSensorCollider)) {
+                        noiseFound = true
                     }
-                }
-            }
+                } ?: run { noiseFound = false }
+            } ?: run { noiseFound = false }
         }
     }
 
-    override fun addReaction(reaction: (Point2d) -> Unit) {
-        reactions += reaction
-    }
+    fun getNoiseFound(): Boolean = noiseFound
 }

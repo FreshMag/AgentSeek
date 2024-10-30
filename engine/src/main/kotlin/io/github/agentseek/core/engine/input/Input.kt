@@ -12,7 +12,7 @@ object Input {
      * Containers of the aliases for the keys.
      */
     enum class Key {
-        UP, DOWN, LEFT, RIGHT, SPACE,
+        UP, DOWN, LEFT, RIGHT, SPACE, SHIFT
     }
 
     sealed class Mouse(val position: Point2d) {
@@ -39,6 +39,9 @@ object Input {
 
     val SPACE: Boolean
         get() = pressedKey(Key.SPACE)
+
+    val SHIFT: Boolean
+        get() = pressedKey(Key.SHIFT)
 
     /**
      * Returns the position of the screen where the mouse was clicked, or null if the mouse was not clicked
