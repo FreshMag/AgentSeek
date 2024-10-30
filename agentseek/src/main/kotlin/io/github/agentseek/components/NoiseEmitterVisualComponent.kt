@@ -9,13 +9,16 @@ import kotlin.time.Duration
 
 @Requires(NoiseEmitterComponent::class)
 class NoiseEmitterVisualComponent(gameObject: GameObject) : AbstractComponent(gameObject) {
+    private lateinit var noiseEmitterComponent: NoiseEmitterComponent
+
     private val timer = TimerImpl(500)
     override fun init() {
         timer.startTimer()
+        noiseEmitterComponent = gameObject.getComponent<NoiseEmitterComponent>()!!
     }
 
     override fun onUpdate(deltaTime: Duration) {
-        gameObject.getComponent<NoiseEmitterComponent>()!!.getNoiseEmitterCollider()?.let {
+        noiseEmitterComponent.getNoiseEmitterCollider()?.let {
             if (timer.isElapsed()) {
                 timer.restart()
                 VFX.expandingCircle(
