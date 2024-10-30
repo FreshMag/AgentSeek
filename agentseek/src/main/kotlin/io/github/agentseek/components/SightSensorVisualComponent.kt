@@ -17,7 +17,7 @@ class SightSensorVisualComponent(gameObject: GameObject) : AbstractComponent(gam
     }
 
     override fun onUpdate(deltaTime: Duration) {
-        if (sightSensorComponent.getIsSeeing() && timer.isElapsed()) {
+        if (sightSensorComponent.getIsObjectInSight() && timer.isElapsed()) {
             timer.restart()
             VFX.fadingText(
                 worldPosition = gameObject.position,

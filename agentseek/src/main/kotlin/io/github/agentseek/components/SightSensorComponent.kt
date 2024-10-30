@@ -18,7 +18,7 @@ class SightSensorComponent(gameObject: GameObject, coneLength: Double, coneApert
     private val sensorCollider: Collider = Collider.ConeCollider(coneAperture, coneLength, 0.0, gameObject)
     private var lastPos = gameObject.position
     private var reactions = listOf<(Perception) -> Unit>()
-    private var isSeeing = false
+    private var isObjectInSight = false
 
     override fun init() {
         sensorCollider.position = gameObject.position
@@ -43,11 +43,11 @@ class SightSensorComponent(gameObject: GameObject, coneLength: Double, coneApert
                 if (intersection?.gameObject?.id == go.id) {
                     val perception = Perception(intersection.gameObject, intersection.distance)
                     reactions.forEach { it(perception) }
-                    isSeeing = true
+                    isObjectInSight = true
                 }
             }
         } else {
-            isSeeing = false
+            isObjectInSight = false
         }
     }
 
@@ -55,5 +55,5 @@ class SightSensorComponent(gameObject: GameObject, coneLength: Double, coneApert
         reactions += reaction
     }
 
-    fun getIsSeeing() = isSeeing
+    fun getIsObjectInSight() = isObjectInSight
 }
