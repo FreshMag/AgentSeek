@@ -19,7 +19,11 @@ class NoiseSensorVisualComponent(gameObject: GameObject) : AbstractComponent(gam
         if (noiseSensor.getNoiseFound() && timer.isElapsed()) {
             timer.restart()
             VFX.fadingText(
-                worldPosition = gameObject.position, text = "?", color = Color.BLACK, size = 40, durationMillis = 3000
+                worldPosition = gameObject.position,
+                text = "?",
+                color = Color.BLACK,
+                size = 40,
+                durationMillis = DEFAULT_SUSPICIOUS_TIME_MILLIS
             )
         }
     }
