@@ -16,7 +16,7 @@ object SceneFactory {
             .build()
         val colliderGO = emptyScene.world.gameObjectBuilder()
             .position(10.0, 5.0)
-            .rigidBody { RigidBody.CircleRigidBody(3.0, it) }
+            .rigidBody { RigidBody.CircleRigidBody(it, 3.0) }
             .renderer(defaultRenderer)
             .build()
 

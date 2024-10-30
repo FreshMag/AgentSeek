@@ -7,6 +7,8 @@ import io.github.agentseek.util.factories.SceneFactory
 import org.jline.reader.LineReaderBuilder
 import org.jline.terminal.TerminalBuilder
 import picocli.CommandLine
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.nanoseconds
 
 
 object GameREPL {
@@ -39,14 +41,18 @@ object GameREPL {
         }
     }
 
-    fun start() {
+    fun start(scene: Scene? = null) {
         println("Welcome to the Game Engine REPL!")
         println("\t - Press ENTER to do one iteration of the game loop")
         println("\t - Or type help to show usage")
-        val (replScene, dummyComponent) = SceneFactory.replScene()
-        GameREPL.dummyComponent = dummyComponent
-        scene = replScene
-        GameEngine.loadScene(replScene)
+        if (scene == null) {
+            val (replScene, dummyComponent) = SceneFactory.replScene()
+            GameREPL.dummyComponent = dummyComponent
+            this.scene = replScene
+        } else {
+            this.scene = scene
+        }
+        GameEngine.loadScene(this.scene)
         while (true) {
             val input = reader.readLine("> ")
             parseLine(input)

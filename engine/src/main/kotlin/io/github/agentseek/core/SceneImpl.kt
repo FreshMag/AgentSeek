@@ -1,6 +1,5 @@
 package io.github.agentseek.core
 
-import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.events.Event
 import io.github.agentseek.events.EventHandler
 import io.github.agentseek.events.EventListener
@@ -15,6 +14,7 @@ class SceneImpl : Scene, EventListener {
     override var isVictory: Boolean = false
     override var isGameOver: Boolean = false
     private val eventHandler: EventHandler = EventHandler(this)
+    override val flags: MutableMap<String, Any> = mutableMapOf()
 
     override fun updateState(deltaTime: Duration) {
         world.gameObjects.forEach {

@@ -1,10 +1,12 @@
 package io.github.agentseek.core
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.components.Component
 import io.github.agentseek.components.Requires
 import io.github.agentseek.events.Event
 import io.github.agentseek.physics.RigidBody
+import io.github.agentseek.util.serialization.GameObjectSerializer
 import io.github.agentseek.view.EmptyRenderer
 import io.github.agentseek.view.Renderer
 import io.github.agentseek.world.World
@@ -28,7 +30,14 @@ class GameObject(
      * Identifier for this GameObject
      */
     val id: String = world.generateId("go")
-    var rigidBody: RigidBody = RigidBody.RectangleRigidBody(DEFAULT_SIZE, DEFAULT_SIZE, this)
+    var rigidBody: RigidBody = RigidBody.RectangleRigidBody(this, DEFAULT_SIZE, DEFAULT_SIZE)
+
+    /**
+     * An optional, recognizable name for this GameObject.
+     *
+     * Note: objects with the same name will be saved as a **single** file from a [Scene]
+     */
+    var name: String = ""
 
     /**
      * This object's current position.
@@ -71,7 +80,7 @@ class GameObject(
             if (missingComponents.isNotEmpty()) {
                 throw IllegalStateException(
                     "Cannot add ${componentClass.simpleName} because it requires " +
-                        requiredComponents.joinToString(", ") { it.simpleName.toString() }
+                            requiredComponents.joinToString(", ") { it.simpleName.toString() }
                 )
             }
         }

@@ -1,5 +1,6 @@
 package io.github.agentseek.view.gui
 
+import io.github.agentseek.core.Scene
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.core.engine.input.Input
 import io.github.agentseek.util.factories.Scenes
@@ -42,7 +43,7 @@ object GameGui : View, InputListener() {
         }
     }
 
-    fun startGameGui(useRepl: Boolean = false) {
+    fun startGameGui(useRepl: Boolean = false, scene: Scene = Scenes.exampleScene(1)) {
         frame.name = APP_NAME
         val panel = GameViewPanel(screenSize, gameViewRendering)
         frame.add(panel, BorderLayout.CENTER)
@@ -63,16 +64,16 @@ object GameGui : View, InputListener() {
         // Sets GameEngine view
         GameEngine.view = this
         // Starts the game view
-        start(useRepl)
+        start(useRepl, scene)
     }
 
-    private fun start(useRepl: Boolean) {
+    private fun start(useRepl: Boolean, scene: Scene) {
         if (useRepl) {
             Thread {
                 GameREPL.start()
             }.start()
         } else {
-            GameEngine.loadScene(Scenes.exampleScene(1))
+            GameEngine.loadScene(scene)
             GameEngine.start()
         }
     }

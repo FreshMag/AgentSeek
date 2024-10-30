@@ -34,6 +34,11 @@ interface Scene {
     val isGameOver: Boolean
 
     /**
+     * Additional string flags for this scene
+     */
+    val flags: MutableMap<String, Any>
+
+    /**
      * Updates current GameState, passing the [deltaTime] of time elapsed since last update.
      */
     fun updateState(deltaTime: Duration)
