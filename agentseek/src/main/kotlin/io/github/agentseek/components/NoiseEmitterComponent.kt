@@ -46,7 +46,9 @@ class NoiseEmitterComponent(gameObject: GameObject, private val radius: Double) 
     }
 
     private fun getNoiseLevel(): NoiseLevel {
-        return if (gameObject.rigidBody.velocity.module() > STANDARD_VELOCITY) {
+        return if (gameObject.rigidBody.velocity.x.absoluteValue >= STANDARD_VELOCITY
+            || gameObject.rigidBody.velocity.y.absoluteValue >= STANDARD_VELOCITY
+        ) {
             NoiseLevel.DEFAULT
         } else {
             NoiseLevel.LOW
