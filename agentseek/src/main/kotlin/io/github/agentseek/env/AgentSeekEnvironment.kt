@@ -1,6 +1,5 @@
 package io.github.agentseek.env
 
-import io.github.agentseek.view.gui.MenuGui
 import jason.asSyntax.Structure
 import jason.environment.Environment
 
