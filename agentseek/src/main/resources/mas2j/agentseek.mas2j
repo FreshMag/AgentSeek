@@ -4,7 +4,6 @@ MAS helloworld {
     environment: io.github.agentseek.env.AgentSeekEnvironment
 	agents:
 		agent1 hello_agent;
-		agent2 hello_agent;
 
 	aslSourcePath:
 		"agentseek/src/main/asl";

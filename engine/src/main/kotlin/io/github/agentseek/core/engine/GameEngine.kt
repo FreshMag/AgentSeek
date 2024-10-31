@@ -1,8 +1,12 @@
 package io.github.agentseek.core.engine
 
 import io.github.agentseek.common.TimedAction
+import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.Scene
 import io.github.agentseek.core.engine.input.Input
+import io.github.agentseek.events.Event
+import io.github.agentseek.events.EventHandler
+import io.github.agentseek.events.EventListener
 import io.github.agentseek.util.factories.SceneFactory
 import io.github.agentseek.view.View
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -20,6 +24,7 @@ object GameEngine {
     private var scheduledActions: Map<String, TimedAction> = mapOf()
 
     private var scene: Scene? = null
+
     var view: View? = null
 
     /**
@@ -37,6 +42,12 @@ object GameEngine {
             view?.render()
         }
     }
+
+    /**
+     * Notifies an [Event] to the scene's world. Returns `false` if the event was not received.
+     */
+    fun notifySceneEvent(gameObject: GameObject, event: Event): Boolean =
+        scene?.world?.let { it.notifyEvent(event, gameObject); true } ?: false
 
     /**
      * Loads a scene into the engine

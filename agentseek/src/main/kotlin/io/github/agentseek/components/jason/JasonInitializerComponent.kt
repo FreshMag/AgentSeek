@@ -9,8 +9,13 @@ class JasonInitializerComponent(gameObject: GameObject, private val mas2jPath: S
 
     override fun init() {
         val file = AgentSeek::class.java.getResource(mas2jPath)?.path
+        jasonManager = this.gameObject
         Thread {
             RunLocalMAS.main(arrayOf(file))
         }.start()
+    }
+
+    companion object {
+        var jasonManager: GameObject? = null
     }
 }
