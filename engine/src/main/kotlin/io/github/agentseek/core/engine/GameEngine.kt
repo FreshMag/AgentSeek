@@ -117,4 +117,10 @@ object GameEngine {
         stop()
         loadScene(SceneFactory.emptyScene())
     }
+
+    /**
+     * Gets a flag from the active scene, or null if that flag isn't set.
+     */
+    fun getFlag(id: String): Any? =
+        scene?.flags?.get(id)
 }

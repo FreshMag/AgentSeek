@@ -2,10 +2,12 @@ package io.github.agentseek.util.factories
 
 import io.github.agentseek.common.Vector2d
 import io.github.agentseek.components.*
+import io.github.agentseek.components.jason.JasonInitializerComponent
 import io.github.agentseek.core.Scene
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.physics.RigidBody
 import io.github.agentseek.util.factories.SceneFactory.emptyScene
+import io.github.agentseek.view.EmptyRenderer
 import io.github.agentseek.view.SimpleRenderer
 import io.github.agentseek.view.gui.GameGui
 
@@ -74,6 +76,17 @@ object Scenes {
             .build()
         emptyScene.world.addGameObject(toCollideGO)
         emptyScene.world.addGameObject(movingGO)
+        return emptyScene
+    }
+
+    fun jasonExampleScene(): Scene {
+        val emptyScene = emptyScene()
+        val mas2jPath = "/mas2j/agentseek.mas2j"
+        val jasonManager = emptyScene.world.gameObjectBuilder()
+            .with { JasonInitializerComponent(it, mas2jPath) }
+            .renderer(EmptyRenderer())
+            .build()
+        emptyScene.world.addGameObject(jasonManager)
         return emptyScene
     }
 }

@@ -7,4 +7,5 @@
 /* Plans */
 
 +!start : true <-
-	.print("hello world").
+	.print("hello world");
+	.yell("salve").
