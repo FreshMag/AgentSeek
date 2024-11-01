@@ -7,5 +7,6 @@
 /* Plans */
 
 +!start : true <-
+    link(this);
 	.print("hello world");
-	.link("engine").
+	yell("Action!").
