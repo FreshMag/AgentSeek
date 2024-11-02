@@ -7,5 +7,5 @@ object Actions {
     /**
      * Linking action for a Jason agent. It links with the engine action.
      */
-    val linkAction: Literal = Literal.parseLiteral("link(\"engine\")")
+    val linkAction: Literal = Literal.parseLiteral("link(this)")
 }

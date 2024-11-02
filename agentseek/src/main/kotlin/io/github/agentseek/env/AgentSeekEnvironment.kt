@@ -2,8 +2,8 @@ package io.github.agentseek.env
 
 import io.github.agentseek.components.jason.JasonAgent
 import io.github.agentseek.components.jason.JasonInitializerComponent
+import io.github.agentseek.env.Actions.linkAction
 import io.github.agentseek.util.GameObjectUtilities.otherGameObjects
-import jason.asSyntax.Literal
 import jason.asSyntax.Structure
 import jason.environment.Environment
 import java.util.*
@@ -13,8 +13,6 @@ class AgentSeekEnvironment : Environment() {
     override fun init(args: Array<out String>?) {
         super.init(args)
     }
-
-    val linkAction: Literal = Literal.parseLiteral("link(this)")
 
     private val agents: MutableMap<String, JasonAgent> = Collections.synchronizedMap(mutableMapOf())
 
@@ -32,9 +30,11 @@ class AgentSeekEnvironment : Environment() {
 
     override fun executeAction(agName: String, action: Structure): Boolean {
         agents[agName]?.execute(action.toString())
-        if (action == linkAction) {
-            println("It is linking to $agName!")
-            link(agName)
+        when (action) {
+            linkAction -> {
+                println("It is linking to $agName!")
+                link(agName)
+            }
         }
         return true
     }
