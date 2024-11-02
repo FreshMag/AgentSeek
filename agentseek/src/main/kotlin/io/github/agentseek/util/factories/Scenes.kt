@@ -91,7 +91,9 @@ object Scenes {
         // Agent 1
         emptyScene.world.gameObjectBuilder()
             .with { BasicAgentComponent(it, "agent1") }
+            .with { InputComponent(it) }
             .position(0, 0)
+            .renderer(GameGui.defaultRenderer())
             .buildAndAddToWorld()
         return emptyScene
     }

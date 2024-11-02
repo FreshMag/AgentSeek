@@ -4,6 +4,7 @@ import io.github.agentseek.components.jason.JasonAgent
 import io.github.agentseek.components.jason.JasonInitializerComponent
 import io.github.agentseek.env.Actions.linkAction
 import io.github.agentseek.util.GameObjectUtilities.otherGameObjects
+import jason.asSyntax.Literal
 import jason.asSyntax.Structure
 import jason.environment.Environment
 import java.util.*
@@ -32,10 +33,13 @@ class AgentSeekEnvironment : Environment() {
         agents[agName]?.execute(action.toString())
         when (action) {
             linkAction -> {
-                println("It is linking to $agName!")
                 link(agName)
             }
         }
         return true
     }
+
+    override fun getPercepts(agName: String?): MutableCollection<Literal> =
+        agents[agName]?.getPercepts() ?: mutableListOf()
+
 }
