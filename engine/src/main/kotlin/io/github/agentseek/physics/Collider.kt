@@ -44,9 +44,16 @@ sealed class Collider(val shape: Shape2d, val gameObject: GameObject) {
         Collider(Cone2d(Point2d.origin(), angle, length, rotation), gameObject)
 
     /**
+     * Collider that does nothing.
+     */
+    class EmptyCollider(gameObject: GameObject) : Collider(Circle2d(0.0), gameObject) {
+        override fun isCollidingWith(collider: Collider): Boolean = false
+    }
+
+    /**
      * Checks if this collider is colliding with another [collider], by intersecting their two-dimensional shapes.
      */
-    fun isCollidingWith(collider: Collider): Boolean {
+    open fun isCollidingWith(collider: Collider): Boolean {
         return shape.intersects(collider.shape)
     }
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider
 import io.github.agentseek.components.Component
 import io.github.agentseek.core.GameObject
+import io.github.agentseek.physics.RigidBody
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.javaType
@@ -68,6 +69,7 @@ internal class GameObjectSerializer : JsonSerializer<GameObject>() {
     }
 
     private fun GameObject.writeRigidBody(generator: JsonGenerator) {
+        if (rigidBody is RigidBody.EmptyRigidBody) return
         generator.writeFieldName("rigidBody")
         generator.writeStartObject()
         generator.writeFieldName("shape")

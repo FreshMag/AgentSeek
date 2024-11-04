@@ -68,8 +68,12 @@ internal class GameObjectDeserializer(private val world: World) : JsonDeserializ
         go.name = node["name"].asText()
 
         // Rigid body
-        val rigidBodyNode = node["rigidBody"]
-        go.setRigidBodyFrom(rigidBodyNode)
+        if (node.has("rigidBody")) {
+            val rigidBodyNode = node["rigidBody"]
+            go.setRigidBodyFrom(rigidBodyNode)
+        } else {
+            go.rigidBody = RigidBody.EmptyRigidBody(go)
+        }
 
         // Components
         val componentsNode = node["components"]
