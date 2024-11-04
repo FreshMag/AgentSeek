@@ -6,8 +6,11 @@ import io.github.agentseek.components.jason.BasicAgentComponent
 import io.github.agentseek.components.jason.JasonInitializerComponent
 import io.github.agentseek.core.Scene
 import io.github.agentseek.core.engine.GameEngine
+import io.github.agentseek.env.AgentSeekEnvironment
 import io.github.agentseek.physics.RigidBody
 import io.github.agentseek.util.factories.SceneFactory.emptyScene
+import io.github.agentseek.util.serialization.Scenes.loadSceneFromResource
+import io.github.agentseek.util.serialization.save
 import io.github.agentseek.view.EmptyRenderer
 import io.github.agentseek.view.SimpleRenderer
 import io.github.agentseek.view.gui.GameGui
@@ -81,13 +84,8 @@ object Scenes {
     }
 
     fun jasonExampleScene(): Scene {
+//        return loadSceneFromResource("jasonExample")!!
         val emptyScene = emptyScene()
-        val mas2jPath = "/mas2j/agentseek.mas2j"
-        // Manager
-        emptyScene.world.gameObjectBuilder()
-            .with { JasonInitializerComponent(it, mas2jPath) }
-            .renderer(EmptyRenderer())
-            .buildAndAddToWorld()
         // Agent 1
         emptyScene.world.gameObjectBuilder()
             .with { BasicAgentComponent(it, "agent1") }
@@ -95,6 +93,27 @@ object Scenes {
             .position(0, 0)
             .renderer(GameGui.defaultRenderer())
             .buildAndAddToWorld()
+        // Agent 2
+        emptyScene.world.gameObjectBuilder()
+            .with { BasicAgentComponent(it, "agent2") }
+            .with { InputComponent(it) }
+            .position(4, 4)
+            .renderer(GameGui.defaultRenderer())
+            .buildAndAddToWorld()
+        // Manager
+        emptyScene.world.gameObjectBuilder()
+            .with {
+                JasonInitializerComponent(
+                    it,
+                    "example",
+                    AgentSeekEnvironment::class.qualifiedName!!,
+                    listOf("agent1" to "hello_agent",
+                    "agent2" to "hello_agent")
+                )
+            }
+            .renderer(EmptyRenderer())
+            .buildAndAddToWorld()
+        emptyScene.save("./agentseek", "jasonExample")
         return emptyScene
     }
 }
