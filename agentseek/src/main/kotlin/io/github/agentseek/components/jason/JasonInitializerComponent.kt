@@ -5,11 +5,13 @@ import io.github.agentseek.core.GameObject
 import jason.infra.local.RunLocalMAS
 import java.io.File
 
+data class Agent(val id: String, val aslAgentName: String)
+
 class JasonInitializerComponent(
     gameObject: GameObject,
     private val mas2jName: String,
     private val environmentClassFQName: String,
-    private val agents: List<Pair<String, String>>,
+    private val agents: List<Agent>,
 ) : AbstractComponent(gameObject) {
 
     override fun init() {
@@ -27,7 +29,7 @@ class JasonInitializerComponent(
         private fun generateTempFile(
             name: String,
             environment: Class<*>,
-            agents: List<Pair<String, String>>
+            agents: List<Agent>
         ): File {
             val content = """
         MAS $name {
@@ -35,7 +37,7 @@ class JasonInitializerComponent(
             infrastructure: Centralised
             environment: ${environment.name}
             agents:
-            ${agents.joinToString(separator = "\n\t\t") { "${it.first} ${it.second};" }}
+            ${agents.joinToString(separator = "\n\t\t") { "${it.id} ${it.aslAgentName};" }}
         
             aslSourcePath:
             "agentseek/src/main/asl";

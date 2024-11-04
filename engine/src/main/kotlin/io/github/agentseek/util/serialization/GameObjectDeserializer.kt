@@ -1,10 +1,8 @@
 package io.github.agentseek.util.serialization
 
 import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.JsonDeserializer
-import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.databind.*
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.treeToValue
 import io.github.agentseek.common.*
@@ -14,6 +12,8 @@ import io.github.agentseek.core.engine.GameEngine.log
 import io.github.agentseek.physics.RigidBody
 import io.github.agentseek.view.Renderer
 import io.github.agentseek.world.World
+import java.lang.reflect.ParameterizedType
+import java.lang.reflect.Type
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.primaryConstructor
@@ -51,8 +51,7 @@ internal class GameObjectDeserializer(private val world: World) : JsonDeserializ
         parameters.forEach { param ->
             val paramNode = argumentsNode.find { it["name"].asText() == param.name }!!
             val value = try {
-                val paramType = Class.forName(paramNode.get("type")!!.asText())
-                jacksonObjectMapper().treeToValue(paramNode["value"], paramType)
+                deserializeParamNode<Any>(jacksonObjectMapper(), paramNode)
             } catch (e: ClassNotFoundException) {
                 jacksonObjectMapper().treeToValue(paramNode.get("value"))
             }
@@ -96,5 +95,38 @@ internal class GameObjectDeserializer(private val world: World) : JsonDeserializ
         go.renderer = renderer
         components.forEach(go::addComponent)
         return go
+    }
+
+    companion object {
+        private fun <T> deserializeParamNode(mapper: ObjectMapper, paramNode: JsonNode): T {
+            val typeName = paramNode.get("type")!!.asText()
+            val rawTypeName = typeName.substringBefore("<")
+            val genericTypeName = typeName.substringAfter("<", "").substringBefore(">")
+            val rawType = Class.forName(rawTypeName)
+
+            val genericType = if (genericTypeName.isNotEmpty()) {
+                Class.forName(genericTypeName)
+            } else {
+                null
+            }
+            val typeReference = object : TypeReference<T>() {
+                override fun getType() = if (genericType != null) {
+                    ParameterizedTypeImpl(rawType, arrayOf(genericType))
+                } else {
+                    rawType
+                }
+            }
+
+            return mapper.readValue(paramNode["value"].toString(), typeReference)
+        }
+
+        private class ParameterizedTypeImpl(
+            private val raw: Class<*>,
+            private val args: Array<Type>
+        ) : ParameterizedType {
+            override fun getRawType() = raw
+            override fun getActualTypeArguments() = args
+            override fun getOwnerType(): Type? = null
+        }
     }
 }

@@ -2,6 +2,7 @@ package io.github.agentseek.util.factories
 
 import io.github.agentseek.common.Vector2d
 import io.github.agentseek.components.*
+import io.github.agentseek.components.jason.Agent
 import io.github.agentseek.components.jason.BasicAgentComponent
 import io.github.agentseek.components.jason.JasonInitializerComponent
 import io.github.agentseek.core.Scene
@@ -9,8 +10,6 @@ import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.env.AgentSeekEnvironment
 import io.github.agentseek.physics.RigidBody
 import io.github.agentseek.util.factories.SceneFactory.emptyScene
-import io.github.agentseek.util.serialization.Scenes.loadSceneFromResource
-import io.github.agentseek.util.serialization.save
 import io.github.agentseek.view.EmptyRenderer
 import io.github.agentseek.view.SimpleRenderer
 import io.github.agentseek.view.gui.GameGui
@@ -84,7 +83,6 @@ object Scenes {
     }
 
     fun jasonExampleScene(): Scene {
-//        return loadSceneFromResource("jasonExample")!!
         val emptyScene = emptyScene()
         // Agent 1
         emptyScene.world.gameObjectBuilder()
@@ -107,13 +105,14 @@ object Scenes {
                     it,
                     "example",
                     AgentSeekEnvironment::class.qualifiedName!!,
-                    listOf("agent1" to "hello_agent",
-                    "agent2" to "hello_agent")
+                    listOf(
+                        Agent("agent1", "hello_agent"),
+                        Agent("agent2", "hello_agent")
+                    )
                 )
             }
             .renderer(EmptyRenderer())
             .buildAndAddToWorld()
-        emptyScene.save("./agentseek", "jasonExample")
         return emptyScene
     }
 }
