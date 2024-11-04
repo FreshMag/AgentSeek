@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider
 import io.github.agentseek.components.Component
 import io.github.agentseek.core.GameObject
+import io.github.agentseek.physics.RigidBody
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
+import kotlin.reflect.javaType
 import kotlin.reflect.jvm.isAccessible
 
 internal class GameObjectSerializer : JsonSerializer<GameObject>() {
@@ -37,6 +39,7 @@ internal class GameObjectSerializer : JsonSerializer<GameObject>() {
             ?.type
             ?.classifier == (GameObject::class)
 
+    @OptIn(ExperimentalStdlibApi::class)
     private fun writeObjectArguments(objectWithArguments: Any, generator: JsonGenerator) {
         val componentClass = objectWithArguments::class
         generator.writeFieldName("arguments")
@@ -45,7 +48,7 @@ internal class GameObjectSerializer : JsonSerializer<GameObject>() {
         constructor?.parameters?.drop(1)?.forEach { par ->
             generator.writeStartObject()
             generator.writeStringField("name", par.name)
-            generator.writeStringField("type", par.type.toString())
+            generator.writeStringField("type", par.type.javaType.typeName)
             val value = try {
                 componentClass
                     .members
@@ -66,6 +69,7 @@ internal class GameObjectSerializer : JsonSerializer<GameObject>() {
     }
 
     private fun GameObject.writeRigidBody(generator: JsonGenerator) {
+        if (rigidBody is RigidBody.EmptyRigidBody) return
         generator.writeFieldName("rigidBody")
         generator.writeStartObject()
         generator.writeFieldName("shape")

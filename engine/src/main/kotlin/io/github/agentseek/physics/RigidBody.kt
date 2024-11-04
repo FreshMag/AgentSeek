@@ -28,6 +28,13 @@ sealed class RigidBody(
         get() = collider.shape
 
     /**
+     * Dummy rigid body that does not react to collisions.
+     */
+    class EmptyRigidBody(gameObject: GameObject) : RigidBody(gameObject, Collider.EmptyCollider(gameObject)) {
+        override fun onUpdate(deltaTime: Duration) {}
+    }
+
+    /**
      * A simple rigid body with a circular collider
      */
     class CircleRigidBody(gameObject: GameObject, radius: Double) :
@@ -63,7 +70,7 @@ sealed class RigidBody(
 
 
     private var safePoint = collider.center
-    
+
 
     /**
      * Acceleration of this [RigidBody] in m/s^2

@@ -4,7 +4,7 @@ import io.github.agentseek.view.gui.MenuGui
 
 object AgentSeek {
     @JvmStatic
-    fun main(args: Array<String>): Unit {
+    fun main(args: Array<String>) {
         MenuGui.startMainMenu()
     }
 }

@@ -31,7 +31,7 @@ class GameObjectBuilder(private val world: World) {
      * This object's [RigidBody].
      */
     private var rigidBodySetter: (GameObject) -> RigidBody = {
-        RigidBody.RectangleRigidBody(it, GameObject.DEFAULT_SIZE, GameObject.DEFAULT_SIZE)
+        RigidBody.EmptyRigidBody(it)
     }
 
     /**
@@ -84,7 +84,6 @@ class GameObjectBuilder(private val world: World) {
         return gameObject
     }
 
-    fun buildAndAddToWorld() {
-        world.addGameObject(build())
-    }
+    fun buildAndAddToWorld(): GameObject =
+        build().also{ world.addGameObject(it) }
 }

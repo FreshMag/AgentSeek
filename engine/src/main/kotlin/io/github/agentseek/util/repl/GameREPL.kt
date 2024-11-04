@@ -1,5 +1,6 @@
 package io.github.agentseek.util.repl
 
+import io.github.agentseek.components.Component
 import io.github.agentseek.core.Scene
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.util.DummyComponent
@@ -53,6 +54,7 @@ object GameREPL {
             this.scene = scene
         }
         GameEngine.loadScene(this.scene)
+        this.scene.gameObjects.forEach { it.components.forEach(Component::init) }
         while (true) {
             val input = reader.readLine("> ")
             parseLine(input)
