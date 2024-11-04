@@ -3,6 +3,7 @@ package io.github.agentseek.components.jason
 import io.github.agentseek.components.AbstractComponent
 import io.github.agentseek.core.GameObject
 import jason.asSyntax.Literal
+import jason.asSyntax.Structure
 
 abstract class JasonAgent(gameObject: GameObject) : AbstractComponent(gameObject) {
     /**
@@ -13,7 +14,7 @@ abstract class JasonAgent(gameObject: GameObject) : AbstractComponent(gameObject
     /**
      * Handler for the actions performed by this agent.
      */
-    abstract fun execute(action: String)
+    abstract fun execute(action: Structure)
 
     /**
      * Gets the percepts for this Agent

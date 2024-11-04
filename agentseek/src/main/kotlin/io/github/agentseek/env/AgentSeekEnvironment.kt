@@ -23,14 +23,13 @@ class AgentSeekEnvironment : Environment() {
         val go = manager.otherGameObjects().firstOrNull { it.getComponent<JasonAgent>()?.id == id }
         if (go != null) {
             agents[id] = go.getComponent<JasonAgent>()!!
-            agents[id]?.execute("linked")
         } else {
             throw IllegalStateException("Agent with $id is not present in the scene!")
         }
     }
 
     override fun executeAction(agName: String, action: Structure): Boolean {
-        agents[agName]?.execute(action.toString())
+        agents[agName]?.execute(action)
         when (action) {
             linkAction -> {
                 link(agName)
