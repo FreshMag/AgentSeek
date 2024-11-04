@@ -17,6 +17,10 @@ import io.github.agentseek.util.FastEntities.scene
 import io.github.agentseek.util.FastEntities.square
 import io.github.agentseek.util.FastEntities.vector
 import io.github.agentseek.util.FastEntities.with
+import io.github.agentseek.util.jason.JasonScenes.agents
+import io.github.agentseek.util.jason.JasonScenes.jasonAgent
+import io.github.agentseek.util.jason.JasonScenes.sceneWithJason
+import io.github.agentseek.view.gui.GameGui
 import kotlin.math.PI
 
 object Scenes {
@@ -60,36 +64,44 @@ object Scenes {
         )
 
     fun jasonExampleScene(): Scene =
-        scene(
-            // Jason Manager
-            gameObject({
-                JasonInitializerComponent(
-                    it,
-                    "Example",
-                    AgentSeekEnvironment::class.qualifiedName!!,
-                    listOf(
-                        Agent("agent1", "hello_agent"),
-                        Agent("agent2", "hello_agent")
-                    )
-                )
-            }),
-            // Agent 1
+        sceneWithJason(
+            name = "example",
+            environmentClass = AgentSeekEnvironment::class,
+            agents = agents(
+                jasonAgent(
+                    id = "agent1",
+                    aslName = "hello_agent",
+                    agentComponent = { id, go -> BasicAgentComponent(go, id) },
+                    { InputComponent(it) },
+                    position = point(0, 0),
+                    rigidBody = square(2.0),
+                    renderer = GameGui.defaultRenderer(),
+                ),
+                jasonAgent(
+                    id = "agent2",
+                    aslName = "hello_agent",
+                    agentComponent = { id, go -> BasicAgentComponent(go, id) },
+                    { InputComponent(it) },
+                    position = point(14, 5),
+                    rigidBody = square(2.0),
+                    renderer = GameGui.defaultRenderer(),
+                ),
+
+                ),
             gameObject(
-                { BasicAgentComponent(it, "agent1") },
-                { InputComponent(it) },
-                position = point(0, 0),
-                rigidBody = square(3.0),
-                renderer = default(),
-                name = "Agent 1"
+                { NoiseSensorComponent(it, 3.0) },
+                { NoiseSensorVisualComponent(it) },
+                position = point(5, 5),
+                rigidBody = rectangle(2, 2).with(isStatic = true),
+                renderer = GameGui.defaultRenderer()
             ),
-            // Agent 2
             gameObject(
-                { BasicAgentComponent(it, "agent2") },
-                { InputComponent(it) },
-                position = point(4, 4),
-                rigidBody = square(3.0),
-                renderer = default(),
-                name = "Agent 2"
-            ),
+                { NoiseSensorComponent(it, 3.0) },
+                { NoiseSensorVisualComponent(it) },
+                position = point(15, 15),
+                rigidBody = rectangle(4, 4).with(isStatic = true),
+                renderer = GameGui.defaultRenderer()
+            )
         )
+
 }
