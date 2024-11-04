@@ -7,6 +7,11 @@ data class Point2d(
     var x: Double,
     var y: Double
 ) {
+
+    constructor(): this(0.0, 0.0)
+
+    constructor(x: Int, y: Int): this(x.toDouble(), y.toDouble())
+
     /**
      * Sums to this point a [vector](v)
      * Returns a new [Point2d] representing the sum between this point and vector.

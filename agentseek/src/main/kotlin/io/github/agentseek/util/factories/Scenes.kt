@@ -1,121 +1,95 @@
 package io.github.agentseek.util.factories
 
-import io.github.agentseek.common.Vector2d
 import io.github.agentseek.components.*
 import io.github.agentseek.components.jason.Agent
 import io.github.agentseek.components.jason.BasicAgentComponent
 import io.github.agentseek.components.jason.JasonInitializerComponent
 import io.github.agentseek.core.Scene
-import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.env.AgentSeekEnvironment
-import io.github.agentseek.physics.RigidBody
-import io.github.agentseek.util.factories.SceneFactory.emptyScene
-import io.github.agentseek.util.serialization.save
-import io.github.agentseek.view.EmptyRenderer
-import io.github.agentseek.view.SimpleRenderer
-import io.github.agentseek.view.gui.GameGui
+import io.github.agentseek.util.FastEntities.circle
+import io.github.agentseek.util.FastEntities.cone
+import io.github.agentseek.util.FastEntities.default
+import io.github.agentseek.util.FastEntities.degrees
+import io.github.agentseek.util.FastEntities.gameObject
+import io.github.agentseek.util.FastEntities.point
+import io.github.agentseek.util.FastEntities.rectangle
+import io.github.agentseek.util.FastEntities.scene
+import io.github.agentseek.util.FastEntities.square
+import io.github.agentseek.util.FastEntities.vector
+import io.github.agentseek.util.FastEntities.with
+import kotlin.math.PI
 
 object Scenes {
 
-    fun exampleScene(nObjects: Int): Scene {
-        val emptyScene = emptyScene()
-        val maxX = GameEngine.view?.camera?.viewPortWidth ?: 50.0
-        val maxY = GameEngine.view?.camera?.viewPortHeight ?: 50.0
-//        val player =
-//            emptyScene.world.gameObjectBuilder().position(10.0, 10.0)
-//                .with { InputComponent(it) }
-//                .with { SightSensorComponent(it, 10.0, Math.PI / 3) }
-//                .renderer(SimpleRenderer()).build()
-//        emptyScene.world.addGameObject(player)
-
-        val agent =
-            emptyScene.world.gameObjectBuilder().position(0.0, 0.0)
-                .rigidBody { it ->
-                    RigidBody.CircleRigidBody(it, 0.5)
+    fun exampleScene(nObjects: Int): Scene =
+        scene(
+            gameObject(
+                { InputComponent(it) },
+                { NoiseEmitterComponent(it, 6.0) },
+                { NoiseEmitterVisualComponent(it) },
+                rigidBody = circle(0.5),
+                renderer = default()
+            ),
+            *((0 until nObjects).flatMap {
+                i -> (0 until nObjects).map {
+                    j ->
+                    gameObject(
+                        { NoiseSensorComponent(it, 3.0) },
+                        { NoiseSensorVisualComponent(it) },
+                        position = point(5 + i * 5, 5 + j * 5),
+                        rigidBody = rectangle(2, 2).with(isStatic = true),
+                        renderer = default()
+                    )
                 }
-//                .with { NoiseEmitterComponent(it, 3.0) }
-                .with { InputComponent(it) }
-                //.with { DistanceSensorComponent(it, 2.0) }
-                //.with { FieldMovementComponent(it) }
-                //.with { TestMouseComponent(it) }
-                .with { NoiseEmitterComponent(it, 6.0) }
-                .with { NoiseEmitterVisualComponent(it) }
-                .renderer(SimpleRenderer()).build()
+            }).toTypedArray()
+        )
 
-        emptyScene.world.addGameObject(agent)
-        (0 until nObjects).forEach { i ->
-            (0 until nObjects).forEach { j ->
-                val go =
-                    emptyScene.world.gameObjectBuilder()
-                        .position(5.0 + i * 5.0, 5.0 + j * 5.0)
-                        .rigidBody {
-                            RigidBody.RectangleRigidBody(it, 2.0, 2.0)
-                                .also { body -> body.isStatic = true }
-                        }
-                        .with { NoiseSensorComponent(it, 3.0) }
-                        .with { NoiseSensorVisualComponent(it) }
-                        .renderer(SimpleRenderer())
-                        .build()
+    fun collisionExampleScene(): Scene =
+        scene(
+            // Moving GameObject
+            gameObject(
+                { ConstantAccelerationComponent(it, vector(2, 2)) },
+                rigidBody = circle(5),
+                renderer = default()
+            ),
+            // Cone to collide with
+            gameObject(
+                position = point(10, 10),
+                rigidBody = cone(90, 7, degrees(PI / 7))
+            )
+        )
 
-                emptyScene.world.addGameObject(go)
-
-            }
-        }
-        return emptyScene
-    }
-
-    fun collisionExampleScene(): Scene {
-        val emptyScene = emptyScene()
-        val movingGO = emptyScene.world.gameObjectBuilder()
-            .position(0.0, 0.0)
-            .with { ConstantAccelerationComponent(it, Vector2d(2.0, 2.0)) }
-            .rigidBody { RigidBody.CircleRigidBody(it, 5.0) }
-            .renderer(GameGui.defaultRenderer())
-            .build()
-
-        val toCollideGO = emptyScene.world.gameObjectBuilder()
-            .position(10.0, 10.0)
-            .rigidBody { RigidBody.ConeRigidBody(it, Math.PI / 2, 7.0, Math.PI / 7) }
-            .renderer(GameGui.defaultRenderer())
-            .build()
-        emptyScene.world.addGameObject(toCollideGO)
-        emptyScene.world.addGameObject(movingGO)
-        return emptyScene
-    }
-
-    fun jasonExampleScene(): Scene {
-        val emptyScene = emptyScene()
-        // Manager
-        emptyScene.world.gameObjectBuilder()
-            .with {
+    fun jasonExampleScene(): Scene =
+        scene(
+            // Jason Manager
+            gameObject({
                 JasonInitializerComponent(
                     it,
-                    "example",
+                    "Example",
                     AgentSeekEnvironment::class.qualifiedName!!,
                     listOf(
                         Agent("agent1", "hello_agent"),
                         Agent("agent2", "hello_agent")
                     )
                 )
-            }
-            .rigidBody { RigidBody.EmptyRigidBody(it) }
-            .renderer(EmptyRenderer())
-            .buildAndAddToWorld()
-        // Agent 1
-        emptyScene.world.gameObjectBuilder()
-            .with { BasicAgentComponent(it, "agent1") }
-            .with { InputComponent(it) }
-            .position(0, 0)
-            .renderer(GameGui.defaultRenderer())
-            .buildAndAddToWorld()
-        // Agent 2
-        emptyScene.world.gameObjectBuilder()
-            .with { BasicAgentComponent(it, "agent2") }
-            .with { InputComponent(it) }
-            .position(4, 4)
-            .renderer(GameGui.defaultRenderer())
-            .buildAndAddToWorld()
-        emptyScene.save("./agentseek", "jasonExample")
-        return emptyScene
-    }
+            }),
+            // Agent 1
+            gameObject(
+                { BasicAgentComponent(it, "agent1") },
+                { InputComponent(it) },
+                position = point(0, 0),
+                rigidBody = square(3.0),
+                renderer = default(),
+                name = "Agent 1"
+            ),
+            // Agent 2
+            gameObject(
+                { BasicAgentComponent(it, "agent2") },
+                { InputComponent(it) },
+                position = point(4, 4),
+                rigidBody = square(3.0),
+                renderer = default(),
+                name = "Agent 2"
+            ),
+        )
 }

@@ -15,6 +15,8 @@ data class Vector2d(var x: Double, var y: Double) {
         y -= destination.y
     }
 
+    constructor(x: Int, y: Int) : this(x.toDouble(), y.toDouble())
+
     /**
      * Return the difference between this vector and another [vector].
      */
