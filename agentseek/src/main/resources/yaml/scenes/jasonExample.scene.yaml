@@ -1,5 +1,54 @@
 ---
 gameObjects:
+- name: "JasonManager"
+  rigidBody:
+    shape:
+      type: "io.github.agentseek.common.Rectangle2d"
+      params:
+        upperLeft:
+          x: 0.0
+          "y": 0.0
+        lowerLeft:
+          x: 0.0
+          "y": 1.5
+        lowerRight:
+          x: 1.5
+          "y": 1.5
+        upperRight:
+          x: 1.5
+          "y": 0.0
+        height: 1.5
+        width: 1.5
+        center:
+          x: 0.75
+          "y": 0.75
+        position:
+          x: 0.0
+          "y": 0.0
+    mass: 1.0
+    velocity:
+      x: 0.0
+      "y": 0.0
+    static: false
+  components:
+    - class: "io.github.agentseek.components.jason.JasonInitializerComponent"
+      arguments:
+        - name: "mas2jName"
+          type: "java.lang.String"
+          value: "example"
+        - name: "environmentClassFQName"
+          type: "java.lang.String"
+          value: "io.github.agentseek.env.AgentSeekEnvironment"
+        - name: "agents"
+          type: "java.util.List<io.github.agentseek.components.jason.Agent>"
+          value:
+            - id: "agent1"
+              aslAgentName: "hello_agent"
+            - id: "agent2"
+              aslAgentName: "hello_agent"
+  renderer:
+    class: "io.github.agentseek.view.EmptyRenderer"
+    arguments: []
 - name: ""
   rigidBody:
     shape:
@@ -81,54 +130,5 @@ gameObjects:
     arguments: []
   renderer:
     class: "io.github.agentseek.view.SimpleRenderer"
-    arguments: []
-- name: ""
-  rigidBody:
-    shape:
-      type: "io.github.agentseek.common.Rectangle2d"
-      params:
-        upperLeft:
-          x: 0.0
-          "y": 0.0
-        lowerLeft:
-          x: 0.0
-          "y": 1.5
-        lowerRight:
-          x: 1.5
-          "y": 1.5
-        upperRight:
-          x: 1.5
-          "y": 0.0
-        height: 1.5
-        width: 1.5
-        center:
-          x: 0.75
-          "y": 0.75
-        position:
-          x: 0.0
-          "y": 0.0
-    mass: 1.0
-    velocity:
-      x: 0.0
-      "y": 0.0
-    static: false
-  components:
-  - class: "io.github.agentseek.components.jason.JasonInitializerComponent"
-    arguments:
-    - name: "mas2jName"
-      type: "java.lang.String"
-      value: "example"
-    - name: "environmentClassFQName"
-      type: "java.lang.String"
-      value: "io.github.agentseek.env.AgentSeekEnvironment"
-    - name: "agents"
-      type: "java.util.List<io.github.agentseek.components.jason.Agent>"
-      value:
-      - id: "agent1"
-        aslAgentName: "hello_agent"
-      - id: "agent2"
-        aslAgentName: "hello_agent"
-  renderer:
-    class: "io.github.agentseek.view.EmptyRenderer"
     arguments: []
 flags: {}

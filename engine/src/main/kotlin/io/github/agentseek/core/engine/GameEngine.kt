@@ -1,6 +1,7 @@
 package io.github.agentseek.core.engine
 
 import io.github.agentseek.common.TimedAction
+import io.github.agentseek.components.Component
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.Scene
 import io.github.agentseek.core.engine.input.Input
@@ -28,12 +29,21 @@ object GameEngine {
     var view: View? = null
 
     /**
-     * The main loop of the game engine
+     * Init function for the game engine. It gets called just before launching the main [loop].
+     *
+     * *Note*: is blocking
      */
-    private val loop: GameLoop by lazy {
+    private val init = {
         if (scene == null) {
             loadScene(SceneFactory.emptyScene())
         }
+        scene?.gameObjects?.forEach { it.components.forEach(Component::init) }
+    }
+
+    /**
+     * The main loop of the game engine
+     */
+    private val loop: GameLoop by lazy {
         GameLoop(STANDARD_STARTING_PERIOD) { dt ->
             log("DT $dt")
             scene?.updateState(dt)
@@ -73,9 +83,12 @@ object GameEngine {
     }
 
     /**
-     * Starts a non-blocking game loop
+     * Starts a non-blocking game loop. This calls the [init] function before starting the game loop.
+     *
+     * *Note*: the init function is blocking.
      */
     fun start() {
+        init()
         loop.start()
     }
 

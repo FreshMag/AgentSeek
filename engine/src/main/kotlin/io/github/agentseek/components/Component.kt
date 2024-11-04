@@ -13,7 +13,7 @@ interface Component {
      */
     val gameObject: GameObject
     /**
-     * This method is called when this component is added to a [GameObject].
+     * This method is called just before the main game loop starts.
      */
     fun init()
 
