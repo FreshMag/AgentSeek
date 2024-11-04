@@ -84,7 +84,7 @@ object FastEntities {
             .position(position)
             .run { componentsSetters.fold(this) { builder, setter -> builder.with(setter) } }
             .name(name)
-            .buildAndAddToWorld()
+            .build()
     }
 
     /**
