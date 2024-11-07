@@ -34,13 +34,15 @@ jobs:
 
       - name: Commit and push changes
         run: |
+          MESSAGE="release(${{ env.VERSION }}): Updated CHANGELOG.md and build.gradle.kts for new release"
           git fetch origin
           git checkout main 
           git pull origin main
           git add CHANGELOG.md
           git add agentseek/build.gradle.kts
-          git commit -m "release(${{ env.VERSION }}): Updated CHANGELOG.md and build.gradle.kts for new release"
+          git commit -m "${MESSAGE}"
           git push origin main
+          git push origin HEAD:${{ github.head_ref }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   build:
