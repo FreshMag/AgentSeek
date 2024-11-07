@@ -1,5 +1,3 @@
-# Changelog
-
-## [1.0.0] - 2024-11-07
-### Added
+# [1.0.0] - 2024-11-07
+## Added
 - Initial release

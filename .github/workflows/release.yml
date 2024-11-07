@@ -1,9 +1,10 @@
 name: Build and Release
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Prepare release"]
+    types:
+      - completed
 
 jobs:
   build:
