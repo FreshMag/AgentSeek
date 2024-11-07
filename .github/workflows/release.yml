@@ -5,7 +5,7 @@ on:
     types:
       - closed  # Trigger only when the pull request is merged
     branches:
-      - feat/release-ci
+      - main
 
 jobs:
   update-version-and-changelog:
@@ -35,12 +35,12 @@ jobs:
       - name: Commit and push changes
         run: |
           git fetch origin
-          git checkout feat/release-ci 
-          git pull origin feat/release-ci  
+          git checkout main 
+          git pull origin main
           git add CHANGELOG.md
           git add agentseek/build.gradle.kts
           git commit -m "release(${{ env.VERSION }}): Updated CHANGELOG.md and build.gradle.kts for new release"
-          git push origin feat/release-ci
+          git push origin main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   build:
