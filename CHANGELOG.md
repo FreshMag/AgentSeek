@@ -1,4 +1,9 @@
 
+# [1.0.1] - 2024-11-07
+## Fixes
+- Fixed CI not pushing also on the source branch
+
+
 # [1.0.0] - 2024-11-07
 ## First release
 - Implementation of a simple game engine 
