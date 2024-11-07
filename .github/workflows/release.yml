@@ -23,7 +23,9 @@ jobs:
           java-version: '17'
 
       - name: Run Gradle task to update version and changelog
-        run: ./gradlew updateVersionAndChangelog -Pversion="${{ github.event.pull_request.title }}" -PchangelogText="${{ github.event.pull_request.body }}"
+        run: |
+          echo "VERSION=${{ github.event.pull_request.title }}" >> $GITHUB_ENV
+          ./gradlew updateVersionAndChangelog -Pversion="${{ github.event.pull_request.title }}" -PchangelogText="${{ github.event.pull_request.body }}"
 
       - name: Set up Git user
         run: |
@@ -37,7 +39,7 @@ jobs:
           git pull origin feat/release-ci  
           git add CHANGELOG.md
           git add agentseek/build.gradle.kts
-          git commit -m "Updated CHANGELOG.md and build.gradle.kts for new release"
+          git commit -m "release(${{ env.VERSION }}): Updated CHANGELOG.md and build.gradle.kts for new release"
           git push origin feat/release-ci
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -65,19 +67,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Extract version from build.gradle.kts
-        id: get_version
-        run: |
-          cd agentseek
-          VERSION=$(grep "^version" build.gradle.kts | sed -E 's/^version = "(.*)"/\1/')
-          echo "version=$VERSION" >> $GITHUB_ENV
-
       - name: Extract changelog for the version
         id: get_changelog
         run: |
           # Extract the changelog for the specific version
-          VERSION="${{ env.version }}"
-          sed -n "/^## \\[${VERSION}\\]/,/^## \\[/p" CHANGELOG.md | sed '$d' > CHANGELOG_OUTPUT.md
+          VERSION="${{ env.VERSION }}"
+          sed -n "/^# \\[${VERSION}\\]/,/^## \\[/p" CHANGELOG.md | sed '$d' > CHANGELOG_OUTPUT.md
           echo "changelog<<EOF" >> $GITHUB_ENV
           cat CHANGELOG_OUTPUT.md >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
@@ -92,9 +87,9 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: "v${{ env.version }}"
-          name: "${{ env.version }}"
-          body: "${{ steps.get_changelog.outputs.changelog }}"
+          tag_name: "v${{ env.VERSION }}"
+          name: "${{ env.VERSION }}"
+          body: "${{ github.event.pull_request.body }}"
           draft: false
           prerelease: false
-          files: agentseek/build/libs/agentseek-${{ env.version }}-all.jar
+          files: agentseek/build/libs/agentseek-${{ env.VERSION }}-all.jar

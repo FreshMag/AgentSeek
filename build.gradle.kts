@@ -29,9 +29,9 @@ tasks.register("updateVersionAndChangelog") {
         val changelogFile = file("CHANGELOG.md")
         val currentDate = SimpleDateFormat("yyyy-MM-dd").format(Date())
         val newChangelogEntry = """
-            # [$version] - $currentDate
-            ${changelogText.trimIndent()}
-        """.trimIndent()
+            |# [$version] - $currentDate
+            |${changelogText.trimIndent()}
+        """.trimMargin()
 
         val existingChangelog = if (changelogFile.exists()) changelogFile.readText() else ""
         val updatedChangelog = "\n$newChangelogEntry\n\n$existingChangelog"
