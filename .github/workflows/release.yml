@@ -43,7 +43,6 @@ jobs:
 
       - name: Build fat JAR for agentseek
         run: |
-          cd agentseek
           ./gradlew clean :agentseek:shadowJar # Assumes usage of the Shadow plugin for fat JARs
         env:
           GRADLE_USER_HOME: ${{ runner.temp }}/.gradle # Avoid Gradle daemon issues in GitHub Actions
