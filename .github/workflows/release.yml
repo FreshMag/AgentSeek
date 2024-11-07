@@ -80,6 +80,7 @@ jobs:
       - name: Build fat JAR for agentseek
         run: |
           ./gradlew clean :agentseek:shadowJar # Assumes usage of the Shadow plugin for fat JARs
+          mv agentseek/build/libs/agentseek-*-all.jar "agentseek-${{ github.event.pull_request.title }}.jar"
         env:
           GRADLE_USER_HOME: ${{ runner.temp }}/.gradle # Avoid Gradle daemon issues in GitHub Actions
 
@@ -92,4 +93,4 @@ jobs:
           body: "${{ github.event.pull_request.body }}"
           draft: false
           prerelease: false
-          files: agentseek/build/libs/agentseek-${{ github.event.pull_request.title }}-all.jar
+          files: agentseek-${{ github.event.pull_request.title }}.jar
