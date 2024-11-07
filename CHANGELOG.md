@@ -1,10 +1,4 @@
 
-# [1.0.1] - 2024-11-07
-## Fixes
-- Fixed CI failing
-- Added latest CHANGELOG
-
-
 # [1.0.0] - 2024-11-07
 ## First release
 - Implementation of a simple game engine 
