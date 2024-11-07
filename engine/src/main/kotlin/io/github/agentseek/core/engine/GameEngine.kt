@@ -1,8 +1,13 @@
 package io.github.agentseek.core.engine
 
 import io.github.agentseek.common.TimedAction
+import io.github.agentseek.components.Component
+import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.Scene
 import io.github.agentseek.core.engine.input.Input
+import io.github.agentseek.events.Event
+import io.github.agentseek.events.EventHandler
+import io.github.agentseek.events.EventListener
 import io.github.agentseek.util.factories.SceneFactory
 import io.github.agentseek.view.View
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -20,15 +25,25 @@ object GameEngine {
     private var scheduledActions: Map<String, TimedAction> = mapOf()
 
     private var scene: Scene? = null
+
     var view: View? = null
+
+    /**
+     * Init function for the game engine. It gets called just before launching the main [loop].
+     *
+     * *Note*: is blocking
+     */
+    private val init = {
+        if (scene == null) {
+            loadScene(SceneFactory.emptyScene())
+        }
+        scene?.gameObjects?.forEach { it.components.forEach(Component::init) }
+    }
 
     /**
      * The main loop of the game engine
      */
     private val loop: GameLoop by lazy {
-        if (scene == null) {
-            loadScene(SceneFactory.emptyScene())
-        }
         GameLoop(STANDARD_STARTING_PERIOD) { dt ->
             log("DT $dt")
             scene?.updateState(dt)
@@ -37,6 +52,12 @@ object GameEngine {
             view?.render()
         }
     }
+
+    /**
+     * Notifies an [Event] to the scene's world. Returns `false` if the event was not received.
+     */
+    fun notifySceneEvent(gameObject: GameObject, event: Event): Boolean =
+        scene?.world?.let { it.notifyEvent(event, gameObject); true } ?: false
 
     /**
      * Loads a scene into the engine
@@ -62,9 +83,12 @@ object GameEngine {
     }
 
     /**
-     * Starts a non-blocking game loop
+     * Starts a non-blocking game loop. This calls the [init] function before starting the game loop.
+     *
+     * *Note*: the init function is blocking.
      */
     fun start() {
+        init()
         loop.start()
     }
 
@@ -117,4 +141,10 @@ object GameEngine {
         stop()
         loadScene(SceneFactory.emptyScene())
     }
+
+    /**
+     * Gets a flag from the active scene, or null if that flag isn't set.
+     */
+    fun getFlag(id: String): Any? =
+        scene?.flags?.get(id)
 }

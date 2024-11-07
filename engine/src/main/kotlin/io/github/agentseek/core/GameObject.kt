@@ -85,7 +85,6 @@ class GameObject(
             }
         }
         components += component
-        component.init()
     }
 
     /**
