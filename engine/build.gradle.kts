@@ -1,38 +1,36 @@
 plugins {
-    kotlin("jvm") version "2.0.21"
     application
+    alias(libs.plugins.kotlin)
 }
 
+
 group = "io.github.agentseek"
-version = "unspecified"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
 }
 
-val jUnitVersion = "5.10.3"
-
 dependencies {
     // LOGGING
-    implementation("io.github.oshai:kotlin-logging-jvm:7.0.0")
-    implementation("org.slf4j:slf4j-simple:2.0.13")
+    implementation(libs.kotlin.logging)
+    implementation(libs.slf4j.simple)
     // REPL
-    implementation("info.picocli:picocli:4.7.6")
-    implementation("org.jline:jline:3.27.0")
+    implementation(libs.picocli)
+    implementation(libs.jline)
     // SERIALIZATION
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.17.2")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.1")
+    implementation(libs.jackson.dataformat.yaml)
+    implementation(libs.jackson.module.kotlin)
     // COROUTINES
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+    implementation(libs.kotlinx.coroutines.core)
 
     // TESTING
     testImplementation(kotlin("test"))
-    testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitVersion")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jUnitVersion")
+    testImplementation(libs.junit.jupiter.api)
+    testRuntimeOnly(libs.junit.jupiter.engine)
     // KOTEST
-    testImplementation("io.kotest:kotest-runner-junit5-jvm:5.9.0")
+    testImplementation(libs.kotest.runner.junit5.jvm)
 }
-
 
 tasks.named<JavaExec>("run") {
     standardInput = System.`in`
@@ -48,5 +46,5 @@ java {
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(libs.versions.kotlinJvmToolchain.get().toInt())
 }

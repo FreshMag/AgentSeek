@@ -1,10 +1,11 @@
 plugins {
-    kotlin("jvm") version "2.0.21"
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.shadowJar)
     application
 }
 
 group = "io.github.agentseek"
-version = "unspecified"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -12,7 +13,7 @@ repositories {
 
 dependencies {
     implementation(project(":engine"))
-    implementation("io.github.jason-lang:interpreter:3.2.0")
+    implementation(libs.jason)
 
     testImplementation(kotlin("test"))
 }
@@ -37,6 +38,7 @@ sourceSets {
         }
     }
 }
+
 file(projectDir).listFiles().filter { it.extension == "mas2j" }.forEach { mas2jFile ->
     task<JavaExec>("run${mas2jFile.nameWithoutExtension}Mas") {
         classpath = sourceSets.getByName("main").runtimeClasspath
@@ -48,5 +50,5 @@ file(projectDir).listFiles().filter { it.extension == "mas2j" }.forEach { mas2jF
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(libs.versions.kotlinJvmToolchain.get().toInt())
 }
