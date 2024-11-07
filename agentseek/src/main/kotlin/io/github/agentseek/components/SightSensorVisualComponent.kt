@@ -6,21 +6,22 @@ import io.github.agentseek.view.animations.VFX
 import java.awt.Color
 import kotlin.time.Duration
 
-@Requires(NoiseSensorComponent::class)
-class NoiseSensorVisualComponent(gameObject: GameObject) : AbstractComponent(gameObject) {
-    private lateinit var noiseSensor: NoiseSensorComponent
+@Requires(SightSensorComponent::class)
+class SightSensorVisualComponent(gameObject: GameObject) : AbstractComponent(gameObject) {
+    private lateinit var sightSensorComponent: SightSensorComponent
     private val timer = TimerImpl(DEFAULT_SUSPICIOUS_TIME_MILLIS.toLong())
+
     override fun init() {
-        noiseSensor = gameObject.getComponent<NoiseSensorComponent>()!!
         timer.startTimer()
+        sightSensorComponent = gameObject.getComponent<SightSensorComponent>()!!
     }
 
     override fun onUpdate(deltaTime: Duration) {
-        if (noiseSensor.getNoiseFound() && timer.isElapsed()) {
+        if (sightSensorComponent.getIsObjectInSight() && timer.isElapsed()) {
             timer.restart()
             VFX.fadingText(
                 worldPosition = gameObject.position,
-                text = "?",
+                text = "!",
                 color = Color.BLACK,
                 size = 40,
                 durationMillis = DEFAULT_SUSPICIOUS_TIME_MILLIS
@@ -29,6 +30,6 @@ class NoiseSensorVisualComponent(gameObject: GameObject) : AbstractComponent(gam
     }
 
     private companion object {
-        const val DEFAULT_SUSPICIOUS_TIME_MILLIS = 3000
+        const val DEFAULT_SUSPICIOUS_TIME_MILLIS = 1000
     }
 }

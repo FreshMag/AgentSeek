@@ -24,7 +24,6 @@ import io.github.agentseek.view.gui.GameGui
 import kotlin.math.PI
 
 object Scenes {
-
     fun exampleScene(nObjects: Int): Scene =
         scene(
             gameObject(
@@ -47,7 +46,6 @@ object Scenes {
                 }
             }).toTypedArray()
         )
-
     fun collisionExampleScene(): Scene =
         scene(
             // Moving GameObject
@@ -86,7 +84,6 @@ object Scenes {
                     rigidBody = square(2.0),
                     renderer = GameGui.defaultRenderer(),
                 ),
-
                 ),
             gameObject(
                 { NoiseSensorComponent(it, 3.0) },
@@ -103,5 +100,4 @@ object Scenes {
                 renderer = GameGui.defaultRenderer()
             )
         )
-
 }
