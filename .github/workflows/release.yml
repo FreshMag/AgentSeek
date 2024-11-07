@@ -42,7 +42,9 @@ jobs:
           # Extract the changelog for the specific version
           VERSION="${{ env.version }}"
           sed -n "/^## \\[${VERSION}\\]/,/^## \\[/p" CHANGELOG.md | sed '$d' > CHANGELOG_OUTPUT.md
-          echo "changelog=$(cat CHANGELOG_OUTPUT.md)" >> $GITHUB_ENV
+          echo "changelog<<EOF" >> $GITHUB_ENV
+          cat CHANGELOG_OUTPUT.md >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Build fat JAR for agentseek
         run: |
@@ -55,8 +57,8 @@ jobs:
         uses: actions/create-release@v1
         with:
           tag_name: "v${{ env.version }}"
-          release_name: "${{ env.version }}"
-          body: "${{ env.changelog }}"
+          release_name: "Release ${{ env.version }}"
+          body: "${{ steps.get_changelog.outputs.changelog }}"
           draft: false
           prerelease: false
         env:
