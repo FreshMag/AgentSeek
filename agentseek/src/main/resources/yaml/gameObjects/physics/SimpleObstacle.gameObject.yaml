@@ -1,0 +1,35 @@
+---
+name: "SimpleObstacle"
+rigidBody:
+  shape:
+    type: "io.github.agentseek.common.Rectangle2d"
+    params:
+      upperLeft:
+        x: 5.0
+        "y": 5.0
+      lowerLeft:
+        x: 5.0
+        "y": 7.0
+      lowerRight:
+        x: 7.0
+        "y": 7.0
+      upperRight:
+        x: 7.0
+        "y": 5.0
+      height: 2.0
+      width: 2.0
+      center:
+        x: 6.0
+        "y": 6.0
+      position:
+        x: 5.0
+        "y": 5.0
+  mass: 1.0
+  velocity:
+    x: 0.0
+    "y": 0.0
+  static: true
+components: [ ]
+renderer:
+  class: "io.github.agentseek.view.SimpleRenderer"
+  arguments: [ ]

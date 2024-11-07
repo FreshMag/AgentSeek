@@ -1,0 +1,31 @@
+[versions]
+jacksonDataformat = "2.17.2"
+jacksonModuleKotlin = "2.17.1"
+jason = "3.2.0"
+jline = "3.27.0"
+junit = "5.10.3"
+kotest = "5.9.0"
+kotlin = "2.0.21"
+kotlinLogging = "7.0.0"
+kotlinJvmToolchain = "17"
+kotlinxCoroutines = "1.8.1"
+picocli = "4.7.6"
+slf4j = "2.0.13"
+shadowJar = "8.3.5"
+
+[libraries]
+jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "jacksonDataformat" }
+jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jacksonModuleKotlin" }
+jason = { module = "io.github.jason-lang:interpreter", version.ref = "jason" }
+jline = { module = "org.jline:jline", version.ref = "jline" }
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+kotest-runner-junit5-jvm = { module = "io.kotest:kotest-runner-junit5-jvm", version.ref = "kotest" }
+kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "kotlinLogging" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+picocli = { module = "info.picocli:picocli", version.ref = "picocli" }
+slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
+
+[plugins]
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+shadowJar = { id = "com.gradleup.shadow", version.ref = "shadowJar" }
