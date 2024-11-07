@@ -32,9 +32,12 @@ jobs:
 
       - name: Commit and push changes
         run: |
+          git fetch origin
+          git checkout feat/release-ci 
+          git pull origin feat/release-ci  
           git add CHANGELOG.md
           git add agentseek/build.gradle.kts
           git commit -m "Updated CHANGELOG.md and build.gradle.kts for new release"
-          git push origin HEAD:${{ github.head_ref }}  # Push to the branch that opened the PR
+          git push origin feat/release-ci
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
