@@ -87,9 +87,9 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: "v${{ env.VERSION }}"
-          name: "${{ env.VERSION }}"
+          tag_name: "v${{ github.event.pull_request.title }}"
+          name: "${{ github.event.pull_request.title }}"
           body: "${{ github.event.pull_request.body }}"
           draft: false
           prerelease: false
-          files: agentseek/build/libs/agentseek-${{ env.VERSION }}-all.jar
+          files: agentseek/build/libs/agentseek-${{ github.event.pull_request.title }}-all.jar
