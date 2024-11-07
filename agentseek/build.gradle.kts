@@ -1,10 +1,12 @@
 plugins {
+    id("com.gradleup.shadow") version "8.3.5"
     kotlin("jvm") version "2.0.21"
+    id("org.jetbrains.changelog") version "2.2.1"
     application
 }
 
 group = "io.github.agentseek"
-version = "unspecified"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -37,6 +39,7 @@ sourceSets {
         }
     }
 }
+
 file(projectDir).listFiles().filter { it.extension == "mas2j" }.forEach { mas2jFile ->
     task<JavaExec>("run${mas2jFile.nameWithoutExtension}Mas") {
         classpath = sourceSets.getByName("main").runtimeClasspath
