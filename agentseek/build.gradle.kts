@@ -1,7 +1,6 @@
 plugins {
-    id("com.gradleup.shadow") version "8.3.5"
-    kotlin("jvm") version "2.0.21"
-    id("org.jetbrains.changelog") version "2.2.1"
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.shadowJar)
     application
 }
 
@@ -14,7 +13,7 @@ repositories {
 
 dependencies {
     implementation(project(":engine"))
-    implementation("io.github.jason-lang:interpreter:3.2.0")
+    implementation(libs.jason)
 
     testImplementation(kotlin("test"))
 }
@@ -51,5 +50,5 @@ file(projectDir).listFiles().filter { it.extension == "mas2j" }.forEach { mas2jF
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(libs.versions.kotlinJvmToolchain.get().toInt())
 }
