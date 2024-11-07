@@ -52,22 +52,13 @@ jobs:
         env:
           GRADLE_USER_HOME: ${{ runner.temp }}/.gradle # Avoid Gradle daemon issues in GitHub Actions
 
-      - name: Create release
+      - name: Create release and add JAR
         id: create_release
-        uses: actions/create-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: "v${{ env.version }}"
-          release_name: "Release ${{ env.version }}"
+          name: "${{ env.version }}"
           body: "${{ steps.get_changelog.outputs.changelog }}"
           draft: false
           prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload fat JAR
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: agentseek/build/libs/agentseek-${{ env.version }}-all.jar
-          asset_name: agentseek-fat-${{ env.version }}.jar
-          asset_content_type: application/java-archive
+          files: agentseek/build/libs/agentseek-${{ env.version }}-all.jar
