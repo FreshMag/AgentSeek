@@ -3,6 +3,7 @@ package io.github.agentseek.util.factories
 import io.github.agentseek.components.*
 import io.github.agentseek.components.jason.Agent
 import io.github.agentseek.components.jason.BasicAgentComponent
+import io.github.agentseek.components.jason.CameraAgentComponent
 import io.github.agentseek.components.jason.JasonInitializerComponent
 import io.github.agentseek.core.Scene
 import io.github.agentseek.env.AgentSeekEnvironment
@@ -12,6 +13,7 @@ import io.github.agentseek.util.FastEntities.default
 import io.github.agentseek.util.FastEntities.degrees
 import io.github.agentseek.util.FastEntities.gameObject
 import io.github.agentseek.util.FastEntities.point
+import io.github.agentseek.util.FastEntities.radians
 import io.github.agentseek.util.FastEntities.rectangle
 import io.github.agentseek.util.FastEntities.scene
 import io.github.agentseek.util.FastEntities.square
@@ -68,29 +70,30 @@ object Scenes {
             agents = agents(
                 jasonAgent(
                     id = "agent1",
-                    aslName = "hello_agent",
-                    agentComponent = { id, go -> BasicAgentComponent(go, id) },
-                    { InputComponent(it) },
+                    aslName = "camera_agent",
+                    agentComponent = { id, go -> CameraAgentComponent(go, id) },
                     position = point(0, 0),
                     rigidBody = square(2.0),
                     renderer = GameGui.defaultRenderer(),
                 ),
-                jasonAgent(
-                    id = "agent2",
-                    aslName = "hello_agent",
-                    agentComponent = { id, go -> BasicAgentComponent(go, id) },
-                    { InputComponent(it) },
-                    position = point(14, 5),
-                    rigidBody = square(2.0),
-                    renderer = GameGui.defaultRenderer(),
-                ),
+//                jasonAgent(
+//                    id = "agent2",
+//                    aslName = "hello_agent",
+//                    agentComponent = { id, go -> BasicAgentComponent(go, id) },
+//                    { InputComponent(it) },
+//                    position = point(14, 5),
+//                    rigidBody = square(2.0),
+//                    renderer = GameGui.defaultRenderer(),
+//                ),
                 ),
             gameObject(
                 { NoiseSensorComponent(it, 3.0) },
                 { NoiseSensorVisualComponent(it) },
+                { InputComponent(it) },
                 position = point(5, 5),
-                rigidBody = rectangle(2, 2).with(isStatic = true),
-                renderer = GameGui.defaultRenderer()
+                rigidBody = rectangle(2, 2),
+                renderer = GameGui.defaultRenderer(),
+                name = "Player"
             ),
             gameObject(
                 { NoiseSensorComponent(it, 3.0) },

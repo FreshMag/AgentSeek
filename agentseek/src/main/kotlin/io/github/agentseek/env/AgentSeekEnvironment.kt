@@ -38,7 +38,9 @@ class AgentSeekEnvironment : Environment() {
         return true
     }
 
-    override fun getPercepts(agName: String?): MutableCollection<Literal> =
-        agents[agName]?.getPercepts() ?: mutableListOf()
+    override fun getPercepts(agName: String?): MutableCollection<Literal> {
+        clearPercepts(agName)
+        return agents[agName]?.getPercepts() ?: mutableListOf()
+    }
 
 }
