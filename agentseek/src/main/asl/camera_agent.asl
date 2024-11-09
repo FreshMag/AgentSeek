@@ -8,14 +8,14 @@
     !check_surroundings.
 
 +!check_surroundings : not seesPlayer <-
-    .print("No player in sight");
-    !turn_around;
-    .wait(1000);
-    !check_surroundings.
-
--!check_surroundings : seesPlayer <-
+    .wait(seesPlayer, 7000);
     .print("Player detected!");
     !alarm_agents.
+
+-!check_surroundings : not seesPlayer <-
+    .print("Have not seen player in 7 seconds, turning");
+    !turn_around;
+    !check_surroundings.
 
 +!alarm_agents <-
     .print("ALARMING THE AGENTS!!!");
