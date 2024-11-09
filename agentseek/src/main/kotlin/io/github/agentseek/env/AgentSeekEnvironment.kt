@@ -2,7 +2,6 @@ package io.github.agentseek.env
 
 import io.github.agentseek.components.jason.JasonAgent
 import io.github.agentseek.components.jason.JasonInitializerComponent
-import io.github.agentseek.env.Actions.linkAction
 import io.github.agentseek.util.GameObjectUtilities.otherGameObjects
 import jason.asSyntax.Literal
 import jason.asSyntax.Structure
@@ -31,7 +30,7 @@ class AgentSeekEnvironment : Environment() {
     override fun executeAction(agName: String, action: Structure): Boolean {
         agents[agName]?.execute(action)
         when (action) {
-            linkAction -> {
+            Actions.linkAction -> {
                 link(agName)
             }
         }
