@@ -1,9 +1,12 @@
 package io.github.agentseek.components
 
 import io.github.agentseek.common.Cone2d
+import io.github.agentseek.common.Vector2d
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.physics.Collider
 import io.github.agentseek.physics.Rays.castRay
+import io.github.agentseek.util.FastEntities.radians
+import io.github.agentseek.util.FastEntities.vector
 import io.github.agentseek.util.GameObjectUtilities.attachRenderer
 import io.github.agentseek.util.GameObjectUtilities.center
 import io.github.agentseek.view.utilities.Rendering.fillGradientCone
@@ -19,6 +22,9 @@ class SightSensorComponent(gameObject: GameObject, coneLength: Double, coneApert
     private var lastPos = gameObject.position
     private var reactions = listOf<(List<Perception>) -> Unit>()
     private var isObjectInSight = false
+
+    val directionOfSight: Vector2d
+        get() = vector(1.0, 0).rotateRadians((sensorCollider.shape as Cone2d).rotation)
 
     override fun init() {
         sensorCollider.position = gameObject.position
@@ -58,6 +64,11 @@ class SightSensorComponent(gameObject: GameObject, coneLength: Double, coneApert
 
     override fun addReaction(reaction: (List<Perception>) -> Unit) {
         reactions += reaction
+    }
+
+    fun rotate(degrees: Number) {
+        val shape = (sensorCollider.shape as? Cone2d) ?: return
+        shape.rotation += radians(degrees)
     }
 
     fun getIsObjectInSight() = isObjectInSight

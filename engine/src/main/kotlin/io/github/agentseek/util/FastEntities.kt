@@ -202,4 +202,26 @@ object FastEntities {
     val cameraHeight: Double
         get() = GameEngine.view?.camera?.viewPortHeight ?: 50.0
 
+
+    fun bounds(size: Number,
+               renderer: Renderer<*>,
+               cameraWidth: Number,
+               cameraHeight: Number,
+               offCameraSize: Int = 50
+    ): Array<(World) -> GameObject> =
+        listOf(
+            point(-offCameraSize + size.toDouble(), 0),
+            point(cameraWidth.toDouble() - size.toDouble(), 0),
+            point(0, cameraHeight.toDouble() - size.toDouble() - 1.5),
+            point(0, -offCameraSize + size.toDouble())
+        ).map {
+            gameObject(
+                position = it,
+                rigidBody = rectangle(offCameraSize, offCameraSize).with(isStatic = true),
+                name = "Bounds",
+                renderer = renderer
+            )
+        }.toTypedArray()
+
+
 }

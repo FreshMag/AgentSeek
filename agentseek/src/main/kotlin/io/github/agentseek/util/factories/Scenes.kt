@@ -7,6 +7,7 @@ import io.github.agentseek.components.jason.CameraAgentComponent
 import io.github.agentseek.components.jason.JasonInitializerComponent
 import io.github.agentseek.core.Scene
 import io.github.agentseek.env.AgentSeekEnvironment
+import io.github.agentseek.util.FastEntities.bounds
 import io.github.agentseek.util.FastEntities.circle
 import io.github.agentseek.util.FastEntities.cone
 import io.github.agentseek.util.FastEntities.default
@@ -72,25 +73,15 @@ object Scenes {
                     id = "agent1",
                     aslName = "camera_agent",
                     agentComponent = { id, go -> CameraAgentComponent(go, id) },
-                    position = point(0, 0),
-                    rigidBody = square(2.0),
+                    position = point(3, 3),
                     renderer = GameGui.defaultRenderer(),
                 ),
-//                jasonAgent(
-//                    id = "agent2",
-//                    aslName = "hello_agent",
-//                    agentComponent = { id, go -> BasicAgentComponent(go, id) },
-//                    { InputComponent(it) },
-//                    position = point(14, 5),
-//                    rigidBody = square(2.0),
-//                    renderer = GameGui.defaultRenderer(),
-//                ),
-                ),
+            ),
             gameObject(
                 { NoiseSensorComponent(it, 3.0) },
                 { NoiseSensorVisualComponent(it) },
                 { InputComponent(it) },
-                position = point(5, 5),
+                position = point(10, 10),
                 rigidBody = rectangle(2, 2),
                 renderer = GameGui.defaultRenderer(),
                 name = "Player"
@@ -100,7 +91,8 @@ object Scenes {
                 { NoiseSensorVisualComponent(it) },
                 position = point(15, 15),
                 rigidBody = rectangle(4, 4).with(isStatic = true),
-                renderer = GameGui.defaultRenderer()
-            )
+                renderer = GameGui.defaultRenderer(),
+            ),
+            *bounds(2.5, GameGui.defaultRenderer(), GameGui.camera.viewPortWidth, GameGui.camera.viewPortHeight)
         )
 }
