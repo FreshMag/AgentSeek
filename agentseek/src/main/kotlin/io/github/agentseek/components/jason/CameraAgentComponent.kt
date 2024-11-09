@@ -3,6 +3,7 @@ package io.github.agentseek.components.jason
 import io.github.agentseek.common.Vector2d
 import io.github.agentseek.components.SightSensorComponent
 import io.github.agentseek.core.GameObject
+import io.github.agentseek.util.FastEntities.allDirections
 import io.github.agentseek.util.FastEntities.radians
 import io.github.agentseek.util.GameObjectUtilities.center
 import io.github.agentseek.util.GameObjectUtilities.otherGameObjects
@@ -18,14 +19,20 @@ class CameraAgentComponent(gameObject: GameObject, override val id: String) : Ja
     private lateinit var bounds: List<GameObject>
     private var player: GameObject? = null
     private var namesToExclude = setOf("bound", "obstacle", "wall", "bounds")
+    private lateinit var startingDirection: Vector2d
 
     override fun init() {
+        bounds = gameObject.otherGameObjects().filter { namesToExclude.contains(it.name.lowercase()) }
+        startingDirection = allDirections().first { direction ->
+            bounds.none { it.rigidBody.shape.contains(gameObject.center() + (direction * WALL_AWARENESS))  }
+        }
         sightSensorComponent = SightSensorComponent(
             gameObject,
             10.0,
             radians(30),
             namesToExclude
         )
+        sightSensorComponent.setDirection(startingDirection)
         gameObject.addComponent(sightSensorComponent)
         sightSensorComponent.init()
         sightSensorComponent.addReaction {
@@ -35,11 +42,11 @@ class CameraAgentComponent(gameObject: GameObject, override val id: String) : Ja
             if (seesPlayer) {
                 sightSensorComponent.lightColor = Color.RED
             } else {
-                sightSensorComponent.setDirection(Vector2d(1.0, 0.0))
+                sightSensorComponent.setDirection(startingDirection)
                 sightSensorComponent.lightColor = Color.YELLOW
             }
         }
-        bounds = gameObject.otherGameObjects().filter { namesToExclude.contains(it.name.lowercase()) }
+
     }
 
     override fun execute(action: Structure): Boolean {

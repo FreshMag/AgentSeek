@@ -66,14 +66,14 @@ object Scenes {
             environmentClass = AgentSeekEnvironment::class,
             agents = agents(
                 jasonAgent(
-                    id = "agent1",
+                    id = "camera1",
                     aslName = "camera_agent",
                     agentComponent = { id, go -> CameraAgentComponent(go, id) },
                     position = point(4, 4),
                     renderer = CameraRenderer(),
                 ),
                 jasonAgent(
-                    id = "agent2",
+                    id = "camera2",
                     aslName = "camera_agent",
                     agentComponent = { id, go -> CameraAgentComponent(go, id) },
                     position = point(46, 4),
