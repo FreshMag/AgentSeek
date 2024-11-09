@@ -10,6 +10,8 @@ class CameraAgentComponent(gameObject: GameObject, override val id: String) : Ja
     private lateinit var sightSensorComponent: SightSensorComponent
     private var seesPlayer = false
 
+    private val rotatingLeft = Literal.parseLiteral("rotate(90)")
+
     override fun init() {
         sightSensorComponent = SightSensorComponent(gameObject, 10.0, radians(30))
         gameObject.addComponent(sightSensorComponent)
@@ -20,6 +22,10 @@ class CameraAgentComponent(gameObject: GameObject, override val id: String) : Ja
     }
 
     override fun execute(action: Structure): Boolean {
+        when (action) {
+            rotatingLeft -> println("Rotate left")
+            else -> println("Rotate right")
+        }
         return true
     }
 
