@@ -21,8 +21,7 @@ class TimerImpl(private var waitTimeMillis: Long) : Timer {
     }
 
     override fun isElapsed(): Boolean {
-        if (System.currentTimeMillis() - startMills > waitTimeMillis) {
-            reset()
+        if (isStarted && System.currentTimeMillis() - startMills > waitTimeMillis) {
             return true
         }
         return false
