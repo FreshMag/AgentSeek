@@ -74,8 +74,7 @@ object Rays {
         val c = oc.dot(oc) - radius * radius
 
         val discriminant = b * b - 4 * a * c
-        // Since this method treats the ray as an infinite straight line, we need to exclude "backwards" shapes
-        if (discriminant < 0 || abs(ray.direction.angleWith(oc)) > Math.PI / 2) return null
+        if (discriminant < 0) return null
 
         val t1 = (-b - sqrt(discriminant)) / (2.0 * a)
         val t2 = (-b + sqrt(discriminant)) / (2.0 * a)
@@ -119,7 +118,7 @@ object Rays {
 
         val discriminant = b * b - 4 * a * c
         // Since this method treats the ray as an infinite straight line, we need to exclude "backwards" shapes
-        if (discriminant < 0 || abs(ray.direction.angleWith(oc)) > Math.PI / 2) return null
+        if (discriminant < 0 || abs(ray.direction.angleWith(oc)) < Math.PI / 2) return null
         val t1 = (-b - sqrt(discriminant)) / (2.0 * a)
         val t2 = (-b + sqrt(discriminant)) / (2.0 * a)
 
