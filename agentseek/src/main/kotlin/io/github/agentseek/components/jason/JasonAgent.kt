@@ -14,7 +14,7 @@ abstract class JasonAgent(gameObject: GameObject) : AbstractComponent(gameObject
     /**
      * Handler for the actions performed by this agent.
      */
-    abstract fun execute(action: Structure)
+    abstract fun execute(action: Structure): Boolean
 
     /**
      * Gets the percepts for this Agent

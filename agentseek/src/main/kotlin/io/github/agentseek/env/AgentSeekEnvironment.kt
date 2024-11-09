@@ -2,6 +2,7 @@ package io.github.agentseek.env
 
 import io.github.agentseek.components.jason.JasonAgent
 import io.github.agentseek.components.jason.JasonInitializerComponent
+import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.env.Actions.linkAction
 import io.github.agentseek.util.GameObjectUtilities.otherGameObjects
 import jason.asSyntax.Literal
@@ -23,6 +24,7 @@ class AgentSeekEnvironment : Environment() {
         val go = manager.otherGameObjects().firstOrNull { it.getComponent<JasonAgent>()?.id == id }
         if (go != null) {
             agents[id] = go.getComponent<JasonAgent>()!!
+            GameEngine.log("$id linked successfully")
         } else {
             throw IllegalStateException("Agent with $id is not present in the scene!")
         }

@@ -7,8 +7,9 @@ import jason.asSyntax.Structure
 
 class BasicAgentComponent(gameObject: GameObject, override val id: String) : JasonAgent(gameObject) {
 
-    override fun execute(action: Structure) {
+    override fun execute(action: Structure): Boolean {
         println("Inside Engine: Agent: $id, Executing action: $action")
+        return true
     }
 
     override fun getPercepts(): MutableList<Literal> {

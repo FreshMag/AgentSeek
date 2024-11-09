@@ -1,6 +1,5 @@
 package io.github.agentseek.components.jason
 
-import io.github.agentseek.components.Requires
 import io.github.agentseek.components.SightSensorComponent
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.util.FastEntities.radians
@@ -20,14 +19,16 @@ class CameraAgentComponent(gameObject: GameObject, override val id: String) : Ja
         }
     }
 
-    override fun execute(action: Structure) {}
-
-    override fun getPercepts(): MutableList<Literal> {
-        val seesPlayerLiteralValue = synchronized(seesPlayer) {
-            if (seesPlayer) "yes" else "no"
-        }
-        return mutableListOf(
-            Literal.parseLiteral("seesPlayer($seesPlayerLiteralValue)")
-        )
+    override fun execute(action: Structure): Boolean {
+        return true
     }
+
+    override fun getPercepts(): MutableList<Literal> =
+        synchronized(this) {
+            if (seesPlayer) "seesPlayer" else null
+        }?.run {
+            return mutableListOf(
+                Literal.parseLiteral(this)
+            )
+        } ?: mutableListOf()
 }
