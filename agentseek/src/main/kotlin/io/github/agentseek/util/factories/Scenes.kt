@@ -1,10 +1,7 @@
 package io.github.agentseek.util.factories
 
 import io.github.agentseek.components.*
-import io.github.agentseek.components.jason.Agent
-import io.github.agentseek.components.jason.BasicAgentComponent
 import io.github.agentseek.components.jason.CameraAgentComponent
-import io.github.agentseek.components.jason.JasonInitializerComponent
 import io.github.agentseek.core.Scene
 import io.github.agentseek.env.AgentSeekEnvironment
 import io.github.agentseek.util.FastEntities.bounds
@@ -14,10 +11,8 @@ import io.github.agentseek.util.FastEntities.default
 import io.github.agentseek.util.FastEntities.degrees
 import io.github.agentseek.util.FastEntities.gameObject
 import io.github.agentseek.util.FastEntities.point
-import io.github.agentseek.util.FastEntities.radians
 import io.github.agentseek.util.FastEntities.rectangle
 import io.github.agentseek.util.FastEntities.scene
-import io.github.agentseek.util.FastEntities.square
 import io.github.agentseek.util.FastEntities.vector
 import io.github.agentseek.util.FastEntities.with
 import io.github.agentseek.util.jason.JasonScenes.agents
@@ -37,9 +32,8 @@ object Scenes {
                 rigidBody = circle(0.5),
                 renderer = default()
             ),
-            *((0 until nObjects).flatMap {
-                i -> (0 until nObjects).map {
-                    j ->
+            *((0 until nObjects).flatMap { i ->
+                (0 until nObjects).map { j ->
                     gameObject(
                         { NoiseSensorComponent(it, 3.0) },
                         { NoiseSensorVisualComponent(it) },
@@ -50,6 +44,7 @@ object Scenes {
                 }
             }).toTypedArray()
         )
+
     fun collisionExampleScene(): Scene =
         scene(
             // Moving GameObject
