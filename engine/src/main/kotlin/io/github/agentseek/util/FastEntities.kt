@@ -203,6 +203,9 @@ object FastEntities {
         get() = GameEngine.view?.camera?.viewPortHeight ?: 50.0
 
 
+    /**
+     * Returns an array of game object setters that adds rectangular bounds of size [size] to the world
+     */
     fun bounds(size: Number,
                renderer: Renderer<*>,
                cameraWidth: Number,
@@ -223,5 +226,15 @@ object FastEntities {
             )
         }.toTypedArray()
 
+    /**
+     * Returns a list of vectors corresponding to the four possible directions in this order: east, south, west, north.
+     */
+    fun allDirections(): Iterable<Vector2d> =
+        listOf(
+            vector(1, 0),
+            vector(0, -1),
+            vector(-1, 0),
+            vector(0, 1),
+        )
 
 }

@@ -23,6 +23,7 @@ import io.github.agentseek.util.FastEntities.with
 import io.github.agentseek.util.jason.JasonScenes.agents
 import io.github.agentseek.util.jason.JasonScenes.jasonAgent
 import io.github.agentseek.util.jason.JasonScenes.sceneWithJason
+import io.github.agentseek.view.CameraRenderer
 import io.github.agentseek.view.gui.GameGui
 import kotlin.math.PI
 
@@ -73,8 +74,15 @@ object Scenes {
                     id = "agent1",
                     aslName = "camera_agent",
                     agentComponent = { id, go -> CameraAgentComponent(go, id) },
-                    position = point(3, 3),
-                    renderer = GameGui.defaultRenderer(),
+                    position = point(4, 4),
+                    renderer = CameraRenderer(),
+                ),
+                jasonAgent(
+                    id = "agent2",
+                    aslName = "camera_agent",
+                    agentComponent = { id, go -> CameraAgentComponent(go, id) },
+                    position = point(46, 4),
+                    renderer = CameraRenderer(),
                 ),
             ),
             gameObject(
