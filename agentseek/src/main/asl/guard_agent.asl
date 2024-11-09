@@ -1,5 +1,4 @@
 /* Initial beliefs and rules */
-go_base :- colleague_found_enemy(found) & found = true.
 
 /* Initial goals */
 
@@ -13,7 +12,7 @@ go_base :- colleague_found_enemy(found) & found = true.
 	!searchForEnemy.
 
 +!searchForEnemy : enemy_lost & base_position(X, Y) <-
-    wait(1000);
+    .wait(1000);
     .print("returning to base");
     move(X, Y);
     !searchForEnemy.
