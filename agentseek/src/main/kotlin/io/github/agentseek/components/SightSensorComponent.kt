@@ -1,6 +1,7 @@
 package io.github.agentseek.components
 
 import io.github.agentseek.common.Cone2d
+import io.github.agentseek.common.Point2d
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.physics.Collider
 import io.github.agentseek.physics.Rays.castRay
@@ -10,14 +11,15 @@ import io.github.agentseek.view.utilities.Rendering.fillGradientCone
 import java.awt.Color
 import kotlin.time.Duration
 
-class SightSensorComponent(gameObject: GameObject, coneLength: Double, coneAperture: Double) :
-    AbstractComponent(gameObject), Sensor<SightSensorComponent.Perception> {
+class SightSensorComponent(gameObject: GameObject, coneLength: Double, coneApertureRadians: Double) :
+    AbstractComponent(gameObject), Sensor<List<SightSensorComponent.Perception>> {
 
-    data class Perception(val gameObject: GameObject, val distance: Double)
+    data class Perception(val gameObject: GameObject, val distance: Double, val enemyPosition: Point2d)
 
-    private val sensorCollider: Collider = Collider.ConeCollider(coneAperture, coneLength, 0.0, gameObject)
+    private val sensorCollider: Collider = Collider.ConeCollider(coneApertureRadians, coneLength, 0.0, gameObject)
     private var lastPos = gameObject.position
-    private var reactions = listOf<(Perception) -> Unit>()
+    private var reactions = listOf<(List<Perception>) -> Unit>()
+    private var isObjectInSight = false
 
     override fun init() {
         sensorCollider.position = gameObject.position
@@ -36,19 +38,28 @@ class SightSensorComponent(gameObject: GameObject, coneLength: Double, coneApert
         }
         val colliding = sensorCollider.findColliding()
         if (colliding.isNotEmpty()) {
-            colliding.forEach {
+            val perceptions: List<Perception> = colliding.mapNotNull {
                 val go = it.gameObject
                 val intersection = gameObject.castRay(go).firstIntersecting
                 if (intersection?.gameObject?.id == go.id) {
-                    val perception = Perception(intersection.gameObject, intersection.distance)
-                    reactions.forEach { it(perception) }
+                    val perception = Perception(intersection.gameObject, intersection.distance, go.position)
+                    isObjectInSight = true
+                    return@mapNotNull perception
                 }
+                return@mapNotNull null
             }
+            reactions.forEach { it(perceptions) }
+        } else {
+            if (isObjectInSight) {
+                reactions.forEach { it(emptyList<Perception>()) }
+            }
+            isObjectInSight = false
         }
     }
 
-    override fun addReaction(reaction: (Perception) -> Unit) {
+    override fun addReaction(reaction: (List<Perception>) -> Unit) {
         reactions += reaction
     }
 
+    fun getIsObjectInSight() = isObjectInSight
 }
