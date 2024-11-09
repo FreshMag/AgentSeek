@@ -8,8 +8,6 @@ import io.github.agentseek.world.WorldImpl
 import kotlin.time.Duration
 
 class SceneImpl : Scene, EventListener {
-    override val player: GameObject?
-        get() = world.gameObjects.firstOrNull(GameObject::isPlayer)
     override val world: World = WorldImpl(this)
     override var isVictory: Boolean = false
     override var isGameOver: Boolean = false

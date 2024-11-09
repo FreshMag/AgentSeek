@@ -23,9 +23,9 @@ class DoorComponent(gameObject: GameObject, duration: Int) : AbstractComponent(g
     override fun onUpdate(deltaTime: Duration) {
         if (timer.isElapsed() || isCollidable) {
             this.isCollidable = true
-            if (player?.rigidBody?.isCollidingWith(gameObject.rigidBody) == true) {
-                notifyEvent(NewLevelEvent())
-            }
+//            if (player?.rigidBody?.isCollidingWith(gameObject.rigidBody) == true) {
+//                notifyEvent(NewLevelEvent())
+//            }
         }
     }
 }

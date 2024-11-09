@@ -20,9 +20,6 @@ abstract class AbstractComponent(
 
     override fun init() {}
 
-    protected val player: GameObject?
-        get() = world.gameObjects.firstOrNull { it.isPlayer() }
-
     override fun onUpdate(deltaTime: Duration) {}
 
     override fun onRemoved() {}
