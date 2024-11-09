@@ -13,7 +13,12 @@ import io.github.agentseek.view.utilities.Rendering.fillGradientCone
 import java.awt.Color
 import kotlin.time.Duration
 
-class SightSensorComponent(gameObject: GameObject, coneLength: Double, coneApertureRadians: Double) :
+class SightSensorComponent(
+    gameObject: GameObject,
+    coneLength: Double,
+    coneApertureRadians: Double,
+    private val namesBlacklist: Set<String> = setOf(),
+) :
     AbstractComponent(gameObject), Sensor<List<SightSensorComponent.Perception>> {
 
     data class Perception(val gameObject: GameObject, val distance: Double)
@@ -23,13 +28,18 @@ class SightSensorComponent(gameObject: GameObject, coneLength: Double, coneApert
     private var reactions = listOf<(List<Perception>) -> Unit>()
     private var isObjectInSight = false
 
+    /**
+     * The color of the cone of light projected by this sensor.
+     */
+    var lightColor: Color = Color.YELLOW
+
     val directionOfSight: Vector2d
         get() = vector(1.0, 0).rotateRadians((sensorCollider.shape as Cone2d).rotation)
 
     override fun init() {
         sensorCollider.position = gameObject.position
         gameObject.attachRenderer { _, context ->
-            context?.fillGradientCone(sensorCollider.shape as Cone2d, Color.YELLOW, Color(255, 255, 0, 0))
+            context?.fillGradientCone(sensorCollider.shape as Cone2d, lightColor, Color(255, 255, 0, 0))
         }
     }
 
@@ -42,7 +52,7 @@ class SightSensorComponent(gameObject: GameObject, coneLength: Double, coneApert
             lastPos = gameObject.position
         }
         val colliding = sensorCollider.findColliding()
-        if (colliding.isNotEmpty()) {
+        if (colliding.isNotEmpty() && colliding.any { it.gameObject.name.lowercase() !in namesBlacklist }) {
             val perceptions: List<Perception> = colliding.mapNotNull {
                 val go = it.gameObject
                 val intersection = gameObject.castRay(go).firstIntersecting
@@ -56,7 +66,7 @@ class SightSensorComponent(gameObject: GameObject, coneLength: Double, coneApert
             reactions.forEach { it(perceptions) }
         } else {
             if (isObjectInSight) {
-                reactions.forEach { it(emptyList<Perception>()) }
+                reactions.forEach { it(emptyList()) }
             }
             isObjectInSight = false
         }
@@ -66,9 +76,20 @@ class SightSensorComponent(gameObject: GameObject, coneLength: Double, coneApert
         reactions += reaction
     }
 
+    /**
+     * Rotates the cone of the sensor
+     */
     fun rotate(degrees: Number) {
         val shape = (sensorCollider.shape as? Cone2d) ?: return
         shape.rotation += radians(degrees)
+    }
+
+    /**
+     * Sets the direction of the cone of the sensor
+     */
+    fun setDirection(direction: Vector2d) {
+        val shape = (sensorCollider.shape as? Cone2d) ?: return
+        shape.rotation = direction.angle()
     }
 
     fun getIsObjectInSight() = isObjectInSight

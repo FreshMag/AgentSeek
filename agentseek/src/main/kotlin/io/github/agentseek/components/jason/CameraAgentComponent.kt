@@ -1,5 +1,6 @@
 package io.github.agentseek.components.jason
 
+import io.github.agentseek.common.Vector2d
 import io.github.agentseek.components.SightSensorComponent
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.util.FastEntities.radians
@@ -8,22 +9,37 @@ import io.github.agentseek.util.GameObjectUtilities.otherGameObjects
 import io.github.agentseek.util.jason.Utils.termToInteger
 import jason.asSyntax.Literal
 import jason.asSyntax.Structure
+import java.awt.Color
+import kotlin.time.Duration
 
 class CameraAgentComponent(gameObject: GameObject, override val id: String) : JasonAgent(gameObject) {
     private lateinit var sightSensorComponent: SightSensorComponent
     private var seesPlayer = false
     private lateinit var bounds: List<GameObject>
+    private var player: GameObject? = null
+    private var namesToExclude = setOf("bound", "obstacle", "wall", "bounds")
 
     override fun init() {
-        sightSensorComponent = SightSensorComponent(gameObject, 10.0, radians(30))
+        sightSensorComponent = SightSensorComponent(
+            gameObject,
+            10.0,
+            radians(30),
+            namesToExclude
+        )
         gameObject.addComponent(sightSensorComponent)
         sightSensorComponent.init()
         sightSensorComponent.addReaction {
-            seesPlayer = it.any { it.gameObject.name == "Player" }
+            seesPlayer = it.any {
+                (it.gameObject.name == "Player").also { isPlayer -> if (isPlayer) player = it.gameObject }
+            }
+            if (seesPlayer) {
+                sightSensorComponent.lightColor = Color.RED
+            } else {
+                sightSensorComponent.setDirection(Vector2d(1.0, 0.0))
+                sightSensorComponent.lightColor = Color.YELLOW
+            }
         }
-        bounds = gameObject.otherGameObjects().filter {
-            listOf("bound", "obstacle", "wall", "bounds").contains(it.name.lowercase())
-        }
+        bounds = gameObject.otherGameObjects().filter { namesToExclude.contains(it.name.lowercase()) }
     }
 
     override fun execute(action: Structure): Boolean {
@@ -34,6 +50,14 @@ class CameraAgentComponent(gameObject: GameObject, override val id: String) : Ja
             }
         }
         return true
+    }
+
+    override fun onUpdate(deltaTime: Duration) {
+        if (seesPlayer) {
+            player?.let {
+                sightSensorComponent.setDirection(it.center() - gameObject.center())
+            }
+        }
     }
 
     private fun hasWallLeftRight(): Pair<Boolean, Boolean> {
