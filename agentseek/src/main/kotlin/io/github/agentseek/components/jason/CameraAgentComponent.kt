@@ -21,7 +21,9 @@ class CameraAgentComponent(gameObject: GameObject, override val id: String) : Ja
         sightSensorComponent.addReaction {
             seesPlayer = it.any { it.gameObject.name == "Player" }
         }
-        bounds = gameObject.otherGameObjects().filter { it.name.lowercase() in listOf("bound", "obstacle", "wall") }
+        bounds = gameObject.otherGameObjects().filter {
+            listOf("bound", "obstacle", "wall", "bounds").contains(it.name.lowercase())
+        }
     }
 
     override fun execute(action: Structure): Boolean {
