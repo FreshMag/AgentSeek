@@ -19,8 +19,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
         sightSensorComponent.addReaction {
             lastEnemyPosition = it.find { it.gameObject.name == "Player" }?.enemyPosition
             if (lastEnemyPosition != null) {
-                println("START")
-                timer.startTimer()
+                timer.restart()
             }
         }
     }
@@ -48,6 +47,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
             println("EnemySeen at ${it.x.toInt()},${it.y.toInt()}")
             percepts.add(Literal.parseLiteral("enemy_position(${it.x.toInt()}, ${it.y.toInt()})"))
         }
+        println("started: ${timer.isStarted}, elapsed: ${timer.isElapsed()}")
         if (timer.isElapsed()) {
             percepts.add(Literal.parseLiteral("enemy_lost"))
             percepts.add(Literal.parseLiteral("base_position(${50}, ${0})"))
