@@ -9,6 +9,7 @@ import io.github.agentseek.env.Actions
 import jason.asSyntax.Literal
 import jason.asSyntax.NumberTerm
 import jason.asSyntax.Structure
+import java.awt.Color
 
 class GuardAgentComponent(gameObject: GameObject, override val id: String) : JasonAgent(gameObject) {
     private lateinit var sightSensorComponent: SightSensorComponent
@@ -19,7 +20,10 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
         sightSensorComponent.addReaction {
             lastEnemyPosition = it.find { it.gameObject.name == "Player" }?.enemyPosition
             if (lastEnemyPosition != null) {
+                sightSensorComponent.lightColor = Color.RED
                 timer.restart()
+            } else {
+                sightSensorComponent.lightColor = Color.YELLOW
             }
         }
     }
