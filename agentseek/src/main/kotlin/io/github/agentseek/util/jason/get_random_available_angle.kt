@@ -7,9 +7,12 @@ import jason.asSemantics.Unifier
 import jason.asSyntax.Literal
 import jason.asSyntax.Term
 
+/**
+ * Internal action used by the camera agent to obtain a random available angle for rotation. If it has a wall on one
+ * side (left or right), checked by the beliefs `wallLeft` and `wallRight`, it returns a subset of `{90, -90}`.
+ */
 class get_random_available_angle : DefaultInternalAction() {
     override fun execute(ts: TransitionSystem, un: Unifier, args: Array<out Term>): Any {
-        println("Getting available angles for turning")
         val currentAgent = ts.ag
         val wallLeft = currentAgent.believes(Literal.parseLiteral("wallLeft"), un)
         val wallRight = currentAgent.believes(Literal.parseLiteral("wallRight"), un)
