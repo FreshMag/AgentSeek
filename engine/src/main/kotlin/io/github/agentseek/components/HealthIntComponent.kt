@@ -35,11 +35,11 @@ class HealthIntComponent(
             this.isImmortal = false
         }
         if (this.currentHp <= 0) {
-            if (gameObject.isPlayer()) {
-                notifyEvent(GameOverEvent())
-            } else {
-                gameObject.delete()
-            }
+//            if (gameObject.isPlayer()) {
+//                notifyEvent(GameOverEvent())
+//            } else {
+//                gameObject.delete()
+//            }
         }
     }
 
@@ -47,14 +47,14 @@ class HealthIntComponent(
      * Decreases [currentHp] of a quantity equals to [dmg]. If it's below zero, it will call a death event.
      */
     fun damage(dmg: Int) {
-        if (gameObject.isPlayer()) {
-            if (!this.isImmortal) {
-                this.currentHp -= dmg
-                this.setImmortality()
-            }
-        } else {
-            this.currentHp -= dmg
-        }
+//        if (gameObject.isPlayer()) {
+//            if (!this.isImmortal) {
+//                this.currentHp -= dmg
+//                this.setImmortality()
+//            }
+//        } else {
+//            this.currentHp -= dmg
+//        }
     }
 
     /**

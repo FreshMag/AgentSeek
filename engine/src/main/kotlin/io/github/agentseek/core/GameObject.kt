@@ -124,11 +124,6 @@ class GameObject(
         components.find { it is T } != null
 
     /**
-     * Returns `true` if this [GameObject] is the player.
-     */
-    fun isPlayer(): Boolean = TODO()
-
-    /**
      * Notifies an event to the world of the GameObject
      */
     fun notifyEvent(event: Event) {
