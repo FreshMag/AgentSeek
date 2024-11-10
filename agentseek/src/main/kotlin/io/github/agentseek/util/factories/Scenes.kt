@@ -28,8 +28,9 @@ object Scenes {
             { InputComponent(it) },
             { NoiseEmitterComponent(it, 6.0) },
             { NoiseEmitterVisualComponent(it) },
+            name = "Player",
             rigidBody = circle(0.5),
-            renderer = default()
+            renderer = GameGui.defaultRenderer()
         ), *((0 until nObjects).flatMap { i ->
             (0 until nObjects).map { j ->
                 gameObject(
@@ -37,7 +38,7 @@ object Scenes {
                     { NoiseSensorVisualComponent(it) },
                     position = point(5 + i * 5, 5 + j * 5),
                     rigidBody = rectangle(2, 2).with(isStatic = true),
-                    renderer = default()
+                    renderer = GameGui.defaultRenderer()
                 )
             }
         }).toTypedArray()
@@ -63,6 +64,7 @@ object Scenes {
                 aslName = "guard_agent",
                 agentComponent = { id, go -> GuardAgentComponent(go, id) },
                 { SightSensorComponent(it, 7.0, 1.0) },
+                { NoiseSensorComponent(it, 3.0) },
                 position = point(0, 0),
                 rigidBody = square(2.0),
                 renderer = GameGui.defaultRenderer(),
@@ -71,6 +73,7 @@ object Scenes {
 
         gameObject(
             { InputComponent(it) },
+            { NoiseEmitterComponent(it, 3.0) },
             name = "Player",
             position = point(5, 5),
             rigidBody = rectangle(2, 2),
