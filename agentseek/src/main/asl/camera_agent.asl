@@ -1,5 +1,6 @@
 
 !start_behavior.
+playerPosition(0, 0).
 
 +!start_behavior <-
     link(this);
@@ -21,7 +22,8 @@
     .print("ALARMING THE AGENTS!!!");
     !monitor_player.
 
-+!monitor_player : seesPlayer <-
++!monitor_player : seesPlayer & playerPosition(X, Y) <-
+    .broadcast(tell, playerPosition(X, Y));
     .print("Continuing to monitor player");
     .wait(1000);
     !monitor_player.

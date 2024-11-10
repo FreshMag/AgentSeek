@@ -1,5 +1,6 @@
 package io.github.agentseek.components.jason
 
+import io.github.agentseek.common.Point2d
 import io.github.agentseek.common.Vector2d
 import io.github.agentseek.components.SightSensorComponent
 import io.github.agentseek.core.GameObject
@@ -7,7 +8,8 @@ import io.github.agentseek.util.FastEntities.allDirections
 import io.github.agentseek.util.FastEntities.radians
 import io.github.agentseek.util.GameObjectUtilities.center
 import io.github.agentseek.util.GameObjectUtilities.otherGameObjects
-import io.github.agentseek.util.jason.Utils.termToInteger
+import io.github.agentseek.util.jason.Utils.toLiteral
+import io.github.agentseek.util.jason.Utils.toNumber
 import jason.asSyntax.Literal
 import jason.asSyntax.Structure
 import java.awt.Color
@@ -24,7 +26,7 @@ class CameraAgentComponent(gameObject: GameObject, override val id: String) : Ja
     override fun init() {
         bounds = gameObject.otherGameObjects().filter { namesToExclude.contains(it.name.lowercase()) }
         startingDirection = allDirections().first { direction ->
-            bounds.none { it.rigidBody.shape.contains(gameObject.center() + (direction * WALL_AWARENESS))  }
+            bounds.none { it.rigidBody.shape.contains(gameObject.center() + (direction * WALL_AWARENESS)) }
         }
         sightSensorComponent = SightSensorComponent(
             gameObject,
@@ -52,7 +54,7 @@ class CameraAgentComponent(gameObject: GameObject, override val id: String) : Ja
     override fun execute(action: Structure): Boolean {
         when (action.functor) {
             "rotate" -> {
-                val rotation = termToInteger(action.terms[0])
+                val rotation = action.terms[0].toNumber()
                 sightSensorComponent.rotate(rotation)
             }
         }
@@ -68,7 +70,7 @@ class CameraAgentComponent(gameObject: GameObject, override val id: String) : Ja
     }
 
     private fun hasWallLeftRight(): Pair<Boolean, Boolean> {
-        val direction =  sightSensorComponent.directionOfSight
+        val direction = sightSensorComponent.directionOfSight
         val leftVector = direction.rotateDegrees(90.0) * WALL_AWARENESS
         val rightVector = direction.rotateDegrees(-90.0) * WALL_AWARENESS
         val center = gameObject.center()
@@ -80,20 +82,31 @@ class CameraAgentComponent(gameObject: GameObject, override val id: String) : Ja
         }
     }
 
-    private data class Percepts(val seesPlayerPercept: String?, val wallLeft: Boolean, val wallRight: Boolean) {
+    private data class Percepts(
+        val seesPlayerPercept: String?,
+        val wallLeft: Boolean,
+        val wallRight: Boolean,
+        val playerPosition: Point2d
+    ) {
         fun toLiterals(): MutableList<Literal> = mutableListOf<Literal>().also { list ->
             seesPlayerPercept?.let {
                 list.add(Literal.parseLiteral(it))
             }
             if (wallLeft) list.add(Literal.parseLiteral("wallLeft"))
             if (wallRight) list.add(Literal.parseLiteral("wallRight"))
+            list.add(playerPosition.toLiteral("playerPosition"))
         }
     }
 
     override fun getPercepts(): MutableList<Literal> =
         synchronized(this) {
             val walls = hasWallLeftRight()
-            Percepts(if (seesPlayer) "seesPlayer" else null, walls.first, walls.second)
+            Percepts(
+                if (seesPlayer) "seesPlayer" else null,
+                walls.first,
+                walls.second,
+                player?.position ?: Point2d.origin()
+            )
         }.toLiterals()
 
     companion object {

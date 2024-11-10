@@ -1,6 +1,6 @@
 package io.github.agentseek.util.jason
 
-import io.github.agentseek.util.jason.Utils.numberToTerm
+import io.github.agentseek.util.jason.Utils.toTerm
 import jason.asSemantics.DefaultInternalAction
 import jason.asSemantics.TransitionSystem
 import jason.asSemantics.Unifier
@@ -22,6 +22,6 @@ class get_random_available_angle : DefaultInternalAction() {
             println("Cannot move anywhere!"); return false
         }
         val angle = available.random()
-        return un.unifies(args[0], numberToTerm(angle))
+        return un.unifies(args[0], angle.toTerm())
     }
 }
