@@ -18,6 +18,16 @@ data class Vector2d(var x: Double, var y: Double) {
     constructor(x: Int, y: Int) : this(x.toDouble(), y.toDouble())
 
     /**
+     * Returns the left-hand perpendicular vector to this one.
+     */
+    val leftNormal: Vector2d get() = this.rotateDegrees(90.0)
+
+    /**
+     * Returns the right-hand perpendicular vector to this one.
+     */
+    val rightNormal: Vector2d get() = this.rotateDegrees(-90.0)
+
+    /**
      * Return the difference between this vector and another [vector].
      */
     operator fun minus(vector: Vector2d): Vector2d = Vector2d(x - vector.x, y - vector.y)
