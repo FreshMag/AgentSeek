@@ -17,13 +17,17 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
     private val timer = TimerImpl(5000)
     override fun init() {
         sightSensorComponent = gameObject.getComponent<SightSensorComponent>()!!
-        sightSensorComponent.addReaction {
-            lastEnemyPosition = it.find { it.gameObject.name == "Player" }?.enemyPosition
-            if (lastEnemyPosition != null) {
+        sightSensorComponent.addReaction { perceptions ->
+            val enemyPosition = perceptions.find { it.gameObject.name == "Player" }?.enemyPosition
+            if (enemyPosition != null) {
+                lastEnemyPosition = enemyPosition
                 sightSensorComponent.lightColor = Color.RED
                 timer.restart()
-            } else {
+            } else if (timer.isElapsed()) {
+                lastEnemyPosition = null
                 sightSensorComponent.lightColor = Color.YELLOW
+            } else {
+                sightSensorComponent.lightColor = Color.ORANGE
             }
         }
     }

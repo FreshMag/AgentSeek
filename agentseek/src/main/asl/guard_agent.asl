@@ -15,6 +15,7 @@
     !returningToBase.
 
 +!searchForEnemy : enemy_position(X, Y) <-
+    !alertAllies;
     !followEnemy.
 
 +!searchForEnemy : not enemy_position(X, Y) <-
@@ -32,10 +33,22 @@
     moveRandom(random);
     !searchForEnemy.
 
-+!returningToBase : enemy_lost & base_position(X, Y) <-
++!returningToBase : (remote_position(X, Y) | enemy_lost) & base_position(X, Y) <-
     .wait(500);
     .print("returning to base");
     move(X, Y);
     !searchForEnemy.
 
-+enemy_position(X, Y) <- .print("Enemy in (", X, ", ", Y, ")").
++!alertAllies : enemy_position(X, Y) <-
+    .print("ALARMING");
+    .assert(remote_position(X, Y));
+    .broadcast(tell, remote_position(X, Y));
+    .retract(remote_position(X, Y)).
+
+/* Plan to handle received broadcast message */
++!remote_position_message : received(remote_position(X, Y)) <-
+    .print("RECEIVED REMOTE: (", X, ", ", Y, ")");
+    .assert(remote_position(X, Y)).
+
++enemy_position(X, Y) <-
+    .print("Enemy in (", X, ", ", Y, ")").
