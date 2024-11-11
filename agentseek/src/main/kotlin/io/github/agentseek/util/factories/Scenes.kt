@@ -68,6 +68,15 @@ object Scenes {
                 position = point(0, 0),
                 rigidBody = square(2.0),
                 renderer = GameGui.defaultRenderer(),
+            ), jasonAgent(
+                id = "agent2",
+                aslName = "guard_agent",
+                agentComponent = { id, go -> GuardAgentComponent(go, id) },
+                { SightSensorComponent(it, 7.0, 1.0) },
+                { NoiseSensorComponent(it, 3.0) },
+                position = point(10, 0),
+                rigidBody = square(2.0),
+                renderer = GameGui.defaultRenderer(),
             )
         ),
 
