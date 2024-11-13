@@ -1,5 +1,5 @@
 /* Initial beliefs and rules */
-
+base_position(15,0).
 /* Initial goals */
 
 !start.
@@ -11,11 +11,17 @@
 	.print("link");
 	!searchForEnemy.
 
-+!searchForEnemy : enemy_lost & base_position(X, Y) <-
++!searchForEnemy : enemy_position(X, Y) <-
+    -enemy_lost;
+    -remote_position;
+    !alertAllies;
+    !followEnemy.
+
++!searchForEnemy : (remote_position | enemy_lost) & base_position(Z, W) <-
     !returningToBase.
 
-+!searchForEnemy : enemy_position(X, Y) <-
-    !alertAllies;
++!searchForEnemy : enemy_heard(X, Y) <-
+    wait(1000);
     !followEnemy.
 
 +!searchForEnemy : not enemy_position(X, Y) <-
@@ -27,28 +33,34 @@
     .print("follow enemy");
     !searchForEnemy.
 
++!alertAllies : enemy_position(X, Y) <-
+    .print("alerting allies");
+    .broadcast(tell, remote_position).
+
 +!moveRandom : not enemy_position(X, Y) <-
     .wait(500);
     .print("search enemy in the surroundings");
     moveRandom(random);
     !searchForEnemy.
 
-+!returningToBase : (remote_position(X, Y) | enemy_lost) & base_position(X, Y) <-
++!returningToBase : (remote_position | enemy_lost) & base_position(Z, W) <-
     .wait(500);
     .print("returning to base");
-    move(X, Y);
+    move(Z, W);
     !searchForEnemy.
 
-+!alertAllies : enemy_position(X, Y) <-
-    .print("ALARMING");
-    .assert(remote_position(X, Y));
-    .broadcast(tell, remote_position(X, Y));
-    .retract(remote_position(X, Y)).
++!baseReached: base_reached <-
+    -enemy_lost;
+    -remote_position;
+    .wait(500);
+    !searchForEnemy.
 
-/* Plan to handle received broadcast message */
-+!remote_position_message : received(remote_position(X, Y)) <-
-    .print("RECEIVED REMOTE: (", X, ", ", Y, ")");
-    .assert(remote_position(X, Y)).
++base_reached : true <-
+    -enemy_lost;
+    -remote_position.
+
++remote_position : true <-
+    .print("received position").
 
 +enemy_position(X, Y) <-
     .print("Enemy in (", X, ", ", Y, ")").
