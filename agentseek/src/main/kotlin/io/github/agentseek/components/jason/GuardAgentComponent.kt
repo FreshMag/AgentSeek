@@ -3,6 +3,7 @@ package io.github.agentseek.components.jason
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.common.TimerImpl
 import io.github.agentseek.common.Vector2d
+import io.github.agentseek.components.NoiseSensorComponent
 import io.github.agentseek.components.SightSensorComponent
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.env.Actions
@@ -20,15 +21,26 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
     }
 
     private lateinit var sightSensorComponent: SightSensorComponent
+    private lateinit var noiseSensorComponent: NoiseSensorComponent
     private var lastEnemyPosition: Point2d? = null
-    private val timer = TimerImpl(5000)
+    private var lastNoisePosition: Point2d? = null
+    private val sightTimer = TimerImpl(5000)
+    private val noiseTimer = TimerImpl(5000)
     override fun init() {
         sightSensorComponent = gameObject.getComponent<SightSensorComponent>()!!
         sightSensorComponent.addReaction { perceptions ->
             val enemyPosition = perceptions.find { it.gameObject.name == ENEMY_NAME }?.enemyPosition
             if (enemyPosition != null) {
                 lastEnemyPosition = enemyPosition
-                timer.restart()
+                sightTimer.restart()
+            }
+        }
+        noiseSensorComponent = gameObject.getComponent<NoiseSensorComponent>()!!
+        noiseSensorComponent.addReaction { perceptions ->
+            val noisePosition = perceptions.find { it.gameObject.name == ENEMY_NAME }?.noisePosition
+            if (noisePosition != null) {
+                lastEnemyPosition = noisePosition
+                noiseTimer.restart()
             }
         }
     }
@@ -52,10 +64,11 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
         val percepts = mutableListOf<Literal>()
         if (lastEnemyPosition != null) {
             percepts.add(Literal.parseLiteral("enemy_position(${lastEnemyPosition!!.x.toInt()}, ${lastEnemyPosition!!.y.toInt()})"))
-        } else if (timer.isElapsed()) {
+        } else if (sightTimer.isElapsed()) {
             percepts.add(Literal.parseLiteral("enemy_lost"))
             percepts.add(Literal.parseLiteral("base_position(${basePosition.x}, ${basePosition.y})"))
         }
+
         if (isNearBase()) {
             percepts.add(Literal.parseLiteral("reached_base"))
         }
@@ -64,7 +77,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
     }
 
     private fun checkPercepts() {
-        if (lastEnemyPosition != null && (timer.isStarted && !timer.isElapsed())) {
+        if (lastEnemyPosition != null && (sightTimer.isStarted && !sightTimer.isElapsed())) {
             sightSensorComponent.lightColor = Color.RED
         } else {
             sightSensorComponent.lightColor = Color.YELLOW
@@ -76,9 +89,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
     private fun isNearBase(): Boolean {
         val dx = gameObject.position.x - basePosition.x
         val dy = gameObject.position.y - basePosition.y
-        val r = sqrt(dx * dx + dy * dy) <= 5.0
-        println("Res $r")
-        return r
+        return sqrt(dx * dx + dy * dy) <= 5.0
     }
 
     private fun move(x: Int, y: Int) {
