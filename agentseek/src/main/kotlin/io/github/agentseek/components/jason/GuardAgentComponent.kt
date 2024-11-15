@@ -47,7 +47,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
         noiseSensorComponent.addReaction { perceptions ->
             val noisePosition = perceptions.find { it.gameObject.name == ENEMY_NAME }?.noisePosition
             if (noisePosition != null) {
-                lastEnemyPosition = noisePosition
+                lastNoisePosition = noisePosition
                 noiseTimer.restart()
             }
         }
@@ -80,6 +80,11 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
         if (isNearBase()) {
             percepts.add(Literal.parseLiteral("base_reached"))
         }
+        if (lastNoisePosition != null) {
+            percepts.add(Literal.parseLiteral("enemy_heard(${lastNoisePosition!!.x.toInt()}, ${lastNoisePosition!!.y.toInt()})"))
+        } else if (noiseTimer.isElapsed()) {
+            noiseTimer.reset()
+        }
         checkPercepts()
         return percepts
     }
@@ -90,6 +95,12 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
         } else {
             sightSensorComponent.lightColor = Color.YELLOW
             lastEnemyPosition = null
+        }
+        if (lastNoisePosition != null && (noiseTimer.isStarted && !noiseTimer.isElapsed())) {
+            noiseSensorComponent.noiseColor = Color.RED
+        } else {
+            noiseSensorComponent.noiseColor = Color.YELLOW
+            lastNoisePosition = null
         }
     }
 

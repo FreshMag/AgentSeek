@@ -7,7 +7,7 @@ import io.github.agentseek.physics.Collider
 import io.github.agentseek.util.GameObjectUtilities.attachRenderer
 import io.github.agentseek.util.GameObjectUtilities.center
 import io.github.agentseek.util.GameObjectUtilities.otherGameObjects
-import io.github.agentseek.view.utilities.Rendering.strokeCircle
+import io.github.agentseek.view.utilities.Rendering.fillGradientCircle
 import java.awt.Color
 import kotlin.time.Duration
 
@@ -17,14 +17,15 @@ class NoiseSensorComponent(gameObject: GameObject, radius: Double) : AbstractCom
     private var lastPos = gameObject.position
 
     private var reactions = listOf<(List<Perception>) -> Unit>()
+    var noiseColor: Color = Color.YELLOW
 
     data class Perception(val gameObject: GameObject, val noisePosition: Point2d)
 
     override fun init() {
         noiseSensorCollider.center = gameObject.center()
         gameObject.attachRenderer { _, renderingContext ->
-            renderingContext?.strokeCircle(
-                noiseSensorCollider.shape as Circle2d, color = Color.BLACK
+            renderingContext?.fillGradientCircle(
+                noiseSensorCollider.shape as Circle2d, noiseColor, Color(255, 255, 0, 0)
             )
         }
     }
