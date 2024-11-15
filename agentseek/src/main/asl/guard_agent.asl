@@ -17,12 +17,11 @@ base_position(25,0).
     !alertAllies;
     !followEnemy.
 
++!searchForEnemy : enemy_heard(X, Y) <-
+    !followEnemy.
+
 +!searchForEnemy : (remote_position | enemy_lost) & base_position(Z, W) <-
     !returningToBase.
-
-+!searchForEnemy : enemy_heard(X, Y) <-
-    wait(1000);
-    !followEnemy.
 
 +!searchForEnemy : not enemy_position(X, Y) <-
     !moveRandom.
@@ -31,6 +30,11 @@ base_position(25,0).
     .wait(500);
     move(X, Y);
     .print("follow enemy");
+    !searchForEnemy.
+
++!followEnemy : enemy_heard(X, Y) <-
+    .wait(500);
+    move(X, Y);
     !searchForEnemy.
 
 +!alertAllies : enemy_position(X, Y) <-
@@ -52,8 +56,7 @@ base_position(25,0).
 
 +!baseReached: base_reached <-
     -enemy_lost[source(_)];
-    -remote_position[source(_)];
-    .print("AHAHAHAHA").
+    -remote_position[source(_)].
 
 -!baseReached <-
     .print("not reached yet").
