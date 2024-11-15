@@ -1,5 +1,5 @@
 /* Initial beliefs and rules */
-base_position(15,0).
+base_position(25,0).
 /* Initial goals */
 
 !start.
@@ -12,8 +12,8 @@ base_position(15,0).
 	!searchForEnemy.
 
 +!searchForEnemy : enemy_position(X, Y) <-
-    -enemy_lost;
-    -remote_position;
+    -enemy_los[source(_)];
+    -remote_position[source(_)];
     !alertAllies;
     !followEnemy.
 
@@ -47,20 +47,22 @@ base_position(15,0).
     .wait(500);
     .print("returning to base");
     move(Z, W);
+    !baseReached;
     !searchForEnemy.
 
 +!baseReached: base_reached <-
-    -enemy_lost;
-    -remote_position;
-    .wait(500);
-    !searchForEnemy.
+    -enemy_lost[source(_)];
+    -remote_position[source(_)];
+    .print("AHAHAHAHA").
 
-+base_reached : true <-
-    -enemy_lost;
-    -remote_position.
+-!baseReached <-
+    .print("not reached yet").
 
 +remote_position : true <-
     .print("received position").
 
 +enemy_position(X, Y) <-
     .print("Enemy in (", X, ", ", Y, ")").
+
++enemy_lost <-
+    +enemy_lost.
