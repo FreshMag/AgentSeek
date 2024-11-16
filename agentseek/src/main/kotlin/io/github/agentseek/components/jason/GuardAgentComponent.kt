@@ -2,24 +2,26 @@ package io.github.agentseek.components.jason
 
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.common.TimerImpl
-import io.github.agentseek.common.Vector2d
+import io.github.agentseek.components.FieldMovementComponent
 import io.github.agentseek.components.NoiseSensorComponent
 import io.github.agentseek.components.SightSensorComponent
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.env.Actions
+import io.github.agentseek.physics.Rays.castRay
+import io.github.agentseek.util.FastEntities
+import io.github.agentseek.util.FastEntities.point
 import jason.asSyntax.Literal
 import jason.asSyntax.NumberTerm
 import jason.asSyntax.Structure
 import java.awt.Color
 import kotlin.math.sqrt
-import kotlin.random.Random
 
 class GuardAgentComponent(gameObject: GameObject, override val id: String) : JasonAgent(gameObject) {
 
     companion object {
         private const val ENEMY_NAME = "Player"
-        private val basePosition = Point2d(25, 0)
-        private const val DEFAULT_NEAR_BASE_DISTANCE = 5.0
+        private val basePosition = Point2d(30, 30)
+        private const val DEFAULT_NEAR_BASE_DISTANCE = 10.0
         private const val DEFAULT_RANDOM_TIMER = 4000L
         private const val DEFAULT_SIGHT_TIMER = 5000L
         private const val DEFAULT_NOISE_TIMER = 5000L
@@ -28,6 +30,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
 
     private lateinit var sightSensorComponent: SightSensorComponent
     private lateinit var noiseSensorComponent: NoiseSensorComponent
+    private lateinit var fieldMovementComponent: FieldMovementComponent
     private var lastEnemyPosition: Point2d? = null
     private var lastNoisePosition: Point2d? = null
     private var baseReached = false
@@ -40,7 +43,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
 
 
     private val sightSensorReaction = { perceptions: List<SightSensorComponent.Perception> ->
-        val enemyPosition = perceptions.find { it.gameObject.name == ENEMY_NAME }?.enemyPosition
+        val enemyPosition = perceptions.find { it.gameObject.name == ENEMY_NAME }?.gameObject?.position
         if (enemyPosition != null) {
             lastEnemyPosition = enemyPosition
             sightTimer.restart()
@@ -56,13 +59,14 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
     }
 
     override fun init() {
+        fieldMovementComponent = gameObject.getComponent<FieldMovementComponent>()!!
         sightSensorComponent = gameObject.getComponent<SightSensorComponent>()!!
         sightSensorComponent.addReaction(sightSensorReaction)
         noiseSensorComponent = gameObject.getComponent<NoiseSensorComponent>()!!
         noiseSensorComponent.addReaction(noiseSensorReaction)
     }
 
-    override fun execute(action: Structure) {
+    override fun execute(action: Structure): Boolean {
         when (action.functor) {
             Actions.moveRandom.toString() -> {
                 moveRandom()
@@ -76,9 +80,11 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
             }
 
             Actions.defendBase.toString() -> {
+                println("Defend base")
                 guardTimer.restart()
             }
         }
+        return true
     }
 
     override fun getPercepts(): MutableList<Literal> {
@@ -90,7 +96,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
             percepts.add(Literal.parseLiteral("enemy_lost"))
             percepts.add(Literal.parseLiteral("base_position(${basePosition.x}, ${basePosition.y})"))
         }
-        if (isNearBase() || !guardTimer.isElapsed()) {
+        if (isNearBase() && (!guardTimer.isElapsed())) {
             percepts.add(Literal.parseLiteral("base_reached"))
         }
         if (lastNoisePosition != null) {
@@ -149,8 +155,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
      */
     private fun move(x: Int, y: Int) {
         synchronized(gameObject) {
-            gameObject.rigidBody.velocity =
-                Vector2d(x, y).minus(Vector2d(gameObject.position.x, gameObject.position.y)).normalized()
+            fieldMovementComponent.objective = point(x, y)
         }
     }
 
@@ -169,10 +174,9 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
     private fun moveRandom() {
         if (!randomTimer.isStarted || randomTimer.isElapsed()) {
             randomTimer.restart()
-            setRandomVelocity()
-        }
-        synchronized(gameObject) {
-            gameObject.rigidBody.velocity = Vector2d(velocityX, velocityY)
+            synchronized(gameObject) {
+                fieldMovementComponent.objective = getRandomVelocity()
+            }
         }
     }
 
@@ -183,10 +187,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
      * The loop ensures that at least one of the velocities is non-zero, preventing the object
      * from remaining stationary.
      */
-    private fun setRandomVelocity() {
-        do {
-            velocityX = Random.nextInt(-1, 2)
-            velocityY = Random.nextInt(-1, 2)
-        } while (velocityX == 0 && velocityY == 0)
-    }
+    private fun getRandomVelocity() =
+        FastEntities.allDirections().mapNotNull { gameObject.castRay(it).firstIntersecting }
+            .maxBy { it.distance }.gameObject.position
 }

@@ -20,33 +20,28 @@ class FieldMovementComponent(gameObject: GameObject) : AbstractComponent(gameObj
     }
 
     override fun onUpdate(deltaTime: Duration) {
-        if (forwardDirection.module() < 0.5) {
-            gameObject.rigidBody.velocity = Vector2d.zero()
-            return
-        }
-
         val distances = sensor.getDistancesResultant()
         val direction: Vector2d = previousDirection +
-            if (distances != Vector2d.zero()) {
-                val clockwise = distances.rotateDegrees(-TANGENTIAL_DEGREES)
-                val antiClockwise = distances.rotateDegrees(TANGENTIAL_DEGREES)
-                val tangentialVector =
-                    if (clockwise.angleWith(forwardDirection) > antiClockwise.angleWith(forwardDirection)) {
-                        antiClockwise
-                    } else {
-                        clockwise
-                    }
-                (tangentialVector * DANGER_COEFFICIENT)
-            } else {
-                forwardDirection
-            }
+                if (distances != Vector2d.zero()) {
+                    val clockwise = distances.rotateDegrees(-TANGENTIAL_DEGREES)
+                    val antiClockwise = distances.rotateDegrees(TANGENTIAL_DEGREES)
+                    val tangentialVector =
+                        if (clockwise.angleWith(forwardDirection) > antiClockwise.angleWith(forwardDirection)) {
+                            antiClockwise
+                        } else {
+                            clockwise
+                        }
+                    (tangentialVector * DANGER_COEFFICIENT)
+                } else {
+                    forwardDirection
+                }
         previousDirection = direction.normalized()
         gameObject.rigidBody.velocity = previousDirection * MAX_VELOCITY
     }
 
     companion object {
         const val TANGENTIAL_DEGREES = 115.0
-        const val MAX_VELOCITY = 3.0
+        const val MAX_VELOCITY = 2.0
         const val DANGER_COEFFICIENT = 0.3
     }
 }
