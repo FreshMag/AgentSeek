@@ -12,12 +12,16 @@ base_position(30,30).
 	!searchForEnemy.
 
 +!searchForEnemy : enemy_position(X, Y) <-
-    -enemy_lost[source(_)];
     -remote_position[source(_)];
+    -remotePlayerPosition[source(_)];
     !alertAllies;
     !followEnemy.
 
 +!searchForEnemy : enemy_heard(X, Y) <-
+    !followEnemy.
+
++!searchForEnemy : remotePlayerPosition(X, Y) & not remote_position <-
+    .print("SCELGO TE");
     !followEnemy.
 
 +!searchForEnemy : base_reached <-
@@ -40,6 +44,12 @@ base_position(30,30).
     .wait(500);
     !searchForEnemy.
 
++!followEnemy : remotePlayerPosition(X, Y) <-
+    move(X, Y);
+    -remotePlayerPosition(X, Y)[source(_)];
+    .wait(500);
+    !searchForEnemy.
+
 +!alertAllies : enemy_position(X, Y) <-
     .print("alerting allies");
     .broadcast(tell, remote_position).
@@ -55,17 +65,14 @@ base_position(30,30).
     defendBase;
     !moveRandom.
 
-+!returningToBase : (remote_position | enemy_lost) & base_position(X, Y) <-
++!returningToBase : remote_position & base_position(X, Y) <-
     .print("returning to base");
     move(X, Y);
     .wait(500);
     !searchForEnemy.
 
-+remote_position : true <-
-    .print("received position").
++remotePlayerPosition(X, Y) : true <-
+    .print("received camera remote enemy position").
 
 +enemy_position(X, Y) <-
     .print("Enemy in (", X, ", ", Y, ")").
-
-+enemy_lost <-
-    +enemy_lost.

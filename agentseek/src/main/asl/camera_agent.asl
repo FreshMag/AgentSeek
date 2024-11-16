@@ -23,7 +23,7 @@ playerPosition(0, 0).
     !monitor_player.
 
 +!monitor_player : seesPlayer & playerPosition(X, Y) <-
-    .broadcast(tell, playerPosition(X, Y));
+    .broadcast(tell, remotePlayerPosition(X, Y));
     .print("Continuing to monitor player");
     .wait(1000);
     !monitor_player.

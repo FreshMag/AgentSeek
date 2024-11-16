@@ -1,6 +1,7 @@
 package io.github.agentseek.util.factories
 
 import io.github.agentseek.components.*
+import io.github.agentseek.components.jason.CameraAgentComponent
 import io.github.agentseek.components.jason.GuardAgentComponent
 import io.github.agentseek.core.Scene
 import io.github.agentseek.env.AgentSeekEnvironment
@@ -19,6 +20,7 @@ import io.github.agentseek.util.FastEntities.with
 import io.github.agentseek.util.jason.JasonScenes.agents
 import io.github.agentseek.util.jason.JasonScenes.jasonAgent
 import io.github.agentseek.util.jason.JasonScenes.sceneWithJason
+import io.github.agentseek.view.CameraRenderer
 import io.github.agentseek.view.SimpleRenderer
 import io.github.agentseek.view.gui.GameGui
 import kotlin.math.PI
@@ -56,20 +58,21 @@ object Scenes {
     )
 
     fun jasonExampleScene(): Scene = sceneWithJason(
-        name = "example", environmentClass = AgentSeekEnvironment::class, agents = agents(/*jasonAgent(
-                    id = "camera1",
-                    aslName = "camera_agent",
-                    agentComponent = { id, go -> CameraAgentComponent(go, id) },
-                    position = point(4, 4),
-                    renderer = CameraRenderer(),
-                ),
-                jasonAgent(
-                    id = "camera2",
-                    aslName = "camera_agent",
-                    agentComponent = { id, go -> CameraAgentComponent(go, id) },
-                    position = point(46, 4),
-                    renderer = CameraRenderer(),
-                ),*/
+        name = "example", environmentClass = AgentSeekEnvironment::class, agents = agents(
+            jasonAgent(
+                id = "camera1",
+                aslName = "camera_agent",
+                agentComponent = { id, go -> CameraAgentComponent(go, id) },
+                position = point(4, 4),
+                renderer = CameraRenderer(),
+            ),
+            jasonAgent(
+                id = "camera2",
+                aslName = "camera_agent",
+                agentComponent = { id, go -> CameraAgentComponent(go, id) },
+                position = point(46, 4),
+                renderer = CameraRenderer(),
+            ),
             jasonAgent(
                 id = "agent1",
                 aslName = "guard_agent",
