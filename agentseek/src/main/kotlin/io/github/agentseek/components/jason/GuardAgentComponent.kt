@@ -93,8 +93,6 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
             percepts.add(Literal.parseLiteral("enemy_position(${lastEnemyPosition!!.x.toInt()}, ${lastEnemyPosition!!.y.toInt()})"))
         } else if (sightTimer.isElapsed()) {
             sightTimer.reset()
-            percepts.add(Literal.parseLiteral("enemy_lost"))
-            percepts.add(Literal.parseLiteral("base_position(${basePosition.x}, ${basePosition.y})"))
         }
         if (isNearBase() && (!guardTimer.isElapsed())) {
             percepts.add(Literal.parseLiteral("base_reached"))
