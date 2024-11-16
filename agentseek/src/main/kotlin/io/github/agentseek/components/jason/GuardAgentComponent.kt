@@ -23,15 +23,18 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
         private const val DEFAULT_RANDOM_TIMER = 4000L
         private const val DEFAULT_SIGHT_TIMER = 5000L
         private const val DEFAULT_NOISE_TIMER = 5000L
+        private const val DEFAULT_GUARD_TIMER = 5000L
     }
 
     private lateinit var sightSensorComponent: SightSensorComponent
     private lateinit var noiseSensorComponent: NoiseSensorComponent
     private var lastEnemyPosition: Point2d? = null
     private var lastNoisePosition: Point2d? = null
+    private var baseReached = false
     private var randomTimer = TimerImpl(DEFAULT_RANDOM_TIMER)
     private val sightTimer = TimerImpl(DEFAULT_SIGHT_TIMER)
     private val noiseTimer = TimerImpl(DEFAULT_NOISE_TIMER)
+    private val guardTimer = TimerImpl(DEFAULT_NOISE_TIMER)
     private var velocityX = 0
     private var velocityY = 0
 
@@ -71,6 +74,10 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
                 }
                 move(x, y)
             }
+
+            Actions.defendBase.toString() -> {
+                guardTimer.restart()
+            }
         }
     }
 
@@ -83,7 +90,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
             percepts.add(Literal.parseLiteral("enemy_lost"))
             percepts.add(Literal.parseLiteral("base_position(${basePosition.x}, ${basePosition.y})"))
         }
-        if (isNearBase()) {
+        if (isNearBase() || !guardTimer.isElapsed()) {
             percepts.add(Literal.parseLiteral("base_reached"))
         }
         if (lastNoisePosition != null) {

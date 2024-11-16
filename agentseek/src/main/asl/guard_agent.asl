@@ -12,7 +12,7 @@ base_position(25,0).
 	!searchForEnemy.
 
 +!searchForEnemy : enemy_position(X, Y) <-
-    -enemy_los[source(_)];
+    -enemy_lost[source(_)];
     -remote_position[source(_)];
     !alertAllies;
     !followEnemy.
@@ -20,20 +20,21 @@ base_position(25,0).
 +!searchForEnemy : enemy_heard(X, Y) <-
     !followEnemy.
 
-+!searchForEnemy : (remote_position | enemy_lost) & base_position(Z, W) <-
++!searchForEnemy : base_reached <-
+    !searchBase.
+
++!searchForEnemy : (remote_position | enemy_lost) & base_position(Z, W) & not base_reached <-
     !returningToBase.
 
 +!searchForEnemy : not enemy_position(X, Y) <-
     !moveRandom.
 
 +!followEnemy : enemy_position(X, Y) <-
-    .wait(500);
     move(X, Y);
     .print("follow enemy");
     !searchForEnemy.
 
 +!followEnemy : enemy_heard(X, Y) <-
-    .wait(500);
     move(X, Y);
     !searchForEnemy.
 
@@ -42,24 +43,17 @@ base_position(25,0).
     .broadcast(tell, remote_position).
 
 +!moveRandom : not enemy_position(X, Y) <-
-    .wait(500);
     .print("search enemy in the surroundings");
     moveRandom(random);
     !searchForEnemy.
 
-+!returningToBase : (remote_position | enemy_lost) & base_position(Z, W) <-
-    .wait(500);
++!searchBase : <-
+    defendBase.
+
++!returningToBase : (remote_position | enemy_lost) & base_position(X, Y) <-
     .print("returning to base");
-    move(Z, W);
-    !baseReached;
+    move(X, Y);
     !searchForEnemy.
-
-+!baseReached: base_reached <-
-    -enemy_lost[source(_)];
-    -remote_position[source(_)].
-
--!baseReached <-
-    .print("not reached yet").
 
 +remote_position : true <-
     .print("received position").

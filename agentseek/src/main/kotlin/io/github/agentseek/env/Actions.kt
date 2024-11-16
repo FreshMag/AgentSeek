@@ -18,4 +18,9 @@ object Actions {
      * Action to make the agent follow an enemy.
      */
     val moveToPosition: Literal = Literal.parseLiteral("move")
+
+    /**
+     * Action to make the agent defend the base
+     */
+    val defendBase: Literal = Literal.parseLiteral("defendBase")
 }
