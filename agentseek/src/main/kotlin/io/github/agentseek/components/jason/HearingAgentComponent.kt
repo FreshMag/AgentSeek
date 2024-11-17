@@ -14,8 +14,14 @@ import jason.asSyntax.Structure
 import java.awt.Color
 
 class HearingAgentComponent(gameObject: GameObject, override val id: String) : JasonAgent(gameObject) {
-    private var randomTimer = TimerImpl(3000)
-    private var noiseTimer = TimerImpl(5000)
+    companion object {
+        private const val ENEMY_NAME = "Player"
+        private const val DEFAULT_RANDOM_TIMER = 3000L
+        private const val DEFAULT_NOISE_TIMER = 5000L
+    }
+
+    private var randomTimer = TimerImpl(DEFAULT_RANDOM_TIMER)
+    private var noiseTimer = TimerImpl(DEFAULT_NOISE_TIMER)
     private lateinit var noiseSensorComponent: NoiseSensorComponent
     private lateinit var fieldMovementComponent: FieldMovementComponent
     private var lastNoisePosition: Point2d? = null
@@ -24,7 +30,7 @@ class HearingAgentComponent(gameObject: GameObject, override val id: String) : J
         fieldMovementComponent = gameObject.getComponent<FieldMovementComponent>()!!
         noiseSensorComponent = gameObject.getComponent<NoiseSensorComponent>()!!
         noiseSensorComponent.addReaction { perceptions ->
-            val noisePosition = perceptions.find { it.gameObject.name == "Player" }?.noisePosition
+            val noisePosition = perceptions.find { it.gameObject.name == ENEMY_NAME }?.noisePosition
             if (noisePosition != null) {
                 lastNoisePosition = noisePosition
                 noiseTimer.restart()
