@@ -25,7 +25,6 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
         private const val DEFAULT_RANDOM_TIMER = 4000L
         private const val DEFAULT_SIGHT_TIMER = 5000L
         private const val DEFAULT_NOISE_TIMER = 5000L
-        private const val DEFAULT_GUARD_TIMER = 5000L
     }
 
     private lateinit var sightSensorComponent: SightSensorComponent
@@ -36,7 +35,6 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
     private var randomTimer = TimerImpl(DEFAULT_RANDOM_TIMER)
     private val sightTimer = TimerImpl(DEFAULT_SIGHT_TIMER)
     private val noiseTimer = TimerImpl(DEFAULT_NOISE_TIMER)
-    private val guardTimer = TimerImpl(DEFAULT_NOISE_TIMER)
 
 
     private val sightSensorReaction = { perceptions: List<SightSensorComponent.Perception> ->
