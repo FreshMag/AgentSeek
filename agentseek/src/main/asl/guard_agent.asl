@@ -55,7 +55,7 @@ base_position(30,30).
 
 +!moveRandom : not player_position(X, Y) <-
     .print("search enemy in the surroundings");
-    moveRandom(random);
+    moveRandom;
     .wait(500);
     !searchForPlayer.
 

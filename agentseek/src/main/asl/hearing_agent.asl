@@ -16,5 +16,5 @@
 
 +!searchForPlayer : not player_heard(X, Y) <-
     wait(1000);
-    moveRandom(random);
+    moveRandom;
     !searchForPlayer.
