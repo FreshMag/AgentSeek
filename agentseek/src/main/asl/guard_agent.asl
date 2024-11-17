@@ -24,7 +24,6 @@ base_position(30,30).
     !followEnemy.
 
 +!searchForEnemy : base_reached & remote_position <-
-    .print("DEF");
     !defendBase.
 
 +!searchForEnemy : remote_position & base_position(X, Y) & not base_reached <-

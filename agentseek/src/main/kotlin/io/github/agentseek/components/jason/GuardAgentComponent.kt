@@ -77,7 +77,6 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
             }
 
             Actions.stop.toString() -> {
-                println("STOPPING")
                 fieldMovementComponent.stop()
             }
 
