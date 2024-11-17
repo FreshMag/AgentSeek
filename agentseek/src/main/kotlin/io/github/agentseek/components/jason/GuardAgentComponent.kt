@@ -5,10 +5,9 @@ import io.github.agentseek.common.TimerImpl
 import io.github.agentseek.components.FieldMovementComponent
 import io.github.agentseek.components.NoiseSensorComponent
 import io.github.agentseek.components.SightSensorComponent
+import io.github.agentseek.components.common.ComponentsUtils
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.env.Actions
-import io.github.agentseek.physics.Rays.castRay
-import io.github.agentseek.util.FastEntities
 import io.github.agentseek.util.FastEntities.point
 import jason.asSyntax.Literal
 import jason.asSyntax.NumberTerm
@@ -104,7 +103,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
         return percepts
     }
 
-    /*
+    /**
      * Defines actions to take based on agent's perception
      */
     private fun checkPercepts() {
@@ -122,15 +121,9 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
         }
     }
 
-
     /**
-     * Determines if the game object is near the base.
-     *
-     * This method calculates the Euclidean distance between the game object's current position
-     * and a predefined base position. If the distance is less than or equal to the
-     * DEFAULT_NEAR_BASE_DISTANCE, it returns true indicating the object is near the base.
-     *
-     * @return true if the game object is near the base, false otherwise.
+     * Determines if the game object is near the base, calculating the Euclidean distance between the game object's current position
+     * and base position.
      */
     private fun isNearBase(): Boolean {
         val dx = gameObject.position.x - basePosition.x
@@ -138,16 +131,8 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
         return sqrt(dx * dx + dy * dy) <= DEFAULT_NEAR_BASE_DISTANCE
     }
 
-
     /**
-     * Moves the game object to a specified position.
-     *
-     * This method takes target coordinates (x, y) and computes the velocity vector needed to move
-     * the game object from its current position to the target position. The computed velocity
-     * vector is then normalized and assigned to the game object's rigid body within a synchronized block.
-     *
-     * @param x The target x-coordinate to move the game object to.
-     * @param y The target y-coordinate to move the game object to.
+     * Set the objective to the coordinates [x] and [y]
      */
     private fun move(x: Int, y: Int) {
         synchronized(gameObject) {
@@ -157,35 +142,16 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
     }
 
     /**
-     * Moves the game object in a random direction.
-     *
-     * This method is called periodically to set a random velocity to the game object's rigid body
-     * within a synchronized block.
-     *
-     * The random direction is determined by the `setRandomVelocity` method, which assigns random
-     * values to `velocityX` and `velocityY`.
-     *
-     * The movement direction is updated only if the `randomTimer` is not started or its time has elapsed.
-     * In those cases, the timer is restarted and a new random velocity is set.
+     * Set the objective position to pseudo random coordinates
      */
     private fun moveRandom() {
         if (!randomTimer.isStarted || randomTimer.isElapsed()) {
             randomTimer.restart()
+            val randomVelocity = ComponentsUtils.getRandomVelocity(gameObject)
             synchronized(gameObject) {
                 fieldMovementComponent.wakeUp()
-                fieldMovementComponent.objective = getRandomVelocity()
+                fieldMovementComponent.objective = randomVelocity
             }
         }
     }
-
-    /**
-     * Sets a random velocity for the game object.
-     *
-     * This method assigns random integers to `velocityX` and `velocityY`, ranging from -1 to 1.
-     * The loop ensures that at least one of the velocities is non-zero, preventing the object
-     * from remaining stationary.
-     */
-    private fun getRandomVelocity() =
-        FastEntities.allDirections().mapNotNull { gameObject.castRay(it).firstIntersecting }
-            .maxBy { it.distance }.gameObject.position
 }
