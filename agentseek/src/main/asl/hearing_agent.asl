@@ -7,14 +7,14 @@
 +!start : true <-
     link(this);
 	.print("link");
-	!think.
+	!searchForPlayer.
 
-+!think : enemy_heard(X, Y) <-
++!searchForPlayer : player_heard(X, Y) <-
     wait(1000);
     move(X, Y);
-    !think.
+    !searchForPlayer.
 
-+!think : not enemy_heard(X, Y) <-
++!searchForPlayer : not player_heard(X, Y) <-
     wait(1000);
     moveRandom(random);
-    !think.
+    !searchForPlayer.

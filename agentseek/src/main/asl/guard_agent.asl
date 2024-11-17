@@ -9,74 +9,74 @@ base_position(30,30).
 +!start : true <-
     link(this);
 	.print("link");
-	!searchForEnemy.
+	!searchForPlayer.
 
-+!searchForEnemy : enemy_position(X, Y) <-
-    -remote_position[source(_)];
-    -remotePlayerPosition[source(_)];
++!searchForPlayer : player_position(X, Y) <-
+    -guard_remote_player_position[source(_)];
+    -camera_remote_player_position[source(_)];
     !alertAllies;
     !followEnemy.
 
-+!searchForEnemy : enemy_heard(X, Y) <-
++!searchForPlayer : enemy_heard(X, Y) <-
     !followEnemy.
 
-+!searchForEnemy : remotePlayerPosition(X, Y) & not remote_position <-
++!searchForPlayer : camera_remote_player_position(X, Y) & not guard_remote_player_position <-
     !followEnemy.
 
-+!searchForEnemy : base_reached & remote_position <-
++!searchForPlayer : base_reached & guard_remote_player_position <-
     !defendBase.
 
-+!searchForEnemy : remote_position & base_position(X, Y) & not base_reached <-
++!searchForPlayer : guard_remote_player_position & base_position(X, Y) & not base_reached <-
     !returningToBase.
 
-+!searchForEnemy : not enemy_position(X, Y) <-
++!searchForPlayer : not player_position(X, Y) <-
     !moveRandom.
 
-+!followEnemy : enemy_position(X, Y) <-
++!followEnemy : player_position(X, Y) <-
     move(X, Y);
     .wait(500);
     .print("follow enemy");
-    !searchForEnemy.
+    !searchForPlayer.
 
 +!followEnemy : enemy_heard(X, Y) <-
     move(X, Y);
     .wait(500);
-    !searchForEnemy.
+    !searchForPlayer.
 
-+!followEnemy : remotePlayerPosition(X, Y) <-
++!followEnemy : camera_remote_player_position(X, Y) <-
     move(X, Y);
-    -remotePlayerPosition(X, Y)[source(_)];
+    -camera_remote_player_position(X, Y)[source(_)];
     .wait(500);
-    !searchForEnemy.
+    !searchForPlayer.
 
-+!alertAllies : enemy_position(X, Y) <-
++!alertAllies : player_position(X, Y) <-
     .print("alerting allies");
-    .broadcast(tell, remote_position).
+    .broadcast(tell, guard_remote_player_position).
 
-+!moveRandom : not enemy_position(X, Y) <-
++!moveRandom : not player_position(X, Y) <-
     .print("search enemy in the surroundings");
     moveRandom(random);
     .wait(500);
-    !searchForEnemy.
+    !searchForPlayer.
 
-+!returningToBase : remote_position & base_position(X, Y) <-
++!returningToBase : guard_remote_player_position & base_position(X, Y) <-
     .print("returning to base");
     move(X, Y);
     .wait(500);
-    !searchForEnemy.
+    !searchForPlayer.
 
-+!defendBase : base_reached & remote_position <-
++!defendBase : base_reached & guard_remote_player_position <-
     stop;
-    .wait(enemy_position(X, Y), 3000);
-    !searchForEnemy.
+    .wait(player_position(X, Y), 3000);
+    !searchForPlayer.
 
--!defendBase : not enemy_position(X, Y) <-
-    -remote_position[source(_)];
+-!defendBase : not player_position(X, Y) <-
+    -guard_remote_player_position[source(_)];
     checkSurroundings;
-    !searchForEnemy.
+    !searchForPlayer.
 
-+remotePlayerPosition(X, Y) : true <-
++camera_remote_player_position(X, Y) : true <-
     .print("received camera remote enemy position").
 
-+enemy_position(X, Y) <-
++player_position(X, Y) <-
     .print("Enemy in (", X, ", ", Y, ")").
