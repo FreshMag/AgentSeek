@@ -3,24 +3,25 @@ package io.github.agentseek.components.jason
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.common.TimerImpl
 import io.github.agentseek.common.Vector2d
+import io.github.agentseek.components.FieldMovementComponent
 import io.github.agentseek.components.NoiseSensorComponent
+import io.github.agentseek.components.common.ComponentsUtils
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.env.Actions
 import jason.asSyntax.Literal
 import jason.asSyntax.NumberTerm
 import jason.asSyntax.Structure
 import java.awt.Color
-import kotlin.random.Random
 
 class HearingAgentComponent(gameObject: GameObject, override val id: String) : JasonAgent(gameObject) {
     private var randomTimer = TimerImpl(3000)
     private var noiseTimer = TimerImpl(5000)
-    private var velocityX = 0
-    private var velocityY = 0
     private lateinit var noiseSensorComponent: NoiseSensorComponent
+    private lateinit var fieldMovementComponent: FieldMovementComponent
     private var lastNoisePosition: Point2d? = null
 
     override fun init() {
+        fieldMovementComponent = gameObject.getComponent<FieldMovementComponent>()!!
         noiseSensorComponent = gameObject.getComponent<NoiseSensorComponent>()!!
         noiseSensorComponent.addReaction { perceptions ->
             val noisePosition = perceptions.find { it.gameObject.name == "Player" }?.noisePosition
@@ -31,7 +32,7 @@ class HearingAgentComponent(gameObject: GameObject, override val id: String) : J
         }
     }
 
-    override fun execute(action: Structure) {
+    override fun execute(action: Structure): Boolean {
         when (action.functor) {
             Actions.moveRandom.toString() -> {
                 moveRandom()
@@ -44,6 +45,7 @@ class HearingAgentComponent(gameObject: GameObject, override val id: String) : J
                 move(x, y)
             }
         }
+        return true
     }
 
     override fun getPercepts(): MutableList<Literal> {
@@ -58,15 +60,20 @@ class HearingAgentComponent(gameObject: GameObject, override val id: String) : J
     }
 
     private fun moveRandom() {
+        val randomVelocity = ComponentsUtils.getRandomVelocity(gameObject)
         if (!randomTimer.isStarted || randomTimer.isElapsed()) {
             randomTimer.restart()
-            setRandomVelocity()
+
         }
         synchronized(gameObject) {
-            gameObject.rigidBody.velocity = Vector2d(velocityX, velocityY)
+            fieldMovementComponent.wakeUp()
+            fieldMovementComponent.objective = randomVelocity
         }
     }
 
+    /**
+     * Defines actions to take based on agent's perception
+     */
     private fun checkPercepts() {
         if (lastNoisePosition != null && (randomTimer.isStarted && !randomTimer.isElapsed())) {
             noiseSensorComponent.noiseColor = Color.RED
@@ -76,13 +83,9 @@ class HearingAgentComponent(gameObject: GameObject, override val id: String) : J
         }
     }
 
-    private fun setRandomVelocity() {
-        do {
-            velocityX = Random.nextInt(-1, 2)
-            velocityY = Random.nextInt(-1, 2)
-        } while (velocityX == 0 && velocityY == 0)
-    }
-
+    /**
+     * Set the objective to the coordinates [x] and [y]
+     */
     private fun move(x: Int, y: Int) {
         synchronized(gameObject) {
             gameObject.rigidBody.velocity =
