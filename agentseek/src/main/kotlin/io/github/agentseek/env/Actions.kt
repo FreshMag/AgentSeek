@@ -22,5 +22,10 @@ object Actions {
     /**
      * Action to make the agent defend the base
      */
-    val defendBase: Literal = Literal.parseLiteral("defendBase")
+    val stop: Literal = Literal.parseLiteral("stop")
+
+    /**
+     * Action to make the agent rotate to check the surroundings
+     */
+    val checkSurroundings: Literal = Literal.parseLiteral("checkSurroundings")
 }

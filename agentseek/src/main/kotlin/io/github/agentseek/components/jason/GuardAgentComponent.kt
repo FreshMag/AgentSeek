@@ -33,13 +33,10 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
     private lateinit var fieldMovementComponent: FieldMovementComponent
     private var lastEnemyPosition: Point2d? = null
     private var lastNoisePosition: Point2d? = null
-    private var baseReached = false
     private var randomTimer = TimerImpl(DEFAULT_RANDOM_TIMER)
     private val sightTimer = TimerImpl(DEFAULT_SIGHT_TIMER)
     private val noiseTimer = TimerImpl(DEFAULT_NOISE_TIMER)
     private val guardTimer = TimerImpl(DEFAULT_NOISE_TIMER)
-    private var velocityX = 0
-    private var velocityY = 0
 
 
     private val sightSensorReaction = { perceptions: List<SightSensorComponent.Perception> ->
@@ -79,9 +76,13 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
                 move(x, y)
             }
 
-            Actions.defendBase.toString() -> {
-                println("Defend base")
-                guardTimer.restart()
+            Actions.stop.toString() -> {
+                println("STOPPING")
+                fieldMovementComponent.stop()
+            }
+
+            Actions.checkSurroundings.toString() -> {
+                sightSensorComponent.rotate(90)
             }
         }
         return true
@@ -94,13 +95,13 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
         } else if (sightTimer.isElapsed()) {
             sightTimer.reset()
         }
-        if (isNearBase() && (!guardTimer.isElapsed())) {
-            percepts.add(Literal.parseLiteral("base_reached"))
-        }
         if (lastNoisePosition != null) {
             percepts.add(Literal.parseLiteral("enemy_heard(${lastNoisePosition!!.x.toInt()}, ${lastNoisePosition!!.y.toInt()})"))
         } else if (noiseTimer.isElapsed()) {
             noiseTimer.reset()
+        }
+        if (isNearBase()) {
+            percepts.add(Literal.parseLiteral("base_reached"))
         }
         checkPercepts()
         return percepts
@@ -153,6 +154,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
      */
     private fun move(x: Int, y: Int) {
         synchronized(gameObject) {
+            fieldMovementComponent.wakeUp()
             fieldMovementComponent.objective = point(x, y)
         }
     }
@@ -173,6 +175,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
         if (!randomTimer.isStarted || randomTimer.isElapsed()) {
             randomTimer.restart()
             synchronized(gameObject) {
+                fieldMovementComponent.wakeUp()
                 fieldMovementComponent.objective = getRandomVelocity()
             }
         }

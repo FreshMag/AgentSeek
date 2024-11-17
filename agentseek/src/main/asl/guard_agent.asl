@@ -21,11 +21,11 @@ base_position(30,30).
     !followEnemy.
 
 +!searchForEnemy : remotePlayerPosition(X, Y) & not remote_position <-
-    .print("SCELGO TE");
     !followEnemy.
 
-+!searchForEnemy : base_reached <-
-    !searchBase.
++!searchForEnemy : base_reached & remote_position <-
+    .print("DEF");
+    !defendBase.
 
 +!searchForEnemy : remote_position & base_position(X, Y) & not base_reached <-
     !returningToBase.
@@ -60,15 +60,20 @@ base_position(30,30).
     .wait(500);
     !searchForEnemy.
 
-+!searchBase : base_reached <-
-    .print("REACH");
-    defendBase;
-    !moveRandom.
-
 +!returningToBase : remote_position & base_position(X, Y) <-
     .print("returning to base");
     move(X, Y);
     .wait(500);
+    !searchForEnemy.
+
++!defendBase : base_reached & remote_position <-
+    stop;
+    .wait(enemy_position(X, Y), 3000);
+    !searchForEnemy.
+
+-!defendBase : not enemy_position(X, Y) <-
+    -remote_position[source(_)];
+    checkSurroundings;
     !searchForEnemy.
 
 +remotePlayerPosition(X, Y) : true <-
