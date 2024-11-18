@@ -15,8 +15,8 @@ import kotlin.time.Duration
 
 class SightSensorComponent(
     gameObject: GameObject,
-    coneLength: Double,
-    coneApertureRadians: Double,
+    val coneLength: Double,
+    val coneApertureRadians: Double,
     private val namesBlacklist: Set<String> = setOf(),
 ) :
     AbstractComponent(gameObject), Sensor<List<SightSensorComponent.Perception>> {

@@ -11,7 +11,7 @@ import io.github.agentseek.view.utilities.Rendering.fillGradientCircle
 import java.awt.Color
 import kotlin.time.Duration
 
-class NoiseSensorComponent(gameObject: GameObject, radius: Double) : AbstractComponent(gameObject),
+class NoiseSensorComponent(gameObject: GameObject, val radius: Double) : AbstractComponent(gameObject),
     Sensor<List<NoiseSensorComponent.Perception>> {
     private val noiseSensorCollider: Collider = Collider.CircleCollider(radius, gameObject)
     private var lastPos = gameObject.position
