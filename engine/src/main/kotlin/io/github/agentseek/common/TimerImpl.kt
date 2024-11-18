@@ -11,7 +11,7 @@ class TimerImpl(private var waitTimeMillis: Long) : Timer {
      * Checks if the timer is already working.
      */
     val isStarted: Boolean
-        get() = startMills.toInt() != 0
+        get() = startMills != 0L
 
     /**
      * Constructor method to instantiate a Timer given the amount of time to wait.
@@ -21,11 +21,7 @@ class TimerImpl(private var waitTimeMillis: Long) : Timer {
     }
 
     override fun isElapsed(): Boolean {
-        if (System.currentTimeMillis() - startMills > waitTimeMillis) {
-            reset()
-            return true
-        }
-        return false
+        return isStarted && System.currentTimeMillis() - startMills > waitTimeMillis
     }
 
     override fun startTimer() {
