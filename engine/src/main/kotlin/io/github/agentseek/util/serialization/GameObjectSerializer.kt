@@ -69,7 +69,12 @@ internal class GameObjectSerializer : JsonSerializer<GameObject>() {
     }
 
     private fun GameObject.writeRigidBody(generator: JsonGenerator) {
-        if (rigidBody is RigidBody.EmptyRigidBody) return
+        if (rigidBody is RigidBody.EmptyRigidBody) {
+            // If the rigid body is empty, we don't need to serialize it
+            // We then serialize only the position
+            generator.writeObjectField("position", this.position)
+            return
+        }
         generator.writeFieldName("rigidBody")
         generator.writeStartObject()
         generator.writeFieldName("shape")

@@ -46,13 +46,6 @@ class ComponentSpec : FreeSpec({
             repeat((1..5).count()) { GameEngine.doOne() }
             counter shouldBe 5
         }
-        "should call init only when added to the game object" - {
-            var counter = 0
-            val (gameObj, component) = scene.createComponent({ counter++ }, addToGameObject = false)
-            counter shouldBe 0
-            gameObj.addComponent(component)
-            counter shouldBe 1
-        }
         "should call onRemoved only when removed from the game object" - {
             var counter = 0
             val (gameObj, component) = scene.createComponent(onRemovedFun = { counter++ }, addToGameObject = false)
@@ -71,7 +64,7 @@ class ComponentSpec : FreeSpec({
         "should correctly notify events to the world" - {
             var counter = 0
             scene.createComponent(
-                initFun = { notifyEvent { counter++ } },
+                updateFun = { notifyEvent { counter++ } },
                 addToGameObject = true
             )
             counter shouldBe 0

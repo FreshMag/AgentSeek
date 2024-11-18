@@ -1,19 +1,13 @@
 package io.github.agentseek.view.editor
 
-import io.github.agentseek.common.Circle2d
-import io.github.agentseek.common.Cone2d
 import io.github.agentseek.common.Point2d
-import io.github.agentseek.common.Rectangle2d
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.Scene
 import io.github.agentseek.core.engine.GameEngine
-import io.github.agentseek.physics.RigidBody
-import io.github.agentseek.util.GameObjectUtilities.center
 import io.github.agentseek.util.serialization.loadGameObject
 import io.github.agentseek.util.serialization.save
 import io.github.agentseek.view.Renderer
 import io.github.agentseek.view.SimpleRenderer
-import io.github.agentseek.view.gui.EditorGui
 import io.github.agentseek.view.gui.EditorGui.selectedGo
 import io.github.agentseek.world.World
 import java.awt.Cursor
@@ -159,6 +153,7 @@ object Utilities {
                             jFrame,
                             scene.world,
                         )
+
                     KeyEvent.VK_BACK_SPACE -> {
                         println("Deleting ${selectedGo?.id}")
                         selectedGo?.delete()

@@ -18,6 +18,16 @@ data class Vector2d(var x: Double, var y: Double) {
     constructor(x: Int, y: Int) : this(x.toDouble(), y.toDouble())
 
     /**
+     * Returns the left-hand perpendicular vector to this one.
+     */
+    fun leftNormal(): Vector2d = this.rotateDegrees(90.0)
+
+    /**
+     * Returns the right-hand perpendicular vector to this one.
+     */
+    fun rightNormal(): Vector2d = this.rotateDegrees(-90.0)
+
+    /**
      * Return the difference between this vector and another [vector].
      */
     operator fun minus(vector: Vector2d): Vector2d = Vector2d(x - vector.x, y - vector.y)
@@ -30,8 +40,11 @@ data class Vector2d(var x: Double, var y: Double) {
     /**
      * This vector normalized.
      */
-    fun normalized(): Vector2d =
-        Vector2d(x / module(), y / module())
+    fun normalized(): Vector2d {
+        val module = module()
+        if (module == 0.0) return zero()
+        return Vector2d(x / module, y / module)
+    }
 
     /**
      * Multiplies this vector by a [factor].

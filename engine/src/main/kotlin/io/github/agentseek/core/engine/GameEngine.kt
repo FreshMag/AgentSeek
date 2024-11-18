@@ -4,14 +4,13 @@ import io.github.agentseek.common.TimedAction
 import io.github.agentseek.components.Component
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.Scene
+import io.github.agentseek.core.engine.GameEngine.init
+import io.github.agentseek.core.engine.GameEngine.loop
 import io.github.agentseek.core.engine.input.Input
 import io.github.agentseek.events.Event
-import io.github.agentseek.events.EventHandler
-import io.github.agentseek.events.EventListener
 import io.github.agentseek.util.factories.SceneFactory
 import io.github.agentseek.view.View
 import io.github.oshai.kotlinlogging.KotlinLogging
-import java.util.Collections
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -63,7 +62,21 @@ object GameEngine {
      * Loads a scene into the engine
      */
     fun loadScene(scene: Scene) {
-        this.scene = scene
+        if (this.scene != null) {
+            stop()
+            destroyScene()
+            this.scene = scene
+            start()
+        } else {
+            this.scene = scene
+        }
+    }
+
+    /**
+     * Destroys the current scene
+     */
+    fun destroyScene() {
+        this.scene?.gameObjects?.forEach { go -> go.delete() }
     }
 
     /**

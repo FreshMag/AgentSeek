@@ -1,8 +1,12 @@
 package io.github.agentseek.components
 
+import io.github.agentseek.common.Circle2d
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.physics.Collider
+import io.github.agentseek.util.GameObjectUtilities.attachRenderer
 import io.github.agentseek.util.GameObjectUtilities.center
+import io.github.agentseek.view.utilities.Rendering.strokeCircle
+import java.awt.Color
 import kotlin.math.absoluteValue
 import kotlin.time.Duration
 
@@ -21,6 +25,11 @@ class NoiseEmitterComponent(gameObject: GameObject, private val radius: Double) 
 
     override fun init() {
         noiseEmitterCollider.center = gameObject.center()
+        gameObject.attachRenderer { _, renderingContext ->
+            renderingContext?.strokeCircle(
+                noiseEmitterCollider.shape as Circle2d, color = Color.BLACK
+            )
+        }
     }
 
     override fun onUpdate(deltaTime: Duration) {
