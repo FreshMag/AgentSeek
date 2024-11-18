@@ -119,5 +119,5 @@ object Scenes {
             rigidBody = square(2.5).with(isStatic = true),
             renderer = DoorRenderer(),
         ),
-    ).also { it.save("./", "jasonExample") }
+    )
 }
