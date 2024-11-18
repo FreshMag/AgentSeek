@@ -33,7 +33,7 @@ fun World.loadGameObject(path: String): GameObject? = YAMLParse.parseGameObject(
 /**
  * Saves a [Scene] into a YAML file. Returns the path to the saved file
  */
-fun Scene.save(directory: String, name: String, serializeGameObjectsWithName: Boolean = true): String {
+fun Scene.save(directory: String, name: String, serializeGameObjectsWithName: Boolean = false): String {
     SceneSerializer.serializeGameObjectsWithName = serializeGameObjectsWithName
     SceneSerializer.gameObjectSerializePath = directory
     val path = Paths.get(directory, "$name.scene.yaml").toString()
