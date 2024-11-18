@@ -20,9 +20,8 @@ import io.github.agentseek.util.jason.JasonScenes.agents
 import io.github.agentseek.util.jason.JasonScenes.jasonAgent
 import io.github.agentseek.util.jason.JasonScenes.sceneWithJason
 import io.github.agentseek.view.CameraRenderer
-import io.github.agentseek.view.SimpleRenderer
+import io.github.agentseek.view.DoorRenderer
 import io.github.agentseek.view.gui.GameGui
-import java.awt.Color
 import kotlin.math.PI
 
 object Scenes {
@@ -54,7 +53,7 @@ object Scenes {
             gameObject(
                 { ConstantAccelerationComponent(it, vector(2, 2)) },
                 rigidBody = circle(5),
-                renderer = default()
+                renderer = GameGui.defaultRenderer()
             ),
             // Cone to collide with
             gameObject(
@@ -101,10 +100,10 @@ object Scenes {
             ),
             *bounds(2.5, GameGui.defaultRenderer(), GameGui.camera.viewPortWidth, GameGui.camera.viewPortHeight),
             gameObject(
-                { DoorComponent(it, "scenes/SimpleCollision.scene.yaml") },
+                { DoorComponent(it, "jasonExample") },
                 position = point(0, 10),
                 rigidBody = square(2.5).with(isStatic = true),
-                renderer = SimpleRenderer(color = Color.WHITE),
+                renderer = DoorRenderer(),
             ),
         )
 }
