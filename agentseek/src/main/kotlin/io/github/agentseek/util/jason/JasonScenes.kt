@@ -56,8 +56,8 @@ object JasonScenes {
         name: String,
         environmentClass: KClass<out Environment>,
         agents: List<JasonAgentConfig>,
+        vararg otherGameObjects: (World) -> GameObject,
         hideJasonGui: Boolean = false,
-        vararg otherGameObjects: (World) -> GameObject
     ): Scene =
         scene(
             // Jason manager
