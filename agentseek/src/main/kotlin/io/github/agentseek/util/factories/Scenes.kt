@@ -20,7 +20,9 @@ import io.github.agentseek.util.FastEntities.with
 import io.github.agentseek.util.jason.JasonScenes.agents
 import io.github.agentseek.util.jason.JasonScenes.jasonAgent
 import io.github.agentseek.util.jason.JasonScenes.sceneWithJason
+import io.github.agentseek.util.serialization.save
 import io.github.agentseek.view.CameraRenderer
+import io.github.agentseek.view.DoorRenderer
 import io.github.agentseek.view.SimpleRenderer
 import io.github.agentseek.view.gui.GameGui
 import kotlin.math.PI
@@ -109,6 +111,13 @@ object Scenes {
             position = point(15, 15),
             rigidBody = rectangle(4, 4).with(isStatic = true),
             renderer = GameGui.defaultRenderer(),
-        ), *bounds(2.5, GameGui.defaultRenderer(), GameGui.camera.viewPortWidth, GameGui.camera.viewPortHeight)
-    )
+        ),
+        *bounds(2.5, GameGui.defaultRenderer(), GameGui.camera.viewPortWidth, GameGui.camera.viewPortHeight),
+        gameObject(
+            { DoorComponent(it, "jasonExample") },
+            position = point(0, 10),
+            rigidBody = square(2.5).with(isStatic = true),
+            renderer = DoorRenderer(),
+        ),
+    ).also { it.save("./", "jasonExample") }
 }
