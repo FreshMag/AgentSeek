@@ -8,7 +8,7 @@ import kotlin.time.Duration
 
 @Requires(NoiseSensorComponent::class)
 class NoiseSensorVisualComponent(gameObject: GameObject) : AbstractComponent(gameObject) {
-    private lateinit var noiseSensor: NoiseSensorComponent
+    private var noiseSensor: NoiseSensorComponent? = null
     private val timer = TimerImpl(DEFAULT_SUSPICIOUS_TIME_MILLIS.toLong())
     override fun init() {
         noiseSensor = gameObject.getComponent<NoiseSensorComponent>()!!
@@ -16,7 +16,7 @@ class NoiseSensorVisualComponent(gameObject: GameObject) : AbstractComponent(gam
     }
 
     override fun onUpdate(deltaTime: Duration) {
-        if (noiseSensor.getNoiseFound() && timer.isElapsed()) {
+        if (noiseSensor?.getNoiseFound() == true && timer.isElapsed()) {
             timer.restart()
             VFX.fadingText(
                 worldPosition = gameObject.position,
