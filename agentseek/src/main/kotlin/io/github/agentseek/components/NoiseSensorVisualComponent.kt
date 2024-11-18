@@ -8,12 +8,12 @@ import kotlin.time.Duration
 
 @Requires(NoiseSensorComponent::class)
 class NoiseSensorVisualComponent(gameObject: GameObject) : AbstractComponent(gameObject) {
-    private lateinit var noiseSensor: NoiseSensorComponent
+    private var noiseSensor: NoiseSensorComponent? = null
     private var noiseFound: Boolean = false
     private val timer = TimerImpl(DEFAULT_SUSPICIOUS_TIME_MILLIS.toLong())
     override fun init() {
         noiseSensor = gameObject.getComponent<NoiseSensorComponent>()!!
-        noiseSensor.addReaction {
+        noiseSensor?.addReaction {
             noiseFound = it.isNotEmpty()
         }
     }

@@ -94,8 +94,8 @@ class CameraAgentComponent(gameObject: GameObject, override val id: String) : Ja
      */
     private fun hasWallLeftRight(): Pair<Boolean, Boolean> {
         val direction = sightSensorComponent.directionOfSight
-        val leftVector = direction.leftNormal * WALL_AWARENESS
-        val rightVector = direction.rightNormal * WALL_AWARENESS
+        val leftVector = direction.leftNormal() * WALL_AWARENESS
+        val rightVector = direction.rightNormal() * WALL_AWARENESS
         val center = gameObject.center()
         return bounds.fold(Pair(false, false)) { acc, go ->
             Pair(

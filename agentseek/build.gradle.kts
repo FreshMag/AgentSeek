@@ -39,16 +39,6 @@ sourceSets {
     }
 }
 
-file(projectDir).listFiles().filter { it.extension == "mas2j" }.forEach { mas2jFile ->
-    task<JavaExec>("run${mas2jFile.nameWithoutExtension}Mas") {
-        classpath = sourceSets.getByName("main").runtimeClasspath
-        mainClass.set("jason.infra.centralised.RunCentralisedMAS")
-        args(mas2jFile.path)
-        standardInput = System.`in`
-        javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
-    }
-}
-
 kotlin {
     jvmToolchain(libs.versions.kotlinJvmToolchain.get().toInt())
 }

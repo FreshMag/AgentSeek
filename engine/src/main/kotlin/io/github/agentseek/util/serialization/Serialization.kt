@@ -33,7 +33,7 @@ fun World.loadGameObject(path: String): GameObject? = YAMLParse.parseGameObject(
 /**
  * Saves a [Scene] into a YAML file. Returns the path to the saved file
  */
-fun Scene.save(directory: String, name: String, serializeGameObjectsWithName: Boolean = true): String {
+fun Scene.save(directory: String, name: String, serializeGameObjectsWithName: Boolean = false): String {
     SceneSerializer.serializeGameObjectsWithName = serializeGameObjectsWithName
     SceneSerializer.gameObjectSerializePath = directory
     val path = Paths.get(directory, "$name.scene.yaml").toString()
@@ -48,11 +48,18 @@ object Scenes {
     fun load(directory: String, name: String): Scene? =
         YAMLParse.parseDto<Scene>(Paths.get(directory, "$name.scene.yaml").toString())
 
+
+    /**
+     * Function to remove the substring after the first dot "."
+     */
+    private fun removeExtension(name: String): String =
+        name.substringBefore(".")
+
     /**
      * Loads a [Scene] taken from `"<RESOURCE_DIR>/yaml/scenes/<NAME>.scene.yaml"`
      */
     fun Any.loadSceneFromResource(name: String): Scene? =
-        this::class.java.getResource("/yaml/scenes/$name.scene.yaml")
+        this::class.java.getResource("/yaml/scenes/${removeExtension(name)}.scene.yaml")
             ?.also { SceneDeserializer.resourcePath = this::class.java.getResource("/yaml/gameObjects/")?.path ?: "" }
             ?.let {
                 YAMLParse.parseString<Scene>(

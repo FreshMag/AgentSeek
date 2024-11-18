@@ -2,7 +2,6 @@ package io.github.agentseek.view
 
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.view.utilities.Rendering.fillShape
-import io.github.agentseek.view.utilities.Rendering.strokeShape
 import java.awt.Color
 import java.awt.Graphics2D
 

@@ -9,6 +9,7 @@ class GameViewPanel(size: Dimension, private val rendering: (Graphics2D) -> Unit
         layout = BorderLayout()
         this.preferredSize = Dimension(size)
         this.add(DrawStuff(), BorderLayout.CENTER)
+        this.background = Color.WHITE
         revalidate()
         repaint()
     }
