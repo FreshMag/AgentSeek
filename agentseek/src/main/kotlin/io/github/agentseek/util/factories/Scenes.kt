@@ -13,13 +13,16 @@ import io.github.agentseek.util.FastEntities.gameObject
 import io.github.agentseek.util.FastEntities.point
 import io.github.agentseek.util.FastEntities.rectangle
 import io.github.agentseek.util.FastEntities.scene
+import io.github.agentseek.util.FastEntities.square
 import io.github.agentseek.util.FastEntities.vector
 import io.github.agentseek.util.FastEntities.with
 import io.github.agentseek.util.jason.JasonScenes.agents
 import io.github.agentseek.util.jason.JasonScenes.jasonAgent
 import io.github.agentseek.util.jason.JasonScenes.sceneWithJason
 import io.github.agentseek.view.CameraRenderer
+import io.github.agentseek.view.SimpleRenderer
 import io.github.agentseek.view.gui.GameGui
+import java.awt.Color
 import kotlin.math.PI
 
 object Scenes {
@@ -96,6 +99,12 @@ object Scenes {
                 rigidBody = rectangle(4, 4).with(isStatic = true),
                 renderer = GameGui.defaultRenderer(),
             ),
-            *bounds(2.5, GameGui.defaultRenderer(), GameGui.camera.viewPortWidth, GameGui.camera.viewPortHeight)
+            *bounds(2.5, GameGui.defaultRenderer(), GameGui.camera.viewPortWidth, GameGui.camera.viewPortHeight),
+            gameObject(
+                { DoorComponent(it, "scenes/SimpleCollision.scene.yaml") },
+                position = point(0, 10),
+                rigidBody = square(2.5).with(isStatic = true),
+                renderer = SimpleRenderer(color = Color.WHITE),
+            ),
         )
 }
