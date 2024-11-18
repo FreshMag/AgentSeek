@@ -1,6 +1,9 @@
 ---
 gameObjects:
 - name: ""
+  position:
+    x: 0.0
+    "y": 0.0
   components:
   - class: "io.github.agentseek.components.jason.JasonInitializerComponent"
     arguments:
@@ -17,10 +20,16 @@ gameObjects:
         aslAgentName: "camera_agent"
       - id: "camera2"
         aslAgentName: "camera_agent"
+    - name: "hideJasonGui"
+      type: "boolean"
+      value: true
   renderer:
     class: "io.github.agentseek.view.EmptyRenderer"
     arguments: []
 - name: "camera1"
+  position:
+    x: 4.0
+    "y": 4.0
   components:
   - class: "io.github.agentseek.components.jason.CameraAgentComponent"
     arguments:
@@ -31,6 +40,9 @@ gameObjects:
     class: "io.github.agentseek.view.CameraRenderer"
     arguments: []
 - name: "camera2"
+  position:
+    x: 46.0
+    "y": 4.0
   components:
   - class: "io.github.agentseek.components.jason.CameraAgentComponent"
     arguments:
@@ -297,6 +309,6 @@ gameObjects:
       type: "java.lang.String"
       value: "jasonExample"
   renderer:
-    class: "io.github.agentseek.view.SimpleRenderer"
+    class: "io.github.agentseek.view.DoorRenderer"
     arguments: []
 flags: {}
