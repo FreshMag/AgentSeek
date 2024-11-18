@@ -19,6 +19,7 @@ import io.github.agentseek.util.FastEntities.with
 import io.github.agentseek.util.jason.JasonScenes.agents
 import io.github.agentseek.util.jason.JasonScenes.jasonAgent
 import io.github.agentseek.util.jason.JasonScenes.sceneWithJason
+import io.github.agentseek.util.serialization.save
 import io.github.agentseek.view.CameraRenderer
 import io.github.agentseek.view.DoorRenderer
 import io.github.agentseek.view.gui.GameGui
@@ -82,6 +83,7 @@ object Scenes {
                     renderer = CameraRenderer(),
                 ),
             ),
+            hideJasonGui = true,
             gameObject(
                 { NoiseSensorComponent(it, 3.0) },
                 { NoiseSensorVisualComponent(it) },
@@ -105,5 +107,5 @@ object Scenes {
                 rigidBody = square(2.5).with(isStatic = true),
                 renderer = DoorRenderer(),
             ),
-        )
+        ).also { it.save("./", "jasonExample") }
 }

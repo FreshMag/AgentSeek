@@ -56,6 +56,7 @@ object JasonScenes {
         name: String,
         environmentClass: KClass<out Environment>,
         agents: List<JasonAgentConfig>,
+        hideJasonGui: Boolean = false,
         vararg otherGameObjects: (World) -> GameObject
     ): Scene =
         scene(
@@ -65,7 +66,8 @@ object JasonScenes {
                     it,
                     name,
                     environmentClass.qualifiedName!!,
-                    agents.map { it.asl }.toList()
+                    agents.map { it.asl }.toList(),
+                    hideJasonGui,
                 )
             }),
             *(agents.map { it.gameObjectSetter } + otherGameObjects).toTypedArray()

@@ -13,10 +13,11 @@ class JasonInitializerComponent(
     private val mas2jName: String,
     private val environmentClassFQName: String,
     private val agents: List<Agent>,
+    private val hideJasonGui: Boolean = false,
 ) : AbstractComponent(gameObject) {
 
     override fun init() {
-        val file = generateTempFile(mas2jName, Class.forName(environmentClassFQName), agents).path
+        val file = generateTempFile(mas2jName, Class.forName(environmentClassFQName), agents).absolutePath
         jasonManager = this.gameObject
         Thread {
             RunLocalMAS.main(arrayOf(file))
