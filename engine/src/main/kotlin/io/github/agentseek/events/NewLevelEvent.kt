@@ -13,9 +13,7 @@ class NewLevelEvent(val destinationSceneResourceName: String) : Event {
     override fun handle(state: Scene) {
         val newScene = loadSceneFromResource(destinationSceneResourceName)
         newScene?.let {
-            GameEngine.stop()
             GameEngine.loadScene(it)
-            GameEngine.start()
         } ?: logError("A NewLevelEvent was notified, but $destinationSceneResourceName was not found among resources.")
     }
 }
