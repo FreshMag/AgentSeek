@@ -73,6 +73,9 @@ internal class GameObjectDeserializer(private val world: World) : JsonDeserializ
             go.setRigidBodyFrom(rigidBodyNode)
         } else {
             go.rigidBody = RigidBody.EmptyRigidBody(go)
+            if (node.has("position")) {
+                go.position = jacksonObjectMapper().treeToValue(node["position"])
+            }
         }
 
         // Components
