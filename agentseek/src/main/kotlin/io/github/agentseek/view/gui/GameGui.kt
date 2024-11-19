@@ -43,7 +43,7 @@ object GameGui : View, InputListener() {
         }
     }
 
-    fun startGameGui(useRepl: Boolean = false, scene: Scene = Scenes.jasonExampleScene()) {
+    fun startGameGui(useRepl: Boolean = false, scene: Scene = Scenes.levelOne()) {
         frame.name = APP_NAME
         val panel = GameViewPanel(screenSize, gameViewRendering)
         frame.add(panel, BorderLayout.CENTER)
