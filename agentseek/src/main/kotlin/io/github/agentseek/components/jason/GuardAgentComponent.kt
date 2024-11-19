@@ -2,6 +2,7 @@ package io.github.agentseek.components.jason
 
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.common.TimerImpl
+import io.github.agentseek.common.Vector2d
 import io.github.agentseek.components.FieldMovementComponent
 import io.github.agentseek.components.NoiseSensorComponent
 import io.github.agentseek.components.SightSensorComponent
@@ -9,6 +10,7 @@ import io.github.agentseek.components.common.ComponentsUtils
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.env.Actions
 import io.github.agentseek.util.FastEntities.point
+import io.github.agentseek.util.GameObjectUtilities.center
 import jason.asSyntax.Literal
 import jason.asSyntax.NumberTerm
 import jason.asSyntax.Structure
@@ -131,7 +133,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
     private fun move(x: Int, y: Int) {
         synchronized(gameObject) {
             fieldMovementComponent.wakeUp()
-            fieldMovementComponent.objective = point(x, y)
+            fieldMovementComponent.setDirection(Point2d(x.toDouble(), y.toDouble()) - gameObject.center())
         }
     }
 
@@ -141,10 +143,10 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
     private fun moveRandom() {
         if (!randomTimer.isStarted || randomTimer.isElapsed()) {
             randomTimer.restart()
-            val randomVelocity = ComponentsUtils.getRandomVelocity(gameObject)
+            var randomVelocity: Vector2d = ComponentsUtils.getRandomVelocity(gameObject)
             synchronized(gameObject) {
                 fieldMovementComponent.wakeUp()
-                fieldMovementComponent.objective = randomVelocity
+                fieldMovementComponent.setDirection(randomVelocity)
             }
         }
     }

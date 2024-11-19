@@ -73,7 +73,7 @@ class HearingAgentComponent(gameObject: GameObject, override val id: String) : J
         }
         synchronized(gameObject) {
             fieldMovementComponent.wakeUp()
-            fieldMovementComponent.objective = randomVelocity
+            fieldMovementComponent.setDirection(randomVelocity)
         }
     }
 
