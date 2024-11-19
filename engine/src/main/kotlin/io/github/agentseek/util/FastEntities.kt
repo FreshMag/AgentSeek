@@ -206,11 +206,12 @@ object FastEntities {
     /**
      * Returns an array of game object setters that adds rectangular bounds of size [size] to the world
      */
-    fun bounds(size: Number,
-               renderer: Renderer<*>,
-               cameraWidth: Number,
-               cameraHeight: Number,
-               offCameraSize: Int = 50
+    fun bounds(
+        size: Number,
+        renderer: Renderer<*>,
+        cameraWidth: Number,
+        cameraHeight: Number,
+        offCameraSize: Int = 50
     ): Array<(World) -> GameObject> =
         listOf(
             point(-offCameraSize + size.toDouble(), 0),
@@ -235,6 +236,22 @@ object FastEntities {
             vector(0, -1),
             vector(-1, 0),
             vector(0, 1),
+        )
+
+    /**
+     * Returns a list of vectors corresponding to the eight possible directions in this order:
+     * east, southeast, south, southwest, west, northwest, north, northeast.
+     */
+    fun allDirections8(): Iterable<Vector2d> =
+        listOf(
+            vector(1, 0),
+            vector(1, -1),
+            vector(0, -1),
+            vector(-1, -1),
+            vector(-1, 0),
+            vector(-1, 1),
+            vector(0, 1),
+            vector(1, 1),
         )
 
 }
