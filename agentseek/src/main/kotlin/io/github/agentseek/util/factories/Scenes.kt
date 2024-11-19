@@ -181,7 +181,7 @@ object Scenes {
                 agentComponent = { id, go -> GuardAgentComponent(go, id) },
                 { NoiseSensorComponent(it, 3.0) },
                 { SightSensorComponent(it, 7.0, 1.0) },
-                { DistanceSensorComponent(it, 5.0) },
+                { DistanceSensorComponent(it, 2.8) },
                 { FieldMovementComponent(it) },
                 position = point(10, 4),
                 rigidBody = square(2.0),
