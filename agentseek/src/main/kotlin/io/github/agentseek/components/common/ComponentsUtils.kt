@@ -1,6 +1,7 @@
 package io.github.agentseek.components.common
 
 import io.github.agentseek.common.Point2d
+import io.github.agentseek.common.Vector2d
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.physics.Rays.castRay
 import io.github.agentseek.util.FastEntities
@@ -13,11 +14,15 @@ object ComponentsUtils {
      * and selecting the direction of the furthest intersecting point.
      *
      * @param gameObject The game object from which to cast rays.
-     * @return A Point2d representing the calculated random velocity.
+     * @return A Vector2d representing the calculated random velocity.
      */
-    fun getRandomVelocity(gameObject: GameObject): Point2d =
-        FastEntities.allDirections().mapNotNull { gameObject.castRay(it).firstIntersecting }
-            .maxBy { it.distance }.gameObject.position
+    fun getRandomVelocity(gameObject: GameObject): Vector2d =
+        FastEntities.allDirections().sortedBy { gameObject.castRay(it).firstIntersecting?.distance ?: 0.0 }.drop(1)
+            .let { directions ->
+                val weightedRandomIndex =
+                    (0 until directions.size).flatMap { index -> List(index + 1) { index } }.random()
+                directions[weightedRandomIndex]
+            }
 
     /**
      * Checks if the distance between two points in a 2D space is within the specified maximum distance.
