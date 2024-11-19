@@ -190,6 +190,7 @@ object Scenes {
         ),
         gameObject(
             { NoiseEmitterComponent(it, 3.0) },
+            { MouseNoiseEmitterComponent(it) },
             { InputComponent(it) },
             position = point(GameGui.camera.viewPortWidth - 5, GameGui.camera.viewPortHeight - 6.5),
             rigidBody = rectangle(2, 2),
