@@ -108,13 +108,6 @@ object Scenes {
             renderer = GameGui.defaultRenderer(),
             name = "Player"
         ),
-        gameObject(
-            { NoiseSensorComponent(it, 3.0) },
-            { NoiseSensorVisualComponent(it) },
-            position = point(15, 15),
-            rigidBody = rectangle(4, 4).with(isStatic = true),
-            renderer = GameGui.defaultRenderer(),
-        ),
         *bounds(2.5, GameGui.defaultRenderer(), GameGui.camera.viewPortWidth, GameGui.camera.viewPortHeight),
         gameObject(
             { DoorComponent(it, "jasonExample") },
