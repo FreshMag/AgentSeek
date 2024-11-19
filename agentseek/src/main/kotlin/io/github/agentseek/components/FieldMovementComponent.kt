@@ -62,6 +62,6 @@ class FieldMovementComponent(gameObject: GameObject) : AbstractComponent(gameObj
     companion object {
         const val TANGENTIAL_DEGREES = 115.0
         const val MAX_VELOCITY = 2.0
-        const val DANGER_COEFFICIENT = 0.3
+        const val DANGER_COEFFICIENT = 0.5
     }
 }
