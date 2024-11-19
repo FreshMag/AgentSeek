@@ -2,6 +2,7 @@ package io.github.agentseek.components
 
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.common.TimerImpl
+import io.github.agentseek.components.common.ComponentsUtils
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.core.engine.input.Input
@@ -9,7 +10,6 @@ import io.github.agentseek.physics.Collider
 import io.github.agentseek.view.Camera
 import io.github.agentseek.view.animations.VFX
 import java.awt.Color
-import kotlin.math.sqrt
 import kotlin.time.Duration
 
 @Requires(NoiseEmitterComponent::class)
@@ -31,7 +31,12 @@ class MouseNoiseEmitterComponent(gameObject: GameObject) : AbstractComponent(gam
         val mouse = Input.mouseClicked()
         mouse?.let {
             val worldPoint = camera.toWorldPoint(mouse)
-            if (isClickNearPlayer(worldPoint) && (!timer.isStarted || timer.isElapsed())) {
+            if (ComponentsUtils.isPointWithinDistance(
+                    worldPoint,
+                    Point2d(gameObject.position.x, gameObject.position.y),
+                    STANDARD_NEAR_PLAYER_DISTANCE
+                ) && (!timer.isStarted || timer.isElapsed())
+            ) {
                 timer.restart()
                 noiseEmitterCollider = Collider.CircleCollider(STANDARD_NOISE_RADIUS, gameObject)
                 noiseEmitterCollider?.center = worldPoint
@@ -48,11 +53,5 @@ class MouseNoiseEmitterComponent(gameObject: GameObject) : AbstractComponent(gam
     fun getNoiseEmitterCollider(): Collider? {
         return if (isEmittingNoise) noiseEmitterCollider
         else null
-    }
-
-    private fun isClickNearPlayer(worldPoint: Point2d): Boolean {
-        val dx = worldPoint.x - gameObject.position.x
-        val dy = worldPoint.y - gameObject.position.y
-        return sqrt(dx * dx + dy * dy) <= STANDARD_NEAR_PLAYER_DISTANCE
     }
 }
