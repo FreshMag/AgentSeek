@@ -20,7 +20,6 @@ import io.github.agentseek.util.FastEntities.with
 import io.github.agentseek.util.jason.JasonScenes.agents
 import io.github.agentseek.util.jason.JasonScenes.jasonAgent
 import io.github.agentseek.util.jason.JasonScenes.sceneWithJason
-import io.github.agentseek.util.serialization.save
 import io.github.agentseek.view.CameraRenderer
 import io.github.agentseek.view.DoorRenderer
 import io.github.agentseek.view.SimpleRenderer
@@ -60,7 +59,8 @@ object Scenes {
     )
 
     fun jasonExampleScene(): Scene = sceneWithJason(
-        name = "example", environmentClass = AgentSeekEnvironment::class, agents = agents(
+        name = "example", environmentClass = AgentSeekEnvironment::class,
+        agents = agents(
             jasonAgent(
                 id = "camera1",
                 aslName = "camera_agent",
@@ -98,14 +98,17 @@ object Scenes {
                 rigidBody = square(2.0),
                 renderer = SimpleRenderer(),
             )
-        ), gameObject(
+        ),
+        gameObject(
             { NoiseEmitterComponent(it, 3.0) },
+            { MouseNoiseEmitterComponent(it) },
             { InputComponent(it) },
             position = point(10, 10),
             rigidBody = rectangle(2, 2),
             renderer = GameGui.defaultRenderer(),
             name = "Player"
-        ), gameObject(
+        ),
+        gameObject(
             { NoiseSensorComponent(it, 3.0) },
             { NoiseSensorVisualComponent(it) },
             position = point(15, 15),
