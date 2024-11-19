@@ -13,7 +13,6 @@ import jason.asSyntax.Literal
 import jason.asSyntax.NumberTerm
 import jason.asSyntax.Structure
 import java.awt.Color
-import kotlin.math.sqrt
 
 class GuardAgentComponent(gameObject: GameObject, override val id: String) : JasonAgent(gameObject) {
 
@@ -96,7 +95,12 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
         } else if (noiseTimer.isElapsed()) {
             noiseTimer.reset()
         }
-        if (isNearBase()) {
+        if (ComponentsUtils.isPointWithinDistance(
+                firstWorldPoint = point(gameObject.position.x, gameObject.position.y), secondWorldPoint = point(
+                    basePosition.x, basePosition.y
+                ), maxDistance = DEFAULT_NEAR_BASE_DISTANCE
+            )
+        ) {
             percepts.add(Literal.parseLiteral("base_reached"))
         }
         checkPercepts()
@@ -119,16 +123,6 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
             noiseSensorComponent.noiseColor = Color.YELLOW
             lastNoisePosition = null
         }
-    }
-
-    /**
-     * Determines if the game object is near the base, calculating the Euclidean distance between the game object's current position
-     * and base position.
-     */
-    private fun isNearBase(): Boolean {
-        val dx = gameObject.position.x - basePosition.x
-        val dy = gameObject.position.y - basePosition.y
-        return sqrt(dx * dx + dy * dy) <= DEFAULT_NEAR_BASE_DISTANCE
     }
 
     /**
