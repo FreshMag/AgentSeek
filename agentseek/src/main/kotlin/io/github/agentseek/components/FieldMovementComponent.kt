@@ -20,17 +20,8 @@ class FieldMovementComponent(gameObject: GameObject) : AbstractComponent(gameObj
 
     private var isStopped: Boolean = false
 
-    private var debugDirection = Vector2d.zero()
-    private var debugDanger = Vector2d.zero()
-
     override fun init() {
         sensor = gameObject.getComponent<DistanceSensorComponent>()!!
-
-        gameObject.attachRenderer { _, context ->
-            context?.drawVector(gameObject.center(), debugDirection, java.awt.Color.PINK)
-            context?.drawVector(gameObject.center(), debugDanger, java.awt.Color.CYAN)
-            context?.drawVector(gameObject.center(), forwardDirection, java.awt.Color.ORANGE)
-        }
     }
 
     override fun onUpdate(deltaTime: Duration) {
@@ -39,7 +30,6 @@ class FieldMovementComponent(gameObject: GameObject) : AbstractComponent(gameObj
             return
         }
         val distances = sensor.getDistancesResultant()
-        debugDanger = distances
         val direction: Vector2d = previousDirection +
                 if (distances != Vector2d.zero()) {
                     val clockwise = distances.rotateDegrees(-TANGENTIAL_DEGREES)
@@ -55,7 +45,6 @@ class FieldMovementComponent(gameObject: GameObject) : AbstractComponent(gameObj
                     forwardDirection
                 }
         previousDirection = direction.normalized()
-        debugDirection = direction * MAX_VELOCITY
         gameObject.rigidBody.velocity = previousDirection * MAX_VELOCITY
     }
 
@@ -73,7 +62,7 @@ class FieldMovementComponent(gameObject: GameObject) : AbstractComponent(gameObj
 
     companion object {
         const val TANGENTIAL_DEGREES = 115.0
-        const val MAX_VELOCITY = 2.0
+        const val MAX_VELOCITY = 3.5
         const val DANGER_COEFFICIENT = 0.75
     }
 }
