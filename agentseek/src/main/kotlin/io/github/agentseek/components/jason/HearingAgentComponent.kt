@@ -66,14 +66,14 @@ class HearingAgentComponent(gameObject: GameObject, override val id: String) : J
     }
 
     private fun moveRandom() {
-        val randomVelocity = ComponentsUtils.getRandomVelocity(gameObject)
+        val randomObjective = ComponentsUtils.getRandomVelocity(gameObject)
         if (!randomTimer.isStarted || randomTimer.isElapsed()) {
             randomTimer.restart()
 
         }
         synchronized(gameObject) {
             fieldMovementComponent.wakeUp()
-            fieldMovementComponent.setDirection(randomVelocity)
+            fieldMovementComponent.objective = randomObjective
         }
     }
 

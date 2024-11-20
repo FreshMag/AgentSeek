@@ -39,11 +39,13 @@ base_position(30,30).
     !searchForPlayer.
 
 +!followEnemy : enemy_heard(X, Y) <-
+    .print("hearing enemy");
     move(X, Y);
     .wait(500);
     !searchForPlayer.
 
 +!followEnemy : camera_remote_player_position(X, Y) <-
+    .print("Camera told me position");
     move(X, Y);
     -camera_remote_player_position(X, Y)[source(_)];
     .wait(500);
