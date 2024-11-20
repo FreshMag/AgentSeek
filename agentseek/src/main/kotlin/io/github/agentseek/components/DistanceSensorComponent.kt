@@ -33,7 +33,7 @@ class DistanceSensorComponent(
             .mapNotNull { direction ->
                 val first = gameObject.castRay(direction).firstIntersecting
                 first?.let {
-                    if (it.distance < radius) {
+                    if (it.gameObject.name != PLAYER_NAME && it.distance < radius) {
                         direction * (radius - it.distance)
                     } else {
                         null
@@ -44,6 +44,10 @@ class DistanceSensorComponent(
                 debugVectors = it
             }
             .sumUp()
+    }
+
+    companion object {
+        const val PLAYER_NAME = "Player"
     }
 
 }
