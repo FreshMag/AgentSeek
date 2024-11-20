@@ -3,9 +3,7 @@ package io.github.agentseek.components
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.common.Vector2d
 import io.github.agentseek.core.GameObject
-import io.github.agentseek.util.GameObjectUtilities.attachRenderer
 import io.github.agentseek.util.GameObjectUtilities.center
-import io.github.agentseek.view.utilities.Rendering.drawVector
 import kotlin.time.Duration
 
 @Requires(DistanceSensorComponent::class)
