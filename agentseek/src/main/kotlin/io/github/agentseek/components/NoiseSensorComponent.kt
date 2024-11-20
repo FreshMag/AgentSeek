@@ -2,7 +2,6 @@ package io.github.agentseek.components
 
 import io.github.agentseek.common.Circle2d
 import io.github.agentseek.common.Point2d
-import io.github.agentseek.components.SightSensorComponent.Perception
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.physics.Collider
 import io.github.agentseek.util.GameObjectUtilities.attachRenderer
@@ -40,18 +39,19 @@ class NoiseSensorComponent(gameObject: GameObject, radius: Double) : AbstractCom
             go.getComponent<NoiseEmitterComponent>()?.let { noiseEmitter ->
                 noiseEmitter.getNoiseEmitterCollider()?.let {
                     if (it.isCollidingWith(noiseSensorCollider)) {
-                        return@mapNotNull Perception(go, it.position)
+                        return@mapNotNull Perception(go, it.center)
                     }
-                }
-                go.getComponent<MouseNoiseEmitterComponent>()?.let { mouseEmitter ->
-                    mouseEmitter.getNoiseEmitterCollider()?.let {
-                        if (it.isCollidingWith(noiseSensorCollider)) {
-                            return@mapNotNull Perception(go, it.center)
-                        }
-                    }
-                    return@mapNotNull null
                 }
             }
+            go.getComponent<MouseNoiseEmitterComponent>()?.let { mouseEmitter ->
+                mouseEmitter.getNoiseEmitterCollider()?.let {
+                    if (it.isCollidingWith(noiseSensorCollider)) {
+                        return@mapNotNull Perception(go, it.center)
+                    }
+                }
+            }
+            return@mapNotNull null
+
         }
         reactions.forEach { it(perceptions) }
     }
