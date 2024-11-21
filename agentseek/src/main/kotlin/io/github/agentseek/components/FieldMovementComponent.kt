@@ -12,9 +12,9 @@ class FieldMovementComponent(gameObject: GameObject) : AbstractComponent(gameObj
     private var previousDirection = Vector2d.zero()
     private var directionObjective: Vector2d = Vector2d.zero()
     private val forwardDirection
-        get() = objective?.let { it - gameObject.center() } ?: directionObjective
+        get() = objective - gameObject.center()
 
-    var objective: Point2d? = Point2d(50.0, 50.0)
+    var objective: Point2d = Point2d(50.0, 50.0)
 
     private var isStopped: Boolean = false
 
@@ -47,7 +47,6 @@ class FieldMovementComponent(gameObject: GameObject) : AbstractComponent(gameObj
     }
 
     fun setDirection(direction: Vector2d) {
-        objective = null
         directionObjective = direction.normalized()
     }
 
@@ -61,7 +60,7 @@ class FieldMovementComponent(gameObject: GameObject) : AbstractComponent(gameObj
 
     companion object {
         const val TANGENTIAL_DEGREES = 115.0
-        const val MAX_VELOCITY = 2.0
-        const val DANGER_COEFFICIENT = 0.5
+        const val MAX_VELOCITY = 3.5
+        const val DANGER_COEFFICIENT = 0.75
     }
 }

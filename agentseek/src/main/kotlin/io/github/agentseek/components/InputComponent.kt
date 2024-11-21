@@ -7,7 +7,7 @@ import kotlin.time.Duration
 
 class InputComponent(gameObject: GameObject) : AbstractComponent(gameObject) {
     companion object {
-        const val STANDARD_VELOCITY = 2.0
+        const val STANDARD_VELOCITY = 3.5
     }
 
     override fun onUpdate(deltaTime: Duration) {

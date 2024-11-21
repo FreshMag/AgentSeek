@@ -35,6 +35,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
     private val noiseTimer = TimerImpl(DEFAULT_NOISE_TIMER)
 
 
+
     private val sightSensorReaction = { perceptions: List<SightSensorComponent.Perception> ->
         val enemyPosition = perceptions.find { it.gameObject.name == ENEMY_NAME }?.gameObject?.position
         if (enemyPosition != null) {
@@ -57,6 +58,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
         sightSensorComponent.addReaction(sightSensorReaction)
         noiseSensorComponent = gameObject.getComponent<NoiseSensorComponent>()!!
         noiseSensorComponent.addReaction(noiseSensorReaction)
+
     }
 
     override fun execute(action: Structure): Boolean {
@@ -86,7 +88,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
     override fun getPercepts(): MutableList<Literal> {
         val percepts = mutableListOf<Literal>()
         if (lastEnemyPosition != null) {
-            percepts.add(Literal.parseLiteral("enemy_position(${lastEnemyPosition!!.x.toInt()}, ${lastEnemyPosition!!.y.toInt()})"))
+            percepts.add(Literal.parseLiteral("player_position(${lastEnemyPosition!!.x.toInt()}, ${lastEnemyPosition!!.y.toInt()})"))
         } else if (sightTimer.isElapsed()) {
             sightTimer.reset()
         }
@@ -141,10 +143,10 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
     private fun moveRandom() {
         if (!randomTimer.isStarted || randomTimer.isElapsed()) {
             randomTimer.restart()
-            val randomVelocity = ComponentsUtils.getRandomVelocity(gameObject)
+            var randomObjective: Point2d = ComponentsUtils.getRandomVelocity(gameObject)
             synchronized(gameObject) {
                 fieldMovementComponent.wakeUp()
-                fieldMovementComponent.objective = randomVelocity
+                fieldMovementComponent.objective = randomObjective
             }
         }
     }

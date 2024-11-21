@@ -1,17 +1,32 @@
 package io.github.agentseek.view.utilities
 
-import io.github.agentseek.common.Circle2d
-import io.github.agentseek.common.Cone2d
-import io.github.agentseek.common.Rectangle2d
-import io.github.agentseek.common.Shape2d
+import io.github.agentseek.common.*
 import io.github.agentseek.view.RenderingContext
 import java.awt.Color
 import java.awt.Graphics2D
-import java.awt.Stroke
 import java.awt.geom.Ellipse2D
 import java.awt.geom.Rectangle2D
 
 object Rendering {
+
+    /**
+     * Draws a [vector2d] from a given [position] with a specified [color].
+     */
+    fun RenderingContext<Graphics2D>.drawVector(position: Point2d, vector2d: Vector2d, color: Color) {
+        render {
+            val previousColor = it.color
+            it.color = color
+            val p1 = camera.toCameraPoint(position)
+            val p2 = camera.toCameraPoint(position + vector2d)
+            it.drawLine(
+                p1.x.toInt(),
+                p1.y.toInt(),
+                p2.x.toInt(),
+                p2.y.toInt()
+            )
+            it.color = previousColor
+        }
+    }
 
     /**
      * Strokes a simple black circle starting from a [Circle2d]

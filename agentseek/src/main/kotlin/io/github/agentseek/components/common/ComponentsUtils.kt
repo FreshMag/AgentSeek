@@ -13,11 +13,12 @@ object ComponentsUtils {
      * and selecting the direction of the furthest intersecting point.
      *
      * @param gameObject The game object from which to cast rays.
-     * @return A Point2d representing the calculated random velocity.
+     * @return A Vector2d representing the calculated random velocity.
      */
     fun getRandomVelocity(gameObject: GameObject): Point2d =
         FastEntities.allDirections().mapNotNull { gameObject.castRay(it).firstIntersecting }
             .maxBy { it.distance }.gameObject.position
+
 
     /**
      * Checks if the distance between two points in a 2D space is within the specified maximum distance.
