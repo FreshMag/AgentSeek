@@ -1,14 +1,7 @@
 package io.github.agentseek.util.factories
 
 import io.github.agentseek.common.Point2d
-import io.github.agentseek.components.DistanceSensorComponent
-import io.github.agentseek.components.DoorComponent
-import io.github.agentseek.components.FieldMovementComponent
-import io.github.agentseek.components.InputComponent
-import io.github.agentseek.components.MouseNoiseEmitterComponent
-import io.github.agentseek.components.NoiseEmitterComponent
-import io.github.agentseek.components.NoiseSensorComponent
-import io.github.agentseek.components.SightSensorComponent
+import io.github.agentseek.components.*
 import io.github.agentseek.components.jason.CameraAgentComponent
 import io.github.agentseek.components.jason.GuardAgentComponent
 import io.github.agentseek.core.GameObject
@@ -18,6 +11,7 @@ import io.github.agentseek.util.FastEntities.point
 import io.github.agentseek.util.FastEntities.rectangle
 import io.github.agentseek.util.FastEntities.square
 import io.github.agentseek.util.FastEntities.with
+import io.github.agentseek.util.factories.GameObjects.walls
 import io.github.agentseek.util.jason.JasonScenes
 import io.github.agentseek.util.jason.JasonScenes.jasonAgent
 import io.github.agentseek.view.CameraRenderer
@@ -107,13 +101,25 @@ object GameObjects {
     /**
      * Creates a wall game object.
      *
-     * @param x The x-coordinate of the wall.
-     * @param y The y-coordinate of the wall.
+     * @param position position of the wall
      * @param width The width of the wall.
      * @param height The height of the wall.
      * @param name The name of the wall.
      * @return A function that takes a World and returns a GameObject representing the wall.
      */
+    fun wall(
+        position: Point2d,
+        width: Number,
+        height: Number,
+        name: String = "Wall",
+    ): (World) -> GameObject =
+        gameObject(
+            position = position,
+            rigidBody = rectangle(width, height).with(isStatic = true),
+            name = name,
+            renderer = GameGui.defaultRenderer()
+        )
+
     fun wall(
         x: Number,
         y: Number,
@@ -121,12 +127,7 @@ object GameObjects {
         height: Number,
         name: String = "Wall",
     ): (World) -> GameObject =
-        gameObject(
-            position = point(x, y),
-            rigidBody = rectangle(width, height).with(isStatic = true),
-            name = name,
-            renderer = GameGui.defaultRenderer()
-        )
+        wall(point(x, y), width, height, name)
 
     /**
      * Creates an array of wall game objects.
@@ -145,22 +146,20 @@ object GameObjects {
      * Creates a door game object.
      *
      * @param destinationSceneName The name of the destination scene.
-     * @param x The x-coordinate of the door.
-     * @param y The y-coordinate of the door.
+     * @param position position of the door
      * @param size The size of the door.
      * @param name The name of the door.
      * @return A function that takes a World and returns a GameObject representing the door.
      */
     fun door(
         destinationSceneName: String,
-        x: Number,
-        y: Number,
+        position: Point2d,
         size: Number = 2.5,
         name: String = "Door",
     ): (World) -> GameObject =
         gameObject(
             { DoorComponent(it, destinationSceneName) },
-            position = point(x, y),
+            position = position,
             rigidBody = square(size).with(isStatic = true),
             name = name,
             renderer = DoorRenderer()

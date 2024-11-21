@@ -257,8 +257,7 @@ object Scenes {
         ),
         door(
             "jasonExample",
-            x = 0,
-            y = 10
+            position = point(0, 10)
         )
     )
 }
