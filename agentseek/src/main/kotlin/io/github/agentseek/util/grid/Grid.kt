@@ -19,7 +19,7 @@ data class Grid(val rows: Int, val columns: Int, val camera: Camera, val boundsS
     val cellWidth = playableWidth / columns
     val cellHeight = playableHeight / rows
 
-    operator fun invoke(row: Int, column: Int, center: Boolean = false): Point2d {
+    operator fun invoke(row: Int, column: Int, center: Boolean = true): Point2d {
         val x = arenaOrigin.x + (column.toDouble() + if (center) 0.5 else 0.0) * cellWidth
         val y = arenaOrigin.y + (row.toDouble() + if (center) 0.5 else 0.0) * cellHeight
         return point(x, y)

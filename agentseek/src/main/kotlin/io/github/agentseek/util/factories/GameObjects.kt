@@ -34,6 +34,7 @@ object GameObjects {
         position: Point2d,
         noiseEmittingRadius: Number = 3,
         rigidBody: (GameObject) -> RigidBody = square(1.5),
+        isCenter: Boolean = true,
     ): (World) -> GameObject =
         gameObject(
             { NoiseEmitterComponent(it, noiseEmittingRadius.toDouble()) },
@@ -43,7 +44,15 @@ object GameObjects {
             rigidBody = rigidBody,
             renderer = GameGui.defaultRenderer(),
             name = "Player"
-        )
+        ).run {
+            if (isCenter) {
+                return@run { world: World ->
+                    this(world).also { it.rigidBody.collider.center = position }
+                }
+            } else {
+                return@run this
+            }
+        }
 
     /**
      * Creates a guard agent configuration.
@@ -65,6 +74,7 @@ object GameObjects {
         sightSensorConeAperture: Number = 1.2,
         distanceSensorRadius: Number = 2.8,
         rigidBody: (GameObject) -> RigidBody = square(1.5),
+        isCenter: Boolean = true,
     ): JasonScenes.JasonAgentConfig =
         jasonAgent(
             id = id,
@@ -77,7 +87,17 @@ object GameObjects {
             position = position,
             rigidBody = rigidBody,
             renderer = SimpleRenderer(),
-        )
+        ).apply {
+            if (isCenter) {
+                this.copy(
+                    gameObjectSetter = { world ->
+                        gameObjectSetter(world).also {
+                            it.rigidBody.collider.center = position
+                        }
+                    }
+                )
+            }
+        }
 
     /**
      * Creates a camera agent configuration.
@@ -89,6 +109,7 @@ object GameObjects {
     fun cameraAgent(
         id: String,
         position: Point2d,
+        isCenter: Boolean = true,
     ): JasonScenes.JasonAgentConfig =
         jasonAgent(
             id = id,
@@ -96,7 +117,17 @@ object GameObjects {
             agentComponent = { id, go -> CameraAgentComponent(go, id) },
             position = position,
             renderer = CameraRenderer(),
-        )
+        ).apply {
+            if (isCenter) {
+                this.copy(
+                    gameObjectSetter = { world ->
+                        gameObjectSetter(world).also {
+                            it.rigidBody.collider.center = position
+                        }
+                    }
+                )
+            }
+        }
 
     /**
      * Creates a wall game object.
@@ -112,13 +143,22 @@ object GameObjects {
         width: Number,
         height: Number,
         name: String = "Wall",
+        isCenter: Boolean = true,
     ): (World) -> GameObject =
         gameObject(
             position = position,
             rigidBody = rectangle(width, height).with(isStatic = true),
             name = name,
             renderer = GameGui.defaultRenderer()
-        )
+        ).run {
+            if (isCenter) {
+                return@run { world: World ->
+                    this(world).also { it.rigidBody.collider.center = position }
+                }
+            } else {
+                return@run this
+            }
+        }
 
     fun wall(
         x: Number,
@@ -126,8 +166,9 @@ object GameObjects {
         width: Number,
         height: Number,
         name: String = "Wall",
+        isCenter: Boolean = true,
     ): (World) -> GameObject =
-        wall(point(x, y), width, height, name)
+        wall(point(x, y), width, height, name, isCenter)
 
     /**
      * Creates an array of wall game objects.
@@ -156,6 +197,7 @@ object GameObjects {
         position: Point2d,
         size: Number = 2.5,
         name: String = "Door",
+        isCenter: Boolean = true,
     ): (World) -> GameObject =
         gameObject(
             { DoorComponent(it, destinationSceneName) },
@@ -163,6 +205,14 @@ object GameObjects {
             rigidBody = square(size).with(isStatic = true),
             name = name,
             renderer = DoorRenderer()
-        )
+        ).run {
+            if (isCenter) {
+                return@run { world: World ->
+                    this(world).also { it.rigidBody.collider.center = position }
+                }
+            } else {
+                return@run this
+            }
+        }
 
 }
