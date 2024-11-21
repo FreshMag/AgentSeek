@@ -17,6 +17,12 @@ import io.github.agentseek.util.FastEntities.scene
 import io.github.agentseek.util.FastEntities.square
 import io.github.agentseek.util.FastEntities.vector
 import io.github.agentseek.util.FastEntities.with
+import io.github.agentseek.util.factories.GameObjects.cameraAgent
+import io.github.agentseek.util.factories.GameObjects.door
+import io.github.agentseek.util.factories.GameObjects.guardAgent
+import io.github.agentseek.util.factories.GameObjects.player
+import io.github.agentseek.util.factories.GameObjects.wall
+import io.github.agentseek.util.factories.GameObjects.walls
 import io.github.agentseek.util.jason.JasonScenes.agents
 import io.github.agentseek.util.jason.JasonScenes.jasonAgent
 import io.github.agentseek.util.jason.JasonScenes.sceneWithJason
@@ -169,106 +175,90 @@ object Scenes {
     fun levelOne(): Scene = sceneWithJason(
         name = "example", environmentClass = AgentSeekEnvironment::class,
         agents = agents(
-            jasonAgent(
+            cameraAgent(
                 id = "camera1",
-                aslName = "camera_agent",
-                agentComponent = { id, go -> CameraAgentComponent(go, id) },
                 position = point(GameGui.camera.viewPortWidth - 4, GameGui.camera.viewPortHeight - 10),
-                renderer = CameraRenderer(),
-            ), jasonAgent(
+            ), guardAgent(
                 id = "agent1",
-                aslName = "guard_agent",
-                agentComponent = { id, go -> GuardAgentComponent(go, id) },
-                { NoiseSensorComponent(it, 3.0) },
-                { SightSensorComponent(it, 7.0, 1.0) },
-                { DistanceSensorComponent(it, 2.8) },
-                { FieldMovementComponent(it) },
                 position = point(10, 4),
-                rigidBody = square(1.5),
-                renderer = SimpleRenderer(),
             )
         ),
-        gameObject(
-            { NoiseEmitterComponent(it, 3.0) },
-            { MouseNoiseEmitterComponent(it) },
-            { InputComponent(it) },
-            position = point(GameGui.camera.viewPortWidth - 5, GameGui.camera.viewPortHeight - 6.5),
-            rigidBody = square(1.5),
-            renderer = GameGui.defaultRenderer(),
-            name = "Player"
+        player(
+            position = point(GameGui.camera.viewPortWidth - 5, GameGui.camera.viewPortHeight - 6.5)
         ),
         *bounds(2.5, GameGui.defaultRenderer(), GameGui.camera.viewPortWidth, GameGui.camera.viewPortHeight),
-        gameObject(
-            position = point(GameGui.camera.viewPortWidth - 15, GameGui.camera.viewPortHeight - 8),
-            rigidBody = rectangle(15, 1).with(isStatic = true),
-            name = "Wall",
-            renderer = GameGui.defaultRenderer()
+        *walls(
+            wall(
+                x = GameGui.camera.viewPortWidth - 15,
+                y = GameGui.camera.viewPortHeight - 8,
+                width = 15,
+                height = 1,
+            ),
+            wall(
+                x = 15,
+                y = 5,
+                width = 10,
+                height = 1,
+            ),
+            wall(
+                x = 8,
+                y = 13,
+                width = 20,
+                height = 1,
+            ),
+            wall(
+                x = 0,
+                y = 23,
+                width = 35,
+                height = 1,
+            ),
+            wall(
+                x = 8,
+                y = 0,
+                width = 1,
+                height = 16,
+            ),
+            wall(
+                x = 12,
+                y = 18,
+                width = 1,
+                height = 5,
+            ),
+            wall(
+                x = 22,
+                y = 18,
+                width = 1,
+                height = 5,
+            ),
+            wall(
+                x = 34,
+                y = 13,
+                width = 1,
+                height = 10,
+            ),
+            wall(
+                x = 40,
+                y = 18,
+                width = 1,
+                height = 5,
+            ),
+            wall(
+                x = 34,
+                y = 14,
+                width = 7,
+                height = 1,
+            ),
+            wall(
+                x = 25,
+                y = 24,
+                width = 1,
+                height = 14,
+            )
         ),
-        gameObject(
-            position = point(15, 5),
-            rigidBody = rectangle(10, 1).with(isStatic = true),
-            name = "Wall1",
-            renderer = GameGui.defaultRenderer()
-        ),
-        gameObject(
-            position = point(8, 13),
-            rigidBody = rectangle(20, 1).with(isStatic = true),
-            name = "Wall2",
-            renderer = GameGui.defaultRenderer()
-        ),
-        gameObject(
-            position = point(0, 23),
-            rigidBody = rectangle(35, 1).with(isStatic = true),
-            name = "Wall4",
-            renderer = GameGui.defaultRenderer()
-        ),
-        gameObject(
-            position = point(8, 0),
-            rigidBody = rectangle(1, 16).with(isStatic = true),
-            name = "Wall6",
-            renderer = GameGui.defaultRenderer()
-        ),
-        gameObject(
-            position = point(12, 18),
-            rigidBody = rectangle(1, 5).with(isStatic = true),
-            name = "Wall8",
-            renderer = GameGui.defaultRenderer()
-        ),
-        gameObject(
-            position = point(22, 18),
-            rigidBody = rectangle(1, 5).with(isStatic = true),
-            name = "Wall9",
-            renderer = GameGui.defaultRenderer()
-        ),
-        gameObject(
-            position = point(34, 13),
-            rigidBody = rectangle(1, 10).with(isStatic = true),
-            name = "Wall9",
-            renderer = GameGui.defaultRenderer()
-        ),
-        gameObject(
-            position = point(40, 18),
-            rigidBody = rectangle(1, 5).with(isStatic = true),
-            name = "Wall9",
-            renderer = GameGui.defaultRenderer()
-        ),
-        gameObject(
-            position = point(34, 14),
-            rigidBody = rectangle(7, 1).with(isStatic = true),
-            name = "Wall9",
-            renderer = GameGui.defaultRenderer()
-        ),
-        gameObject(
-            position = point(25, 24),
-            rigidBody = rectangle(1, 14).with(isStatic = true),
-            name = "Wall10",
-            renderer = GameGui.defaultRenderer()
-        ),
-        gameObject(
-            { DoorComponent(it, "jasonExample") },
-            position = point(0, 10),
-            rigidBody = square(2.5).with(isStatic = true),
-            renderer = DoorRenderer(),
+        door(
+            "jasonExample",
+            x = 0,
+            y = 10
         )
     )
 }
