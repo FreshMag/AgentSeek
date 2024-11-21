@@ -19,17 +19,7 @@ import javax.swing.WindowConstants.EXIT_ON_CLOSE
 typealias RenderingEvent = (Graphics2D) -> Unit
 
 object GameGui : View, InputListener() {
-
-    private var screenSize: Dimension = Dimension(1000, 720)//Toolkit.getDefaultToolkit().screenSize
-    override val screenHeight: Int
-        get() = screenSize.height
-    override val screenWidth: Int
-        get() = screenSize.width
-
     override val camera: Camera = Camera(this, 50.0)
-
-    private const val APP_NAME = "Agent Seek"
-
     private val renderingContext = RenderingContext<Graphics2D>(camera)
     private var eventsBuffer: List<RenderingEvent> = emptyList()
     private val frame = JFrame(APP_NAME)
@@ -43,9 +33,38 @@ object GameGui : View, InputListener() {
         }
     }
 
+    /**
+     * The following margin is used to avoid the frame's title bar. During runtime the frame's title bar is not counted
+     * because the GameViewPanel is used instead, but before rendering the JFrame, panel dimensions are still 0, so this
+     * manual adjustment is necessary.
+     */
+    private const val FRAME_HEIGHT_UPPER_MARGIN = 28
+
+    private var screenSize: Dimension = Dimension(1000, 720)//Toolkit.getDefaultToolkit().screenSize
+    private val gameView: GameViewPanel = GameViewPanel(screenSize, gameViewRendering)
+    override val screenHeight: Int
+        get() = gameView.height.apply {
+            return if (this == 0) {
+                screenSize.height - FRAME_HEIGHT_UPPER_MARGIN
+            } else {
+                this
+            }
+        }
+    override val screenWidth: Int
+        get() = gameView.width.apply {
+            return if (this == 0) {
+                screenSize.width
+            } else {
+                this
+            }
+        }
+
+
+    private const val APP_NAME = "Agent Seek"
+
     fun startGameGui(useRepl: Boolean = false, scene: Scene = Scenes.levelOne()) {
         frame.name = APP_NAME
-        val panel = GameViewPanel(screenSize, gameViewRendering)
+        val panel = gameView
         frame.add(panel, BorderLayout.CENTER)
         frame.size = screenSize
         frame.preferredSize = screenSize
@@ -70,7 +89,7 @@ object GameGui : View, InputListener() {
     private fun start(useRepl: Boolean, scene: Scene) {
         if (useRepl) {
             Thread {
-                GameREPL.start()
+                GameREPL.start(scene)
             }.start()
         } else {
             GameEngine.loadScene(scene)
