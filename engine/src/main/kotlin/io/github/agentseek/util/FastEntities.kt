@@ -216,7 +216,7 @@ object FastEntities {
         listOf(
             point(-offCameraSize + size.toDouble(), 0),
             point(cameraWidth.toDouble() - size.toDouble(), 0),
-            point(0, cameraHeight.toDouble() - size.toDouble() - 1.5),
+            point(0, cameraHeight.toDouble() - size.toDouble()),
             point(0, -offCameraSize + size.toDouble())
         ).map {
             gameObject(
