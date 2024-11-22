@@ -74,7 +74,9 @@ class CameraAgentComponent(gameObject: GameObject, override val id: String) : Ja
         when (action.functor) {
             "rotate" -> {
                 val rotation = action.terms[0].toNumber()
-                sightSensorComponent.rotate(rotation)
+                synchronized(this) {
+                    sightSensorComponent.rotate(rotation)
+                }
             }
         }
         return true
