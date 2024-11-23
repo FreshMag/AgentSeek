@@ -15,7 +15,6 @@ object Config {
         val file = File(Config::class.java.getResource("/config.properties")?.file!!)
         if (file.exists()) {
             FileInputStream(file).use { properties.load(it) }
-            println(properties)
         } else {
             GameEngine.logError("Config file not found: ${file.absolutePath}")
         }
