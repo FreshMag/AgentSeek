@@ -24,7 +24,7 @@ class NoiseSensorVisualComponent(gameObject: GameObject) : AbstractComponent(gam
             VFX.fadingText(
                 worldPosition = gameObject.position,
                 text = Config.VisualComponents.noiseSensorText,
-                color = Config.VisualComponents.noiseSensorColor,
+                color = Config.VisualComponents.noiseSensorTextColor,
                 size = Config.VisualComponents.noiseSensorFontSize,
                 durationMillis = Config.VisualComponents.noiseSensorDefaultSuspiciousTimeMillis.toInt()
             )
