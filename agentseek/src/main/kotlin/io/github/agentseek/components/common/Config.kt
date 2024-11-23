@@ -33,7 +33,7 @@ object Config {
             }
             return Color::class.java.getField(expression.uppercase()).get(null) as Color
         } catch (e: Exception) {
-            e.printStackTrace();
+            e.printStackTrace()
             return null
         }
     }

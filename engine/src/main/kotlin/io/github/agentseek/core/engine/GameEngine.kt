@@ -56,7 +56,7 @@ object GameEngine {
      * Notifies an [Event] to the scene's world. Returns `false` if the event was not received.
      */
     fun notifySceneEvent(gameObject: GameObject, event: Event): Boolean =
-        scene?.world?.let { it.notifyEvent(event, gameObject); true } ?: false
+        scene?.world?.let { it.notifyEvent(event, gameObject); true } == true
 
     /**
      * Loads a scene into the engine
