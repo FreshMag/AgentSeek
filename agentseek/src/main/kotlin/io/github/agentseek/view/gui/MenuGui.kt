@@ -1,5 +1,6 @@
 package io.github.agentseek.view.gui
 
+import io.github.agentseek.components.common.Config
 import io.github.agentseek.util.serialization.Scenes.loadSceneFromResource
 import java.awt.BorderLayout
 import java.awt.Component
@@ -14,8 +15,7 @@ import kotlin.system.exitProcess
 
 object MenuGui {
 
-    private var screenSize: Dimension = Dimension(720, 720)//Toolkit.getDefaultToolkit().screenSize
-    private const val APPLICATION_NAME = "Agent Seek"
+    private var screenSize: Dimension = Dimension(Config.GUI.frameWidth, Config.GUI.frameHeight)
     private const val START_BUTTON_TEXT = "Start Game"
     private const val START_SELECTED_BUTTON_TEXT = "Start selected"
     private const val START_WITH_REPL_BUTTON_TEXT = "Start Game with REPL"
@@ -42,7 +42,7 @@ object MenuGui {
     private lateinit var frame: JFrame
 
     fun startMainMenu() {
-        frame = JFrame(APPLICATION_NAME)
+        frame = JFrame(Config.GUI.menuTitle)
         frame.size = screenSize
         val container = JPanel().apply { layout = BorderLayout() }
         container.add(makeTitlePanel(), BorderLayout.NORTH)
@@ -55,7 +55,7 @@ object MenuGui {
 
     private fun makeTitlePanel(): JPanel {
         val container = JPanel()
-        val titleLabel = JLabel(APPLICATION_NAME)
+        val titleLabel = JLabel(Config.GUI.menuTitle)
         titleLabel.font = Font("Arial", Font.BOLD, 32)
         titleLabel.alignmentX = Component.CENTER_ALIGNMENT
 

@@ -1,5 +1,6 @@
 package io.github.agentseek.view.gui
 
+import io.github.agentseek.components.common.Config
 import io.github.agentseek.core.Scene
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.core.engine.input.Input
@@ -19,10 +20,10 @@ import javax.swing.WindowConstants.EXIT_ON_CLOSE
 typealias RenderingEvent = (Graphics2D) -> Unit
 
 object GameGui : View, InputListener() {
-    override val camera: Camera = Camera(this, 50.0)
+    override val camera: Camera = Camera(this, Config.Camera.viewPortWidth)
     private val renderingContext = RenderingContext<Graphics2D>(camera)
     private var eventsBuffer: List<RenderingEvent> = emptyList()
-    private val frame = JFrame(APP_NAME)
+    private val frame = JFrame(Config.GUI.frameTitle)
 
     /**
      * This function is called once every frame rendering on the Graphics 2D of the GUI.
@@ -40,7 +41,7 @@ object GameGui : View, InputListener() {
      */
     private const val FRAME_HEIGHT_UPPER_MARGIN = 28
 
-    private var screenSize: Dimension = Dimension(1000, 720)//Toolkit.getDefaultToolkit().screenSize
+    private var screenSize: Dimension = Dimension(Config.GUI.frameWidth, Config.GUI.frameHeight)
     private val gameView: GameViewPanel = GameViewPanel(screenSize, gameViewRendering)
     override val screenHeight: Int
         get() = gameView.height.apply {
@@ -59,11 +60,8 @@ object GameGui : View, InputListener() {
             }
         }
 
-
-    private const val APP_NAME = "Agent Seek"
-
     fun startGameGui(useRepl: Boolean = false, scene: Scene = Scenes.levelOne()) {
-        frame.name = APP_NAME
+        frame.name = Config.GUI.frameTitle
         val panel = gameView
         frame.add(panel, BorderLayout.CENTER)
         frame.size = screenSize

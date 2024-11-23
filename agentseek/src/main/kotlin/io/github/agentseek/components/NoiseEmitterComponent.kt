@@ -1,12 +1,12 @@
 package io.github.agentseek.components
 
 import io.github.agentseek.common.Circle2d
+import io.github.agentseek.components.common.Config
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.physics.Collider
 import io.github.agentseek.util.GameObjectUtilities.attachRenderer
 import io.github.agentseek.util.GameObjectUtilities.center
 import io.github.agentseek.view.utilities.Rendering.strokeCircle
-import java.awt.Color
 import kotlin.math.absoluteValue
 import kotlin.time.Duration
 
@@ -15,9 +15,6 @@ private enum class NoiseLevel {
 }
 
 class NoiseEmitterComponent(gameObject: GameObject, private val radius: Double) : AbstractComponent(gameObject) {
-    companion object {
-        const val STANDARD_VELOCITY = 2.0
-    }
 
     private var isEmittingNoise = false
     private var lastPos = gameObject.center()
@@ -27,7 +24,7 @@ class NoiseEmitterComponent(gameObject: GameObject, private val radius: Double) 
         noiseEmitterCollider.center = gameObject.center()
         gameObject.attachRenderer { _, renderingContext ->
             renderingContext?.strokeCircle(
-                noiseEmitterCollider.shape as Circle2d, color = Color.BLACK
+                noiseEmitterCollider.shape as Circle2d, color = Config.VisualComponents.noiseEmitterColor
             )
         }
     }
@@ -55,8 +52,8 @@ class NoiseEmitterComponent(gameObject: GameObject, private val radius: Double) 
     }
 
     private fun getNoiseLevel(): NoiseLevel {
-        return if (gameObject.rigidBody.velocity.x.absoluteValue >= STANDARD_VELOCITY
-            || gameObject.rigidBody.velocity.y.absoluteValue >= STANDARD_VELOCITY
+        return if (gameObject.rigidBody.velocity.x.absoluteValue >= Config.Components.noiseEmitterSpeedThreshold
+            || gameObject.rigidBody.velocity.y.absoluteValue >= Config.Components.noiseEmitterSpeedThreshold
         ) {
             NoiseLevel.DEFAULT
         } else {

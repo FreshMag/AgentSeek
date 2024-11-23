@@ -1,6 +1,7 @@
 package io.github.agentseek.view.animations
 
 import io.github.agentseek.common.Point2d
+import io.github.agentseek.components.common.Config
 import io.github.agentseek.view.RenderingContext
 import java.awt.Color
 import java.awt.Font
@@ -41,7 +42,7 @@ object AnimationUtilities {
             val previousPaint = it.paint
             val originalTransform: AffineTransform = it.transform
 
-            val font = Font("Serif", Font.PLAIN, fontSize)
+            val font = Font(Config.Rendering.textFont, Font.PLAIN, fontSize)
             it.font = font
             it.paint = fadingColor(originalColor, iteration, maxIterations)
             val angle = incrementalRotation(0.0, -15.0, iteration, maxIterations)

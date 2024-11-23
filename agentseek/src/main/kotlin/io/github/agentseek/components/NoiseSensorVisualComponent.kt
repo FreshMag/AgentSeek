@@ -1,16 +1,16 @@
 package io.github.agentseek.components
 
 import io.github.agentseek.common.TimerImpl
+import io.github.agentseek.components.common.Config
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.view.animations.VFX
-import java.awt.Color
 import kotlin.time.Duration
 
 @Requires(NoiseSensorComponent::class)
 class NoiseSensorVisualComponent(gameObject: GameObject) : AbstractComponent(gameObject) {
     private var noiseSensor: NoiseSensorComponent? = null
     private var noiseFound: Boolean = false
-    private val timer = TimerImpl(DEFAULT_SUSPICIOUS_TIME_MILLIS.toLong())
+    private val timer = TimerImpl(Config.VisualComponents.noiseSensorDefaultSuspiciousTimeMillis)
     override fun init() {
         noiseSensor = gameObject.getComponent<NoiseSensorComponent>()!!
         noiseSensor?.addReaction {
@@ -23,15 +23,11 @@ class NoiseSensorVisualComponent(gameObject: GameObject) : AbstractComponent(gam
             timer.restart()
             VFX.fadingText(
                 worldPosition = gameObject.position,
-                text = "?",
-                color = Color.BLACK,
-                size = 40,
-                durationMillis = DEFAULT_SUSPICIOUS_TIME_MILLIS
+                text = Config.VisualComponents.noiseSensorText,
+                color = Config.VisualComponents.noiseSensorColor,
+                size = Config.VisualComponents.noiseSensorFontSize,
+                durationMillis = Config.VisualComponents.noiseSensorDefaultSuspiciousTimeMillis.toInt()
             )
         }
-    }
-
-    private companion object {
-        const val DEFAULT_SUSPICIOUS_TIME_MILLIS = 3000
     }
 }

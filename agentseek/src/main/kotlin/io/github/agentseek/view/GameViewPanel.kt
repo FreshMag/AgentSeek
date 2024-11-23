@@ -1,5 +1,6 @@
 package io.github.agentseek.view
 
+import io.github.agentseek.components.common.Config
 import java.awt.*
 import javax.swing.JComponent
 import javax.swing.JPanel
@@ -9,7 +10,7 @@ class GameViewPanel(size: Dimension, private val rendering: (Graphics2D) -> Unit
         layout = BorderLayout()
         this.preferredSize = Dimension(size)
         this.add(DrawStuff(), BorderLayout.CENTER)
-        this.background = Color.WHITE
+        this.background = Config.Rendering.backgroundColor
         revalidate()
         repaint()
     }

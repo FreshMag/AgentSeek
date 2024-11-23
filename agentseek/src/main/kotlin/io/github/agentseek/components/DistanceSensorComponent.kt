@@ -1,6 +1,7 @@
 package io.github.agentseek.components
 
 import io.github.agentseek.common.Vector2d
+import io.github.agentseek.components.common.Config
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.physics.Rays.castRay
 import io.github.agentseek.util.FastEntities.allDirections8
@@ -21,7 +22,7 @@ class DistanceSensorComponent(
             .mapNotNull { direction ->
                 val first = gameObject.castRay(direction).firstIntersecting
                 first?.let {
-                    if (it.gameObject.name != PLAYER_NAME && it.distance < radius) {
+                    if (it.gameObject.name != Config.Player.name && it.distance < radius) {
                         direction * (radius - it.distance)
                     } else {
                         null
@@ -29,10 +30,6 @@ class DistanceSensorComponent(
                 }
             }
             .sumUp()
-    }
-
-    companion object {
-        const val PLAYER_NAME = "Player"
     }
 
 }
