@@ -62,7 +62,7 @@ class CameraAgentComponent(gameObject: GameObject, override val id: String) : Ja
             gameObject,
             SIGHT_LENGTH,
             radians(SIGHT_APERTURE_DEGREES),
-            namesToExclude
+            namesToTrack
         )
         sightSensorComponent.setDirection(startingDirection)
         gameObject.addComponent(sightSensorComponent)
@@ -179,6 +179,11 @@ class CameraAgentComponent(gameObject: GameObject, override val id: String) : Ja
          * Names used for the wall awareness.
          */
         private val namesToExclude = setOf("bound", "obstacle", "wall", "bounds")
+
+        /**
+         * Names to track by the camera agent.
+         */
+        private val namesToTrack = setOf("player")
 
         /**
          * Name used to identify the player's GameObject.
