@@ -20,9 +20,18 @@ object Config {
         }
     }
 
-    fun getColorByName(name: String): Color? {
+    fun getColor(expression: String): Color? {
         try {
-            return Color::class.java.getField(name.uppercase()).get(null) as Color
+            if (expression.contains("(")) {
+                val rgb = expression.removeSurrounding("(", ")").split(",").map { it.trim().toInt() }
+                if (rgb.size == 3) {
+                    return Color(rgb[0], rgb[1], rgb[2])
+                } else if (rgb.size == 4) {
+                    return Color(rgb[0], rgb[1], rgb[2], rgb[3])
+                }
+                return null
+            }
+            return Color::class.java.getField(expression.uppercase()).get(null) as Color
         } catch (e: Exception) {
             e.printStackTrace();
             return null
@@ -42,7 +51,7 @@ object Config {
 
     object Agents {
         val cameraColor: Color
-            get() = getColorByName(properties.getProperty("agents.camera.color", "DARK_GRAY")) ?: Color.BLACK
+            get() = getColor(properties.getProperty("agents.camera.color", "DARK_GRAY")) ?: Color.BLACK
         val cameraRectangleSize: Double
             get() = properties.getProperty("agents.camera.rectangleSize", "1.0").toDouble()
         val cameraCirclesRadius: Double
@@ -56,14 +65,17 @@ object Config {
         val cameraExcludedNames: List<String>
             get() = properties.getProperty("agents.camera.excludedNames", "[]").removeSurrounding("[", "]").split(",")
                 .map { it.trim() }
+        val cameraNamesToTrack: List<String>
+            get() = properties.getProperty("agents.camera.namesToTrack", "[]").removeSurrounding("[", "]").split(",")
+                .map { it.trim() }
         val cameraStandardLightColor: Color
-            get() = getColorByName(properties.getProperty("agents.camera.standardLightColor", "YELLOW")) ?: Color.YELLOW
+            get() = getColor(properties.getProperty("agents.camera.standardLightColor", "YELLOW")) ?: Color.YELLOW
         val cameraDangerLightColor: Color
-            get() = getColorByName(properties.getProperty("agents.camera.dangerLightColor", "RED")) ?: Color.RED
+            get() = getColor(properties.getProperty("agents.camera.dangerLightColor", "RED")) ?: Color.RED
 
 
         val guardDefaultColor: Color
-            get() = getColorByName(properties.getProperty("agents.guard.defaultColor", "BLACK")) ?: Color.BLACK
+            get() = getColor(properties.getProperty("agents.guard.defaultColor", "BLACK")) ?: Color.BLACK
         val guardDefaultNoiseSensorRadius: Double
             get() = properties.getProperty("agents.guard.defaultNoiseSensorRadius", "4.0").toDouble()
         val guardDefaultSightConeLength: Double
@@ -83,19 +95,19 @@ object Config {
         val guardNoiseTimerMillis: Long
             get() = properties.getProperty("agents.guard.noiseTimerMillis", "5000").toLong()
         val guardStandardLightColor: Color
-            get() = getColorByName(properties.getProperty("agents.guard.standardLightColor", "YELLOW")) ?: Color.YELLOW
+            get() = getColor(properties.getProperty("agents.guard.standardLightColor", "YELLOW")) ?: Color.YELLOW
         val guardDangerLightColor: Color
-            get() = getColorByName(properties.getProperty("agents.guard.dangerLightColor", "RED")) ?: Color.RED
+            get() = getColor(properties.getProperty("agents.guard.dangerLightColor", "RED")) ?: Color.RED
 
         val hearingRandomMovementTimerMillis: Long
             get() = properties.getProperty("agents.hearing.randomMovementTimerMillis", "3000").toLong()
         val hearingNoiseTimerMillis: Long
             get() = properties.getProperty("agents.hearing.noiseTimerMillis", "5000").toLong()
         val hearingStandardLightColor: Color
-            get() = getColorByName(properties.getProperty("agents.hearing.standardLightColor", "YELLOW"))
+            get() = getColor(properties.getProperty("agents.hearing.standardLightColor", "YELLOW"))
                 ?: Color.YELLOW
         val hearingDangerLightColor: Color
-            get() = getColorByName(properties.getProperty("agents.hearing.dangerLightColor", "RED")) ?: Color.RED
+            get() = getColor(properties.getProperty("agents.hearing.dangerLightColor", "RED")) ?: Color.RED
 
     }
 
@@ -124,9 +136,9 @@ object Config {
         val defaultLayer: Layer
             get() = Layer.valueOf(properties.getProperty("rendering.defaultLayer", "GENERIC"))
         val defaultColor: Color
-            get() = getColorByName(properties.getProperty("rendering.defaultColor", "BLACK")) ?: Color.BLACK
+            get() = getColor(properties.getProperty("rendering.defaultColor", "BLACK")) ?: Color.BLACK
         val backgroundColor: Color
-            get() = getColorByName(properties.getProperty("rendering.backgroundColor", "WHITE")) ?: Color.WHITE
+            get() = getColor(properties.getProperty("rendering.backgroundColor", "WHITE")) ?: Color.WHITE
         val textFont: String
             get() = properties.getProperty("rendering.textFont", "Serif")
     }
@@ -149,6 +161,9 @@ object Config {
             get() = properties.getProperty("mouseEmitter.playerMaxDistance", "15.0").toDouble()
         val noiseEmitterSpeedThreshold: Double
             get() = properties.getProperty("noiseEmitter.speedThreshold", "2.0").toDouble()
+
+        val sightSensorDefaultColor: Color
+            get() = getColor(properties.getProperty("sightSensor.defaultColor", "YELLOW")) ?: Color.YELLOW
     }
 
     object FieldMovement {
@@ -166,7 +181,7 @@ object Config {
         val sightSensorText: String
             get() = properties.getProperty("sightSensor.visual.text", "!")
         val sightSensorTextColor: Color
-            get() = getColorByName(properties.getProperty("sightSensor.visual.textColor", "BLACK")) ?: Color.BLACK
+            get() = getColor(properties.getProperty("sightSensor.visual.textColor", "BLACK")) ?: Color.BLACK
         val sightSensorFontSize: Int
             get() = properties.getProperty("sightSensor.visual.fontSize", "40").toInt()
 
@@ -175,14 +190,14 @@ object Config {
         val noiseSensorText: String
             get() = properties.getProperty("noiseSensor.visual.text", "?")
         val noiseSensorTextColor: Color
-            get() = getColorByName(properties.getProperty("noiseSensor.visual.textColor", "BLACK")) ?: Color.BLACK
+            get() = getColor(properties.getProperty("noiseSensor.visual.textColor", "BLACK")) ?: Color.BLACK
         val noiseSensorFontSize: Int
             get() = properties.getProperty("noiseSensor.visual.fontSize", "40").toInt()
         val noiseSensorColor: Color
-            get() = getColorByName(properties.getProperty("noiseSensor.visual.color", "YELLOW")) ?: Color.YELLOW
+            get() = getColor(properties.getProperty("noiseSensor.visual.color", "YELLOW")) ?: Color.YELLOW
 
         val noiseEmitterColor: Color
-            get() = getColorByName(properties.getProperty("noiseEmitter.visual.color", "BLACK")) ?: Color.BLACK
+            get() = getColor(properties.getProperty("noiseEmitter.visual.color", "BLACK")) ?: Color.BLACK
         val noiseEmitterDurationMillis: Long
             get() = properties.getProperty("noiseEmitter.visual.durationMillis", "500").toLong()
 
@@ -191,6 +206,6 @@ object Config {
         val mouseEmitterFontSize: Int
             get() = properties.getProperty("mouseEmitter.visual.fontSize", "40").toInt()
         val mouseEmitterTextColor: Color
-            get() = getColorByName(properties.getProperty("mouseEmitter.visual.textColor", "BLACK")) ?: Color.BLACK
+            get() = getColor(properties.getProperty("mouseEmitter.visual.textColor", "BLACK")) ?: Color.BLACK
     }
 }

@@ -63,8 +63,9 @@ class CameraAgentComponent(gameObject: GameObject, override val id: String) : Ja
             gameObject,
             Config.Agents.cameraSightLength,
             radians(Config.Agents.cameraSightApertureDegrees),
-            Config.Agents.cameraExcludedNames.toSet()
+            Config.Agents.cameraNamesToTrack.toSet()
         )
+        sightSensorComponent.lightColor = Config.Agents.cameraStandardLightColor
         sightSensorComponent.setDirection(startingDirection)
         gameObject.addComponent(sightSensorComponent)
         sightSensorComponent.init()
