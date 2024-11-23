@@ -27,7 +27,7 @@ object Levels {
             agents(
                 cameraAgent(
                     id = "camera1",
-                    position = grid(0.65, 6),
+                    position = grid(0.65, 6.35),
                     isCenter = false
                 ), guardAgent(
                     id = "agent1",

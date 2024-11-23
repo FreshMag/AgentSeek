@@ -17,7 +17,7 @@ class SightSensorComponent(
     gameObject: GameObject,
     val coneLength: Double,
     val coneApertureRadians: Double,
-    private val namesBlacklist: Set<String> = setOf(),
+    private val namesWhitelist: Set<String> = setOf(),
 ) :
     AbstractComponent(gameObject), Sensor<List<SightSensorComponent.Perception>> {
 
@@ -52,7 +52,7 @@ class SightSensorComponent(
             lastPos = gameObject.position
         }
         val colliding = sensorCollider.findColliding()
-        if (colliding.isNotEmpty() && colliding.any { it.gameObject.name.lowercase() !in namesBlacklist }) {
+        if (colliding.isNotEmpty() && colliding.any { it.gameObject.name.lowercase() in namesWhitelist }) {
             val perceptions: List<Perception> = colliding.mapNotNull {
                 val go = it.gameObject
                 val intersection = gameObject.castRay(go).firstIntersecting
