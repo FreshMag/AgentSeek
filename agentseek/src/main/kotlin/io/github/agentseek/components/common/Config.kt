@@ -5,7 +5,7 @@ import io.github.agentseek.view.Layer
 import java.awt.Color
 import java.io.File
 import java.io.FileInputStream
-import java.util.Properties
+import java.util.*
 
 object Config {
 
@@ -20,7 +20,7 @@ object Config {
         }
     }
 
-     fun getColorByName(name: String): Color? {
+    fun getColorByName(name: String): Color? {
         try {
             return Color::class.java.getField(name.uppercase()).get(null) as Color
         } catch (e: Exception) {
@@ -47,6 +47,20 @@ object Config {
             get() = properties.getProperty("agents.camera.rectangleSize", "1.0").toDouble()
         val cameraCirclesRadius: Double
             get() = properties.getProperty("agents.camera.circlesRadius", "0.5").toDouble()
+        val cameraWallAwareness: Double
+            get() = properties.getProperty("agents.camera.wallAwareness", "2.0").toDouble()
+        val cameraSightLength: Double
+            get() = properties.getProperty("agents.camera.sightLength", "10.0").toDouble()
+        val cameraSightApertureDegrees: Double
+            get() = properties.getProperty("agents.camera.sightApertureDegrees", "30.0").toDouble()
+        val cameraExcludedNames: List<String>
+            get() = properties.getProperty("agents.camera.excludedNames", "[]").removeSurrounding("[", "]").split(",")
+                .map { it.trim() }
+        val cameraStandardLightColor: Color
+            get() = getColorByName(properties.getProperty("agents.camera.standardLightColor", "YELLOW")) ?: Color.YELLOW
+        val cameraDangerLightColor: Color
+            get() = getColorByName(properties.getProperty("agents.camera.dangerLightColor", "RED")) ?: Color.RED
+
 
         val guardDefaultColor: Color
             get() = getColorByName(properties.getProperty("agents.guard.defaultColor", "BLACK")) ?: Color.BLACK
@@ -60,6 +74,29 @@ object Config {
             get() = properties.getProperty("agents.guard.defaultDistanceSensorRadius", "2.8").toDouble()
         val guardSize: Double
             get() = properties.getProperty("agents.guard.size", "1.5").toDouble()
+        val guardNearBaseDistance: Double
+            get() = properties.getProperty("agents.guard.nearBaseDistance", "10.0").toDouble()
+        val guardRandomMovementTimerMillis: Long
+            get() = properties.getProperty("agents.guard.randomMovementTimerMillis", "4000").toLong()
+        val guardSightTimerMillis: Long
+            get() = properties.getProperty("agents.guard.sightTimerMillis", "5000").toLong()
+        val guardNoiseTimerMillis: Long
+            get() = properties.getProperty("agents.guard.noiseTimerMillis", "5000").toLong()
+        val guardStandardLightColor: Color
+            get() = getColorByName(properties.getProperty("agents.guard.standardLightColor", "YELLOW")) ?: Color.YELLOW
+        val guardDangerLightColor: Color
+            get() = getColorByName(properties.getProperty("agents.guard.dangerLightColor", "RED")) ?: Color.RED
+
+        val hearingRandomMovementTimerMillis: Long
+            get() = properties.getProperty("agents.hearing.randomMovementTimerMillis", "3000").toLong()
+        val hearingNoiseTimerMillis: Long
+            get() = properties.getProperty("agents.hearing.noiseTimerMillis", "5000").toLong()
+        val hearingStandardLightColor: Color
+            get() = getColorByName(properties.getProperty("agents.hearing.standardLightColor", "YELLOW"))
+                ?: Color.YELLOW
+        val hearingDangerLightColor: Color
+            get() = getColorByName(properties.getProperty("agents.hearing.dangerLightColor", "RED")) ?: Color.RED
+
     }
 
     object Physics {

@@ -6,22 +6,16 @@ import io.github.agentseek.common.Vector2d
 import io.github.agentseek.components.FieldMovementComponent
 import io.github.agentseek.components.NoiseSensorComponent
 import io.github.agentseek.components.common.ComponentsUtils
+import io.github.agentseek.components.common.Config
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.env.Actions
 import jason.asSyntax.Literal
 import jason.asSyntax.NumberTerm
 import jason.asSyntax.Structure
-import java.awt.Color
 
 class HearingAgentComponent(gameObject: GameObject, override val id: String) : JasonAgent(gameObject) {
-    companion object {
-        private const val ENEMY_NAME = "Player"
-        private const val DEFAULT_RANDOM_TIMER = 3000L
-        private const val DEFAULT_NOISE_TIMER = 5000L
-    }
-
-    private var randomTimer = TimerImpl(DEFAULT_RANDOM_TIMER)
-    private var noiseTimer = TimerImpl(DEFAULT_NOISE_TIMER)
+    private var randomTimer = TimerImpl(Config.Agents.hearingRandomMovementTimerMillis)
+    private var noiseTimer = TimerImpl(Config.Agents.hearingNoiseTimerMillis)
     private lateinit var noiseSensorComponent: NoiseSensorComponent
     private lateinit var fieldMovementComponent: FieldMovementComponent
     private var lastNoisePosition: Point2d? = null
@@ -30,7 +24,7 @@ class HearingAgentComponent(gameObject: GameObject, override val id: String) : J
         fieldMovementComponent = gameObject.getComponent<FieldMovementComponent>()!!
         noiseSensorComponent = gameObject.getComponent<NoiseSensorComponent>()!!
         noiseSensorComponent.addReaction { perceptions ->
-            val noisePosition = perceptions.find { it.gameObject.name == ENEMY_NAME }?.noisePosition
+            val noisePosition = perceptions.find { it.gameObject.name == Config.Names.playerName }?.noisePosition
             if (noisePosition != null) {
                 lastNoisePosition = noisePosition
                 noiseTimer.restart()
@@ -82,9 +76,9 @@ class HearingAgentComponent(gameObject: GameObject, override val id: String) : J
      */
     private fun checkPercepts() {
         if (lastNoisePosition != null && (randomTimer.isStarted && !randomTimer.isElapsed())) {
-            noiseSensorComponent.noiseColor = Color.RED
+            noiseSensorComponent.noiseColor = Config.Agents.hearingDangerLightColor
         } else {
-            noiseSensorComponent.noiseColor = Color.YELLOW
+            noiseSensorComponent.noiseColor = Config.Agents.hearingStandardLightColor
             lastNoisePosition = null
         }
     }
