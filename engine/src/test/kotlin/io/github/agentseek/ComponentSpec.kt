@@ -2,7 +2,7 @@ package io.github.agentseek
 
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.util.EngineTestingUtil
-import io.github.agentseek.util.FastEntities.createComponent
+import io.github.agentseek.util.EngineTestingUtil.createComponent
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe

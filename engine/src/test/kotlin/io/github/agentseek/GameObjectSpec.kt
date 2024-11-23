@@ -4,7 +4,7 @@ import io.github.agentseek.common.Point2d
 import io.github.agentseek.common.Vector2d
 import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.util.EngineTestingUtil
-import io.github.agentseek.util.FastEntities.createComponent
+import io.github.agentseek.util.EngineTestingUtil.createComponent
 import io.github.agentseek.util.FastEntities.emptyGameObject
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldHaveSize
