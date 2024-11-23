@@ -43,11 +43,4 @@ class WorldImpl(private val eventListener: EventListener) : World {
         log("Notified event $event from $source")
         eventListener.notifyEvent(event)
     }
-
-    companion object {
-        private const val BOUNDS_WIDTH = 1407
-        private const val BOUNDS_HEIGHT = 736
-        private const val BOUNDS_UPPER_LEFT_X = 252
-        private const val BOUNDS_UPPER_LEFT_Y = 172
-    }
 }
