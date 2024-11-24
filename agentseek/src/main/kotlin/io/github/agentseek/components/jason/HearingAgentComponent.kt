@@ -64,6 +64,7 @@ class HearingAgentComponent(gameObject: GameObject, override val id: String) : J
             randomTimer.restart()
             var randomObjective: Point2d = ComponentsUtils.getRandomVelocity(gameObject)
             synchronized(gameObject) {
+                fieldMovementComponent.maxVelocity = Config.Agents.hearingMaxWanderingSpeed
                 fieldMovementComponent.wakeUp()
                 fieldMovementComponent.objective = randomObjective
             }
@@ -87,6 +88,7 @@ class HearingAgentComponent(gameObject: GameObject, override val id: String) : J
      */
     private fun move(x: Int, y: Int) {
         synchronized(gameObject) {
+            fieldMovementComponent.maxVelocity = Config.Agents.hearingMaxSpeed
             fieldMovementComponent.wakeUp()
             fieldMovementComponent.objective = point(x, y)
         }

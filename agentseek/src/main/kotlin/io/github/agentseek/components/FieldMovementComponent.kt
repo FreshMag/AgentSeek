@@ -10,7 +10,7 @@ import kotlin.time.Duration
 @Requires(DistanceSensorComponent::class)
 class FieldMovementComponent(
     gameObject: GameObject,
-    val maxVelocity: Double = Config.FieldMovement.defaultMaxVelocity
+    var maxVelocity: Double = Config.FieldMovement.defaultMaxVelocity
 ) :
     AbstractComponent(gameObject) {
     private lateinit var sensor: DistanceSensorComponent

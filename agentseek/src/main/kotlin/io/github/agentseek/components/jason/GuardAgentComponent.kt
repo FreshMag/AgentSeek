@@ -128,6 +128,9 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
      */
     private fun move(x: Int, y: Int) {
         synchronized(gameObject) {
+            synchronized(gameObject) {
+                fieldMovementComponent.maxVelocity = Config.Agents.guardMaxSpeed
+            }
             fieldMovementComponent.wakeUp()
             fieldMovementComponent.objective = point(x, y)
         }
@@ -141,6 +144,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
             randomTimer.restart()
             var randomObjective: Point2d = ComponentsUtils.getRandomVelocity(gameObject)
             synchronized(gameObject) {
+                fieldMovementComponent.maxVelocity = Config.Agents.guardMaxWanderingSpeed
                 fieldMovementComponent.wakeUp()
                 fieldMovementComponent.objective = randomObjective
             }
