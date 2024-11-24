@@ -6,6 +6,7 @@ import io.github.agentseek.util.FastEntities.bounds
 import io.github.agentseek.util.factories.GameObjects.cameraAgent
 import io.github.agentseek.util.factories.GameObjects.door
 import io.github.agentseek.util.factories.GameObjects.guardAgent
+import io.github.agentseek.util.factories.GameObjects.hearingAgent
 import io.github.agentseek.util.factories.GameObjects.player
 import io.github.agentseek.util.factories.GameObjects.wall
 import io.github.agentseek.util.factories.GameObjects.walls
@@ -18,7 +19,7 @@ object Levels {
 
     @JvmStatic
     fun main(args: Array<String>) {
-        GameGui.startGameGui(scene = prisonLevel())
+        GameGui.startGameGui(scene = obstacleLevel())
     }
 
     fun prisonLevel(): Scene = useGrid(rows = 5, columns = 7, 6.5) { grid ->
@@ -97,6 +98,97 @@ object Levels {
                 destinationSceneName = "prisonScene",
                 position = grid(-1.30, 0.5),
                 size = grid.boundsSize
+            )
+        )
+    }
+
+    fun obstacleLevel(): Scene = useGrid(rows = 8, columns = 10, 6.5) { grid ->
+        sceneWithJason(
+            name = "obstacleScene", environmentClass = AgentSeekEnvironment::class,
+            agents(
+                cameraAgent(
+                    id = "camera1",
+                    position = grid(0, 0),
+                    isCenter = false
+                ),
+                cameraAgent(
+                    id = "camera2",
+                    position = grid(7, 9),
+                    isCenter = false
+                ),
+                guardAgent(
+                    id = "guard1",
+                    position = grid(0, 9),
+                ),
+                guardAgent(
+                    id = "guard2",
+                    position = grid(6, 9),
+                ),
+                hearingAgent(
+                    id = "hearing1",
+                    position = grid(4, 5),
+                )
+            ),
+            player(
+                position = grid(7, 0)
+            ),
+            *bounds(
+                grid.boundsSize,
+                GameGui.defaultRenderer(),
+                GameGui.camera.viewPortWidth,
+                GameGui.camera.viewPortHeight
+            ),
+            *walls(
+                wall(
+                    position = grid(1, 1),
+                    width = grid.cellWidth,
+                    height = grid.cellHeight * 3,
+                    isCenter = false
+                ),
+                wall(
+                    position = grid(3, 2),
+                    width = grid.cellWidth * 2,
+                    height = grid.cellHeight / 2,
+                ),
+                wall(
+                    position = grid(2, 5.49),
+                    width = grid.cellWidth * 2,
+                    height = grid.cellHeight / 2
+                ),
+                wall(
+                    position = grid(4, 7),
+                    width = grid.cellWidth * 2,
+                    height = grid.cellHeight
+                ),
+                wall(
+                    position = grid(6, 3.5),
+                    width = grid.cellWidth * 1.5,
+                    height = grid.cellHeight / 2,
+                    isCenter = false
+                ),
+                wall(
+                    position = grid(0.5, 6),
+                    width = grid.cellWidth / 2,
+                    height = grid.cellHeight * 1.5,
+                    isCenter = false
+                ),
+                wall(
+                    position = grid(7.5, 5),
+                    width = grid.cellWidth / 2,
+                    height = grid.cellHeight * 3,
+                ),
+                wall(
+                    position = grid(5.5, 1.5),
+                    width = grid.cellWidth * 2,
+                    height = grid.cellHeight / 2,
+                ),
+
+                ),
+            door(
+                destinationSceneName = "finalLevel",
+                position = grid(-3, 7.8),
+                size = grid.boundsSize,
+                isCenter = false
             )
         )
     }
