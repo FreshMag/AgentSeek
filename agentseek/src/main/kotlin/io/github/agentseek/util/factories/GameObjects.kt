@@ -19,7 +19,8 @@ import io.github.agentseek.util.jason.JasonScenes
 import io.github.agentseek.util.jason.JasonScenes.jasonAgent
 import io.github.agentseek.view.CameraRenderer
 import io.github.agentseek.view.DoorRenderer
-import io.github.agentseek.view.SimpleRenderer
+import io.github.agentseek.view.GuardRenderer
+import io.github.agentseek.view.HearingRenderer
 import io.github.agentseek.view.gui.GameGui
 import io.github.agentseek.world.World
 
@@ -96,7 +97,7 @@ object GameObjects {
             { FieldMovementComponent(it, Config.Agents.guardMaxSpeed) },
             position = position,
             rigidBody = rigidBody,
-            renderer = SimpleRenderer(),
+            renderer = GuardRenderer(),
         ).apply {
             if (isCenter) {
                 this.copy(
@@ -126,7 +127,7 @@ object GameObjects {
             { FieldMovementComponent(it, Config.Agents.hearingMaxSpeed) },
             position = position,
             rigidBody = rigidBody,
-            renderer = SimpleRenderer(),
+            renderer = HearingRenderer(),
         ).apply {
             if (isCenter) {
                 this.copy(
