@@ -103,6 +103,8 @@ object Config {
         val guardMaxWanderingSpeed: Double
             get() = properties.getProperty("agents.guard.maxWanderingSpeed", "1.5").toDouble()
 
+        val hearingDefaultColor: Color
+            get() = getColor(properties.getProperty("agents.hearing.defaultColor", "BLACK")) ?: Color.BLACK
         val hearingRandomMovementTimerMillis: Long
             get() = properties.getProperty("agents.hearing.randomMovementTimerMillis", "3000").toLong()
         val hearingNoiseTimerMillis: Long
