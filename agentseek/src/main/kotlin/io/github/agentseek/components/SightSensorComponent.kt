@@ -2,6 +2,7 @@ package io.github.agentseek.components
 
 import io.github.agentseek.common.Cone2d
 import io.github.agentseek.common.Vector2d
+import io.github.agentseek.components.common.Config
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.physics.Collider
 import io.github.agentseek.physics.Rays.castRay
@@ -31,7 +32,7 @@ class SightSensorComponent(
     /**
      * The color of the cone of light projected by this sensor.
      */
-    var lightColor: Color = Color.YELLOW
+    var lightColor: Color = Config.Components.sightSensorDefaultColor
 
     val directionOfSight: Vector2d
         get() = vector(1.0, 0).rotateRadians((sensorCollider.shape as Cone2d).rotation)

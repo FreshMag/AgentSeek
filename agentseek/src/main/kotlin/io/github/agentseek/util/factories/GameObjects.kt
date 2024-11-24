@@ -2,6 +2,7 @@ package io.github.agentseek.util.factories
 
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.components.*
+import io.github.agentseek.components.common.Config
 import io.github.agentseek.components.jason.CameraAgentComponent
 import io.github.agentseek.components.jason.GuardAgentComponent
 import io.github.agentseek.core.GameObject
@@ -32,8 +33,8 @@ object GameObjects {
      */
     fun player(
         position: Point2d,
-        noiseEmittingRadius: Number = 3,
-        rigidBody: (GameObject) -> RigidBody = square(1.5),
+        noiseEmittingRadius: Number = Config.Player.noiseEmittingRadius,
+        rigidBody: (GameObject) -> RigidBody = square(Config.Player.size),
         isCenter: Boolean = true,
     ): (World) -> GameObject =
         gameObject(
@@ -43,7 +44,7 @@ object GameObjects {
             position = position,
             rigidBody = rigidBody,
             renderer = GameGui.defaultRenderer(),
-            name = "Player"
+            name = Config.Player.name
         ).run {
             if (isCenter) {
                 return@run { world: World ->
@@ -69,11 +70,11 @@ object GameObjects {
     fun guardAgent(
         id: String,
         position: Point2d,
-        noiseSensorRadius: Number = 4.0,
-        sightSensorConeLength: Number = 10,
-        sightSensorConeAperture: Number = 1.2,
-        distanceSensorRadius: Number = 2.8,
-        rigidBody: (GameObject) -> RigidBody = square(1.5),
+        noiseSensorRadius: Number = Config.Agents.guardDefaultNoiseSensorRadius,
+        sightSensorConeLength: Number = Config.Agents.guardDefaultSightConeLength,
+        sightSensorConeAperture: Number = Config.Agents.guardDefaultSightConeApertureRadians,
+        distanceSensorRadius: Number = Config.Agents.guardDefaultDistanceSensorRadius,
+        rigidBody: (GameObject) -> RigidBody = square(Config.Agents.guardSize),
         isCenter: Boolean = true,
     ): JasonScenes.JasonAgentConfig =
         jasonAgent(
@@ -142,7 +143,7 @@ object GameObjects {
         position: Point2d,
         width: Number,
         height: Number,
-        name: String = "Wall",
+        name: String = Config.Names.wallName,
         isCenter: Boolean = true,
     ): (World) -> GameObject =
         gameObject(
@@ -165,7 +166,7 @@ object GameObjects {
         y: Number,
         width: Number,
         height: Number,
-        name: String = "Wall",
+        name: String = Config.Names.wallName,
         isCenter: Boolean = true,
     ): (World) -> GameObject =
         wall(point(x, y), width, height, name, isCenter)
@@ -196,7 +197,7 @@ object GameObjects {
         destinationSceneName: String,
         position: Point2d,
         size: Number = 2.5,
-        name: String = "Door",
+        name: String = Config.Names.doorName,
         isCenter: Boolean = true,
     ): (World) -> GameObject =
         gameObject(

@@ -2,12 +2,17 @@ package io.github.agentseek.components
 
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.common.Vector2d
+import io.github.agentseek.components.common.Config
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.util.GameObjectUtilities.center
 import kotlin.time.Duration
 
 @Requires(DistanceSensorComponent::class)
-class FieldMovementComponent(gameObject: GameObject) : AbstractComponent(gameObject) {
+class FieldMovementComponent(
+    gameObject: GameObject,
+    val maxVelocity: Double = Config.FieldMovement.defaultMaxVelocity
+) :
+    AbstractComponent(gameObject) {
     private lateinit var sensor: DistanceSensorComponent
     private var previousDirection = Vector2d.zero()
     private var directionObjective: Vector2d = Vector2d.zero()
@@ -30,20 +35,20 @@ class FieldMovementComponent(gameObject: GameObject) : AbstractComponent(gameObj
         val distances = sensor.getDistancesResultant()
         val direction: Vector2d = previousDirection +
                 if (distances != Vector2d.zero()) {
-                    val clockwise = distances.rotateDegrees(-TANGENTIAL_DEGREES)
-                    val antiClockwise = distances.rotateDegrees(TANGENTIAL_DEGREES)
+                    val clockwise = distances.rotateDegrees(-Config.FieldMovement.rotationDegrees)
+                    val antiClockwise = distances.rotateDegrees(Config.FieldMovement.rotationDegrees)
                     val tangentialVector =
                         if (clockwise.angleWith(forwardDirection) > antiClockwise.angleWith(forwardDirection)) {
                             antiClockwise
                         } else {
                             clockwise
                         }
-                    (tangentialVector * DANGER_COEFFICIENT)
+                    (tangentialVector * Config.FieldMovement.dangerCoefficient)
                 } else {
                     forwardDirection
                 }
         previousDirection = direction.normalized()
-        gameObject.rigidBody.velocity = previousDirection * MAX_VELOCITY
+        gameObject.rigidBody.velocity = previousDirection * maxVelocity
     }
 
     fun setDirection(direction: Vector2d) {
@@ -56,11 +61,5 @@ class FieldMovementComponent(gameObject: GameObject) : AbstractComponent(gameObj
 
     fun wakeUp() {
         isStopped = false
-    }
-
-    companion object {
-        const val TANGENTIAL_DEGREES = 115.0
-        const val MAX_VELOCITY = 3.5
-        const val DANGER_COEFFICIENT = 0.75
     }
 }

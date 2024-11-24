@@ -2,6 +2,7 @@ package io.github.agentseek.components
 
 import io.github.agentseek.common.Circle2d
 import io.github.agentseek.common.Point2d
+import io.github.agentseek.components.common.Config
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.physics.Collider
 import io.github.agentseek.util.GameObjectUtilities.attachRenderer
@@ -17,7 +18,7 @@ class NoiseSensorComponent(gameObject: GameObject, radius: Double) : AbstractCom
     private var lastPos = gameObject.position
 
     private var reactions = listOf<(List<Perception>) -> Unit>()
-    var noiseColor: Color = Color.YELLOW
+    var noiseColor: Color = Config.VisualComponents.noiseSensorColor
 
     data class Perception(val gameObject: GameObject, val noisePosition: Point2d)
 

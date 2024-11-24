@@ -6,6 +6,7 @@ import io.github.agentseek.components.FieldMovementComponent
 import io.github.agentseek.components.NoiseSensorComponent
 import io.github.agentseek.components.SightSensorComponent
 import io.github.agentseek.components.common.ComponentsUtils
+import io.github.agentseek.components.common.Config
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.env.Actions
 import io.github.agentseek.util.FastEntities.point
@@ -17,12 +18,7 @@ import java.awt.Color
 class GuardAgentComponent(gameObject: GameObject, override val id: String) : JasonAgent(gameObject) {
 
     companion object {
-        private const val ENEMY_NAME = "Player"
         private val basePosition = Point2d(30, 30)
-        private const val DEFAULT_NEAR_BASE_DISTANCE = 10.0
-        private const val DEFAULT_RANDOM_TIMER = 4000L
-        private const val DEFAULT_SIGHT_TIMER = 5000L
-        private const val DEFAULT_NOISE_TIMER = 5000L
     }
 
     private lateinit var sightSensorComponent: SightSensorComponent
@@ -30,14 +26,14 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
     private lateinit var fieldMovementComponent: FieldMovementComponent
     private var lastEnemyPosition: Point2d? = null
     private var lastNoisePosition: Point2d? = null
-    private var randomTimer = TimerImpl(DEFAULT_RANDOM_TIMER)
-    private val sightTimer = TimerImpl(DEFAULT_SIGHT_TIMER)
-    private val noiseTimer = TimerImpl(DEFAULT_NOISE_TIMER)
+    private var randomTimer = TimerImpl(Config.Agents.guardRandomMovementTimerMillis)
+    private val sightTimer = TimerImpl(Config.Agents.guardSightTimerMillis)
+    private val noiseTimer = TimerImpl(Config.Agents.guardNoiseTimerMillis)
 
 
 
     private val sightSensorReaction = { perceptions: List<SightSensorComponent.Perception> ->
-        val enemyPosition = perceptions.find { it.gameObject.name == ENEMY_NAME }?.gameObject?.position
+        val enemyPosition = perceptions.find { it.gameObject.name == Config.Names.playerName }?.gameObject?.position
         if (enemyPosition != null) {
             lastEnemyPosition = enemyPosition
             sightTimer.restart()
@@ -45,7 +41,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
     }
 
     private val noiseSensorReaction = { perceptions: List<NoiseSensorComponent.Perception> ->
-        val noisePosition = perceptions.find { it.gameObject.name == ENEMY_NAME }?.noisePosition
+        val noisePosition = perceptions.find { it.gameObject.name == Config.Names.playerName }?.noisePosition
         if (noisePosition != null) {
             lastNoisePosition = noisePosition
             noiseTimer.restart()
@@ -100,7 +96,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
         if (ComponentsUtils.isPointWithinDistance(
                 firstWorldPoint = point(gameObject.position.x, gameObject.position.y), secondWorldPoint = point(
                     basePosition.x, basePosition.y
-                ), maxDistance = DEFAULT_NEAR_BASE_DISTANCE
+                ), maxDistance = Config.Agents.guardNearBaseDistance
             )
         ) {
             percepts.add(Literal.parseLiteral("base_reached"))
@@ -114,15 +110,15 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
      */
     private fun checkPercepts() {
         if (lastEnemyPosition != null && (sightTimer.isStarted && !sightTimer.isElapsed())) {
-            sightSensorComponent.lightColor = Color.RED
+            sightSensorComponent.lightColor = Config.Agents.guardDangerLightColor
         } else {
-            sightSensorComponent.lightColor = Color.YELLOW
+            sightSensorComponent.lightColor = Config.Agents.guardStandardLightColor
             lastEnemyPosition = null
         }
         if (lastNoisePosition != null && (noiseTimer.isStarted && !noiseTimer.isElapsed())) {
-            noiseSensorComponent.noiseColor = Color.RED
+            noiseSensorComponent.noiseColor = Config.Agents.guardDangerLightColor
         } else {
-            noiseSensorComponent.noiseColor = Color.YELLOW
+            noiseSensorComponent.noiseColor = Config.Agents.guardStandardLightColor
             lastNoisePosition = null
         }
     }

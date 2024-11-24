@@ -3,6 +3,7 @@ package io.github.agentseek.components.jason
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.common.Vector2d
 import io.github.agentseek.components.SightSensorComponent
+import io.github.agentseek.components.common.Config
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.util.FastEntities.allDirections
 import io.github.agentseek.util.FastEntities.radians
@@ -12,7 +13,6 @@ import io.github.agentseek.util.jason.Utils.toLiteral
 import io.github.agentseek.util.jason.Utils.toNumber
 import jason.asSyntax.Literal
 import jason.asSyntax.Structure
-import java.awt.Color
 import kotlin.time.Duration
 
 /**
@@ -40,30 +40,32 @@ class CameraAgentComponent(gameObject: GameObject, override val id: String) : Ja
     /**
      * Reaction to the sight of the player.
      */
-    private val sightReaction = { perceptions: List<SightSensorComponent. Perception> ->
+    private val sightReaction = { perceptions: List<SightSensorComponent.Perception> ->
         seesPlayer = perceptions.any {
-            (it.gameObject.name == PLAYER_GO_NAME).also { isPlayer -> if (isPlayer) player = it.gameObject }
+            (it.gameObject.name == Config.Player.name).also { isPlayer -> if (isPlayer) player = it.gameObject }
         }
         if (seesPlayer) {
-            sightSensorComponent.lightColor = DANGER_LIGHT_COLOR
+            sightSensorComponent.lightColor = Config.Agents.cameraDangerLightColor
         } else {
             sightSensorComponent.setDirection(startingDirection)
-            sightSensorComponent.lightColor = STANDARD_LIGHT_COLOR
+            sightSensorComponent.lightColor = Config.Agents.cameraStandardLightColor
         }
     }
 
     override fun init() {
-        bounds = gameObject.otherGameObjects().filter { namesToExclude.contains(it.name.lowercase()) }
+        bounds =
+            gameObject.otherGameObjects().filter { Config.Agents.cameraExcludedNames.contains(it.name.lowercase()) }
         // Choose a direction that doesn't intersect with a bound as starting direction
         startingDirection = allDirections().first { direction ->
-            bounds.none { it.rigidBody.shape.contains(gameObject.center() + (direction * WALL_AWARENESS)) }
+            bounds.none { it.rigidBody.shape.contains(gameObject.center() + (direction * Config.Agents.cameraWallAwareness)) }
         }
         sightSensorComponent = SightSensorComponent(
             gameObject,
-            SIGHT_LENGTH,
-            radians(SIGHT_APERTURE_DEGREES),
-            namesToTrack
+            Config.Agents.cameraSightLength,
+            radians(Config.Agents.cameraSightApertureDegrees),
+            Config.Agents.cameraNamesToTrack.toSet()
         )
+        sightSensorComponent.lightColor = Config.Agents.cameraStandardLightColor
         sightSensorComponent.setDirection(startingDirection)
         gameObject.addComponent(sightSensorComponent)
         sightSensorComponent.init()
@@ -96,8 +98,8 @@ class CameraAgentComponent(gameObject: GameObject, override val id: String) : Ja
      */
     private fun hasWallLeftRight(): Pair<Boolean, Boolean> {
         val direction = sightSensorComponent.directionOfSight
-        val leftVector = direction.leftNormal() * WALL_AWARENESS
-        val rightVector = direction.rightNormal() * WALL_AWARENESS
+        val leftVector = direction.leftNormal() * Config.Agents.cameraWallAwareness
+        val rightVector = direction.rightNormal() * Config.Agents.cameraWallAwareness
         val center = gameObject.center()
         return bounds.fold(Pair(false, false)) { acc, go ->
             Pair(
@@ -138,7 +140,6 @@ class CameraAgentComponent(gameObject: GameObject, override val id: String) : Ja
         }.toLiterals()
 
     companion object {
-
         /**
          * Belief used by the agent to check if it sees the player.
          */
@@ -158,46 +159,5 @@ class CameraAgentComponent(gameObject: GameObject, override val id: String) : Ja
          * Belief used by the agent to maintain the player position.
          */
         private const val PLAYER_POSITION_BELIEF = "playerPosition"
-
-        /**
-         * How close can be an "obstacle", "bound" or "wall" to be detected by the camera agent (and so excluding
-         * that direction when rotating).
-         */
-        private const val WALL_AWARENESS = 2.0
-
-        /**
-         * Length of the cone of sight.
-         */
-        private const val SIGHT_LENGTH = 10.0
-
-        /**
-         * Aperture of the cone of sight (in degrees).
-         */
-        private const val SIGHT_APERTURE_DEGREES = 30
-
-        /**
-         * Names used for the wall awareness.
-         */
-        private val namesToExclude = setOf("bound", "obstacle", "wall", "bounds")
-
-        /**
-         * Names to track by the camera agent.
-         */
-        private val namesToTrack = setOf("player")
-
-        /**
-         * Name used to identify the player's GameObject.
-         */
-        private const val PLAYER_GO_NAME = "Player"
-
-        /**
-         * Color used when the camera is in normal state.
-         */
-        private val STANDARD_LIGHT_COLOR = Color.YELLOW
-
-        /**
-         * Color used when the camera detects the player.
-         */
-        private val DANGER_LIGHT_COLOR = Color.RED
     }
 }
