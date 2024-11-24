@@ -18,7 +18,7 @@ class SightSensorComponent(
     gameObject: GameObject,
     val coneLength: Double,
     val coneApertureRadians: Double,
-    private val namesWhitelist: Set<String> = setOf(),
+    private val namesWhitelist: Set<String>,
 ) :
     AbstractComponent(gameObject), Sensor<List<SightSensorComponent.Perception>> {
 
