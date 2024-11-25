@@ -17,13 +17,32 @@ import io.github.agentseek.world.World
 import jason.environment.Environment
 import kotlin.reflect.KClass
 
+/**
+ * Helper functions to create scenes with Jason agents.
+ */
 object JasonScenes {
 
+    /**
+     * Configuration for a Jason agent.
+     * @param asl The agent's ASL name.
+     * @param gameObjectSetter A function that creates a GameObject for the agent.
+     */
     data class JasonAgentConfig(
         val asl: Agent,
         val gameObjectSetter: (World) -> GameObject
     )
 
+    /**
+     * Creates a Jason agent configuration.
+     * @param id The agent's ID.
+     * @param aslName The agent's ASL name.
+     * @param agentComponent A function that creates the agent's JasonAgent component.
+     * @param componentsSetters Functions that create other components for the agent.
+     * @param rigidBody A function that creates the agent's RigidBody.
+     * @param renderer The agent's renderer.
+     * @param position The agent's initial position.
+     * @return The Jason agent configuration.
+     */
     fun jasonAgent(
         id: String,
         aslName: String,
@@ -45,13 +64,21 @@ object JasonScenes {
             )
         )
 
-
+    /**
+     * Creates a list of Jason agent configurations.
+     */
     fun agents(
         vararg agents: JasonAgentConfig
     ): List<JasonAgentConfig> =
         agents.toList()
 
-
+    /**
+     * Creates a scene with Jason agents.
+     * @param name The scene's name.
+     * @param environmentClass The environment class.
+     * @param agents The Jason agents.
+     * @param otherGameObjects Other game objects to add to the scene.
+     */
     fun sceneWithJason(
         name: String,
         environmentClass: KClass<out Environment>,
