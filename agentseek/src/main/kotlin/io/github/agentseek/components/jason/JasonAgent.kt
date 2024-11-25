@@ -5,6 +5,9 @@ import io.github.agentseek.core.GameObject
 import jason.asSyntax.Literal
 import jason.asSyntax.Structure
 
+/**
+ * Abstract class for Jason agents.
+ */
 abstract class JasonAgent(gameObject: GameObject) : AbstractComponent(gameObject) {
     /**
      * ID for this Agent, corresponding to a Jason agent ID
