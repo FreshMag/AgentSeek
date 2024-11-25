@@ -24,6 +24,9 @@ import io.github.agentseek.view.HearingRenderer
 import io.github.agentseek.view.gui.GameGui
 import io.github.agentseek.world.World
 
+/**
+ * Factory object for creating game objects.
+ */
 object GameObjects {
 
     /**
@@ -32,6 +35,7 @@ object GameObjects {
      * @param position The initial position of the player.
      * @param noiseEmittingRadius The radius within which the player emits noise.
      * @param rigidBody A function to create the player's rigid body.
+     * @param isCenter Whether the player should be centered at the given position.
      * @return A function that takes a World and returns a GameObject representing the player.
      */
     fun player(
@@ -68,6 +72,7 @@ object GameObjects {
      * @param sightSensorConeAperture The aperture of the sight sensor cone.
      * @param distanceSensorRadius The radius within which the guard agent can sense distance.
      * @param rigidBody A function to create the guard agent's rigid body.
+     * @param isCenter Whether the guard agent should be centered at the given position.
      * @return A JasonAgentConfig for the guard agent.
      */
     fun guardAgent(
@@ -111,6 +116,17 @@ object GameObjects {
             }
         }
 
+    /**
+     * Creates a hearing agent configuration.
+     *
+     * @param id The identifier for the hearing agent.
+     * @param position The initial position of the hearing agent.
+     * @param noiseSensorRadius The radius within which the hearing agent can sense noise.
+     * @param distanceSensorRadius The radius within which the hearing agent can sense distance.
+     * @param rigidBody A function to create the hearing agent's rigid body.
+     * @param isCenter Whether the hearing agent should be centered at the given position.
+     * @return A JasonAgentConfig for the hearing agent.
+     */
     fun hearingAgent(
         id: String,
         position: Point2d,
@@ -147,6 +163,7 @@ object GameObjects {
      *
      * @param id The identifier for the camera agent.
      * @param position The initial position of the camera agent.
+     * @param isCenter Whether the camera agent should be centered at the given position.
      * @return A JasonAgentConfig for the camera agent.
      */
     fun cameraAgent(
@@ -179,6 +196,7 @@ object GameObjects {
      * @param width The width of the wall.
      * @param height The height of the wall.
      * @param name The name of the wall.
+     * @param isCenter Whether the wall should be centered at the given position.
      * @return A function that takes a World and returns a GameObject representing the wall.
      */
     fun wall(
@@ -203,6 +221,17 @@ object GameObjects {
             }
         }
 
+    /**
+     * Creates a wall game object.
+     *
+     * @param x The x-coordinate of the wall.
+     * @param y The y-coordinate of the wall.
+     * @param width The width of the wall.
+     * @param height The height of the wall.
+     * @param name The name of the game object.
+     * @param isCenter Whether the wall should be centered at the given position.
+     * @return A function that takes a World and returns a GameObject representing the wall.
+     */
     fun wall(
         x: Number,
         y: Number,

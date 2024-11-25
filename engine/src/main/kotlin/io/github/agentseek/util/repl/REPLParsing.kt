@@ -16,9 +16,17 @@ import kotlin.system.exitProcess
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.DurationUnit
 
-
+/**
+ * Object that contains methods and commands for parsing REPL commands.
+ */
 object REPLParsing {
 
+    /**
+     * Creates a component from its fully qualified class name and adds it to the GameObject.
+     *
+     * @param className The fully qualified name of the component class.
+     * @return The created component, or null if the class was not found.
+     */
     private fun GameObject.createComponentFromClass(className: String): Component? {
         try {
             val component: Component = ClassLoader.getSystemClassLoader()
@@ -26,22 +34,32 @@ object REPLParsing {
                 .getConstructor(GameObject::class.java)
                 .newInstance(this) as Component
             return component
-        } catch (e: ClassNotFoundException) {
+        } catch (_: ClassNotFoundException) {
             println("Component class $className not found")
         }
         return null
     }
 
+    /**
+     * Adds a component to the GameObject from its fully qualified class name.
+     *
+     * @param className The fully qualified name of the component class.
+     */
     private fun GameObject.addComponentFromFQName(className: String) {
         createComponentFromClass(className)?.let {
             try {
                 this.addComponent(it)
-            } catch (e: IllegalStateException) {
+            } catch (_: IllegalStateException) {
                 println("The GameObject already has that component")
             }
         }
     }
 
+    /**
+     * Removes a component from the GameObject by its fully qualified class name.
+     *
+     * @param className The fully qualified name of the component class.
+     */
     private fun GameObject.removeComponentFromFQName(className: String) {
         val clazz = Class.forName(className)
         components.find { clazz.isInstance(it) }?.let { removeComponent(it) } ?: println(
@@ -49,6 +67,11 @@ object REPLParsing {
         )
     }
 
+    /**
+     * Sets the renderer of the GameObject from its fully qualified class name.
+     *
+     * @param className The fully qualified name of the renderer class.
+     */
     fun GameObject.setRendererFromFQName(className: String) {
         try {
             val renderer: Renderer<*> = ClassLoader.getSystemClassLoader()
@@ -56,7 +79,7 @@ object REPLParsing {
                 .getConstructor()
                 .newInstance() as Renderer<*>
             this.renderer = renderer
-        } catch (e: ClassNotFoundException) {
+        } catch (_: ClassNotFoundException) {
             println("Renderer class $className not found")
         }
     }
@@ -89,6 +112,9 @@ object REPLParsing {
             "@|red,bg(white) (c) 2024|@"],
     )
     class REPLCommand : Runnable {
+        /**
+         * Runs the REPL command, displaying a help message.
+         */
         override fun run() {
             println("Type 'help' to see available commands")
         }
@@ -99,6 +125,9 @@ object REPLParsing {
         description = ["Starts an infinite game loop"]
     )
     class StartCommand : Runnable {
+        /**
+         * Starts the game engine and sets the running flag to true.
+         */
         override fun run() {
             GameEngine.start()
             isRunning = true
@@ -110,6 +139,9 @@ object REPLParsing {
         description = ["Pauses a running game loop"]
     )
     class PauseCommand : Runnable {
+        /**
+         * Pauses the game engine and sets the running flag to false.
+         */
         override fun run() {
             GameEngine.pause()
             isRunning = false
@@ -121,6 +153,9 @@ object REPLParsing {
         description = ["Resumes the game loop"]
     )
     class ResumeCommand : Runnable {
+        /**
+         * Resumes the game engine and sets the running flag to true.
+         */
         override fun run() {
             GameEngine.resume()
             isRunning = true
@@ -132,6 +167,9 @@ object REPLParsing {
         description = ["Exits the program"]
     )
     class ExitCommand : Runnable {
+        /**
+         * Stops the game engine and exits the program.
+         */
         override fun run() {
             GameEngine.stop()
             exitProcess(0)
@@ -173,6 +211,9 @@ object REPLParsing {
         )
         var components: Array<String> = emptyArray()
 
+        /**
+         * Adds a new game object to the scene with the specified shape, position, and components.
+         */
         override fun run() {
             val go = scene.emptyGameObject(false)
             components.forEach {
@@ -186,6 +227,13 @@ object REPLParsing {
         }
     }
 
+    /**
+     * Parses the form string to create a RigidBody for the GameObject.
+     *
+     * @param form The form string (e.g., "circle(10)").
+     * @param gameObject The GameObject to which the RigidBody will be added.
+     * @return The created RigidBody, or null if the form string is invalid.
+     */
     private fun parseForm(form: String, gameObject: GameObject): RigidBody? {
         try {
             val split = form.split("(")
@@ -197,10 +245,10 @@ object REPLParsing {
                 "square" -> RigidBody.RectangleRigidBody(gameObject, args[0].toDouble(), args[0].toDouble())
                 else -> throw IllegalArgumentException()
             }
-        } catch (e: NumberFormatException) {
+        } catch (_: NumberFormatException) {
             println("Please provide an integer value between parentheses")
             return null
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             println("$form is not a valid form expression. Try circle(<RADIUS>) or rectangle(<WIDTH>, <HEIGHT>)")
             return null
         }
@@ -216,6 +264,10 @@ object REPLParsing {
             description = ["ID of the game object to delete"],
         )
         lateinit var id: String
+
+        /**
+         * Deletes the game object with the specified ID from the scene.
+         */
         override fun run() {
             scene.world.gameObjectById(id)?.let {
                 scene.world.removeGameObject(it)
@@ -234,6 +286,10 @@ object REPLParsing {
             description = ["ID of the game object to inspect"],
         )
         lateinit var id: String
+
+        /**
+         * Inspects the game object with the specified ID and prints its details.
+         */
         override fun run() {
             scene.world.gameObjectById(id)?.let {
                 println(it.toString())
@@ -283,6 +339,10 @@ object REPLParsing {
         )
         var y: Double = Double.MAX_VALUE
 
+        /**
+         * Modifies the game object with the specified ID by adding/removing components, setting the renderer, or
+         * changing its position.
+         */
         override fun run() {
             scene.world.gameObjectById(id)?.let {
                 if (componentFQName.isNotBlank()) {
@@ -319,6 +379,9 @@ object REPLParsing {
         )
         var verbose: Boolean = false
 
+        /**
+         * Lists all game objects in the scene, optionally printing detailed information.
+         */
         override fun run() {
             scene.world.gameObjects.forEach {
                 println(if (verbose) it.toString() else it.id)
@@ -337,6 +400,10 @@ object REPLParsing {
             description = ["ID of the game object to watch"],
         )
         lateinit var id: String
+
+        /**
+         * Adds a WatchComponent to the game object with the specified ID to monitor its state.
+         */
         override fun run() {
             scene.world.gameObjectById(id)?.let {
                 it.addComponent(WatchComponent(it))
@@ -355,6 +422,10 @@ object REPLParsing {
             description = ["ID of the game object to un-watch"],
         )
         lateinit var id: String
+
+        /**
+         * Removes the WatchComponent from the game object with the specified ID.
+         */
         override fun run() {
             scene.world.gameObjectById(id)?.let {
                 if (it.hasComponent<WatchComponent>()) {
@@ -377,6 +448,9 @@ object REPLParsing {
         @Parameters(paramLabel = "SCENE_FILE", description = ["File containing the scene to set"])
         lateinit var file: File
 
+        /**
+         * Sets the scene from the specified file.
+         */
         override fun run() {
             TODO()
         }
@@ -397,6 +471,9 @@ object REPLParsing {
         )
         var deltaTime: Long = 100.milliseconds.toLong(DurationUnit.MILLISECONDS)
 
+        /**
+         * Executes the specified number of iterations of the game loop with the given delta time.
+         */
         override fun run() {
             repeat((1..nIterations).count()) {
                 GameEngine.doOne(deltaTime.milliseconds)
@@ -416,6 +493,9 @@ object REPLParsing {
         )
         lateinit var file: File
 
+        /**
+         * Loads a game object from the specified file.
+         */
         override fun run() {
             TODO("Not yet implemented")
         }
@@ -432,6 +512,9 @@ object REPLParsing {
         )
         var factor: Double = 1.0
 
+        /**
+         * Zooms the camera by the specified factor.
+         */
         override fun run() {
             GameEngine.view?.camera?.zoom(factor.takeIf { it > 0 } ?: 1.0)
         }
@@ -453,6 +536,9 @@ object REPLParsing {
         )
         var secondId: String = ""
 
+        /**
+         * Casts a ray between two game objects and prints the IDs of the intersected game objects, sorted by distance.
+         */
         override fun run() {
             scene.world.gameObjectById(firstId)?.let { gameObject ->
                 val second = scene.world.gameObjectById(secondId) ?: return@let

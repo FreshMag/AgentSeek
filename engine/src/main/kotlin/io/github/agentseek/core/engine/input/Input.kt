@@ -15,6 +15,9 @@ object Input {
         UP, DOWN, LEFT, RIGHT, SPACE, SHIFT
     }
 
+    /**
+     * Class that represents a mouse event.
+     */
     sealed class Mouse(val position: Point2d) {
         class MousePressed(position: Point2d) : Mouse(position)
         class MouseReleased(position: Point2d) : Mouse(position)
@@ -25,21 +28,34 @@ object Input {
     private val keyInputBuffer: MutableSet<Key> = Collections.synchronizedSet(HashSet())
     private val mouseInputBuffer: MutableList<Mouse> = Collections.synchronizedList(mutableListOf())
 
+    /**
+     * Returns `true` if the key UP(W) is pressed
+     */
     val UP: Boolean
         get() = pressedKey(Key.UP)
-
+    /**
+     * Returns `true` if the key DOWN(S) is pressed
+     */
     val DOWN: Boolean
         get() = pressedKey(Key.DOWN)
-
+    /**
+     * Returns `true` if the key LEFT(A) is pressed
+     */
     val LEFT: Boolean
         get() = pressedKey(Key.LEFT)
-
+    /**
+     * Returns `true` if the key RIGHT(D) is pressed
+     */
     val RIGHT: Boolean
         get() = pressedKey(Key.RIGHT)
-
+    /**
+     * Returns `true` if the key SPACE is pressed
+     */
     val SPACE: Boolean
         get() = pressedKey(Key.SPACE)
-
+    /**
+     * Returns `true` if the key SHIFT is pressed
+     */
     val SHIFT: Boolean
         get() = pressedKey(Key.SHIFT)
 
@@ -72,7 +88,7 @@ object Input {
      */
     fun pressedKey(key: String): Boolean = try {
         keyInputBuffer.contains(Key.valueOf(key))
-    } catch (e: IllegalArgumentException) {
+    } catch (_: IllegalArgumentException) {
         false
     }
 
@@ -89,7 +105,6 @@ object Input {
      * Refreshes the input buffer, clearing all the previous input events.
      */
     internal fun refresh() {
-
         mouseInputBuffer.clear()
     }
 }

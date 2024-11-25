@@ -5,6 +5,9 @@ import io.github.agentseek.core.GameObject
 import io.github.agentseek.view.Renderer
 import io.github.agentseek.view.RenderingContext
 
+/**
+ * A collection of utility functions for GameObjects
+ */
 object GameObjectUtilities {
 
     /**

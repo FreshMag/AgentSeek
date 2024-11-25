@@ -6,6 +6,9 @@ import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.engine.input.Input
 import kotlin.time.Duration
 
+/**
+ * InputComponent is responsible for handling input and updating the velocity of the GameObject's RigidBody.
+ */
 class InputComponent(gameObject: GameObject) : AbstractComponent(gameObject) {
     private val standardVelocity = Config.Player.speed
 

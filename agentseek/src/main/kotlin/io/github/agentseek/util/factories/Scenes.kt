@@ -54,17 +54,6 @@ object Scenes {
         }).toTypedArray()
     )
 
-    fun collisionExampleScene(): Scene = scene(
-        // Moving GameObject
-        gameObject(
-            { ConstantAccelerationComponent(it, vector(2, 2)) }, rigidBody = circle(5), renderer = default()
-        ),
-        // Cone to collide with
-        gameObject(
-            position = point(10, 10), rigidBody = cone(90, 7, degrees(PI / 7))
-        )
-    )
-
     fun jasonExampleScene(): Scene = sceneWithJason(
         name = "example", environmentClass = AgentSeekEnvironment::class,
         agents = agents(

@@ -51,6 +51,9 @@ data class Cone2d(
             field = value
         }
 
+    /**
+     * Returns the vertices of the triangle version of the cone.
+     */
     fun edges(): Iterable<Pair<Point2d, Point2d>> {
         val (v1, v2, v3) = triangle
         return listOf(

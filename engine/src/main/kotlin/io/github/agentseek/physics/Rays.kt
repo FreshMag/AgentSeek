@@ -6,12 +6,25 @@ import io.github.agentseek.util.GameObjectUtilities.center
 import io.github.agentseek.util.GameObjectUtilities.otherGameObjects
 import kotlin.math.*
 
+/**
+ * A collection of functions and classes for casting rays and checking for intersections with GameObjects
+ */
 object Rays {
-
+    /**
+     * Represents a ray cast from a GameObject
+     * @param gameObject the GameObject casting the ray
+     * @param vector2d the direction of the ray
+     */
     class Ray(val gameObject: GameObject, vector2d: Vector2d) {
+        /**
+         * Normalized direction of the ray
+         */
         val direction = vector2d.normalized()
         private var other: GameObject? = null
 
+        /**
+         * Constructs a Ray from a GameObject to another.
+         */
         constructor(origin: GameObject, destination: GameObject)
                 : this(origin, destination.center() - origin.center()) {
             other = destination
@@ -40,6 +53,11 @@ object Rays {
 
     }
 
+    /**
+     * Represents an intersection between a Ray and a GameObject
+     * @param gameObject the GameObject intersecting with the Ray
+     * @param distance the distance from the origin of the Ray to the intersection
+     */
     data class Intersection(val gameObject: GameObject, val distance: Double)
 
     /**
@@ -63,6 +81,11 @@ object Rays {
             is Cone2d -> this.coneRayIntersect(ray)
         }
 
+    private fun tNear(a: Double, b: Double, discriminant: Double): Double {
+        val t1 = (-b - sqrt(discriminant)) / (2.0 * a)
+        val t2 = (-b + sqrt(discriminant)) / (2.0 * a)
+        return min(t1, t2)
+    }
 
     private fun Circle2d.circleRayIntersect(ray: Ray): Double? {
         val oc = ray.gameObject.center() - center
@@ -76,13 +99,8 @@ object Rays {
         val discriminant = b * b - 4 * a * c
         if (discriminant < 0) return null
 
-        val t1 = (-b - sqrt(discriminant)) / (2.0 * a)
-        val t2 = (-b + sqrt(discriminant)) / (2.0 * a)
-
-        val tNear = min(t1, t2)
-
+        val tNear = tNear(a, b, discriminant)
         if (tNear < 0) return null
-
         return tNear * direction.module()
     }
 
@@ -119,11 +137,8 @@ object Rays {
         val discriminant = b * b - 4 * a * c
         // Since this method treats the ray as an infinite straight line, we need to exclude "backwards" shapes
         if (discriminant < 0 || abs(ray.direction.angleWith(oc)) < Math.PI / 2) return null
-        val t1 = (-b - sqrt(discriminant)) / (2.0 * a)
-        val t2 = (-b + sqrt(discriminant)) / (2.0 * a)
 
-        val tNear = min(t1, t2)
-
+        val tNear = tNear(a, b, discriminant)
         if (tNear < 0) return null
         return tNear * direction.module()
     }

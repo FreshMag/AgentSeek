@@ -21,12 +21,18 @@ data class Rectangle2d(
      */
     override val width: Double = (lowerRight.x - lowerLeft.x)
 
+    /**
+     * Creates a rectangle with the given width and height with the upper left corner at the origin.
+     */
     constructor(width: Double, height: Double) : this(
         Point2d(0.0, 0.0),
         width,
         height,
     )
 
+    /**
+     * Creates a rectangle with the given width and height with the upper left corner at the given point.
+     */
     constructor(upperLeft: Point2d, width: Double, height: Double) : this(
         upperLeft,
         upperLeft + Vector2d(0.0, height),

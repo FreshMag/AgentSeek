@@ -12,14 +12,24 @@ import io.github.agentseek.view.utilities.Rendering.fillGradientCircle
 import java.awt.Color
 import kotlin.time.Duration
 
+/**
+ * A sensor that detects noise in the environment around a [radius] centered at the [gameObject].
+ */
 class NoiseSensorComponent(gameObject: GameObject, radius: Double) : AbstractComponent(gameObject),
     Sensor<List<NoiseSensorComponent.Perception>> {
     private val noiseSensorCollider: Collider = Collider.CircleCollider(radius, gameObject)
     private var lastPos = gameObject.position
 
     private var reactions = listOf<(List<Perception>) -> Unit>()
+
+    /**
+     * The color used to represent the noise sensor.
+     */
     var noiseColor: Color = Config.VisualComponents.noiseSensorColor
 
+    /**
+     * A data class representing a perception of a noise source.
+     */
     data class Perception(val gameObject: GameObject, val noisePosition: Point2d)
 
     override fun init() {

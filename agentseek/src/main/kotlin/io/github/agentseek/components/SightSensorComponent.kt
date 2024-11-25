@@ -14,14 +14,29 @@ import io.github.agentseek.view.utilities.Rendering.fillGradientCone
 import java.awt.Color
 import kotlin.time.Duration
 
+/**
+ * A sensor that detects other objects in its field of view.
+ */
 class SightSensorComponent(
     gameObject: GameObject,
+    /**
+     * The length of the cone within which the sensor can detect objects.
+     */
     val coneLength: Double,
+    /**
+     * The aperture of the cone in radians.
+     */
     val coneApertureRadians: Double,
+    /**
+     * The names of the objects that the sensor can detect.
+     */
     private val namesWhitelist: Set<String>,
 ) :
     AbstractComponent(gameObject), Sensor<List<SightSensorComponent.Perception>> {
 
+    /**
+     * A data class representing the perception of an object detected by the sensor.
+     */
     data class Perception(val gameObject: GameObject, val distance: Double)
 
     private val sensorCollider: Collider = Collider.ConeCollider(coneApertureRadians, coneLength, 0.0, gameObject)
@@ -34,6 +49,9 @@ class SightSensorComponent(
      */
     var lightColor: Color = Config.Components.sightSensorDefaultColor
 
+    /**
+     * The direction of sight of the sensor.
+     */
     val directionOfSight: Vector2d
         get() = vector(1.0, 0).rotateRadians((sensorCollider.shape as Cone2d).rotation)
 
@@ -93,5 +111,8 @@ class SightSensorComponent(
         shape.rotation = direction.angle()
     }
 
-    fun getIsObjectInSight() = isObjectInSight
+    /**
+     * Returns whether an object is in sight of the sensor.
+     */
+    fun getIsObjectInSight(): Boolean = isObjectInSight
 }

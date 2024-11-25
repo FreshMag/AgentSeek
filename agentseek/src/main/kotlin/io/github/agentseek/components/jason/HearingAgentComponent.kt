@@ -4,7 +4,7 @@ import io.github.agentseek.common.Point2d
 import io.github.agentseek.common.TimerImpl
 import io.github.agentseek.components.FieldMovementComponent
 import io.github.agentseek.components.NoiseSensorComponent
-import io.github.agentseek.components.common.ComponentsUtils
+import io.github.agentseek.components.common.ComponentsUtils.setRandomObjective
 import io.github.agentseek.components.common.Config
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.env.Actions
@@ -13,6 +13,19 @@ import jason.asSyntax.Literal
 import jason.asSyntax.NumberTerm
 import jason.asSyntax.Structure
 
+/**
+ * Component used by the hearing agent. The Hearing agent reacts to the noise made by the player, moving towards the
+ * player's last known position.
+ *
+ * ### Percepts
+ * The percepts returned by this agent are the following:
+ * - *player_heard(X, Y)*
+ *
+ * ### Actions
+ * The actions supported by this agent are the following:
+ * - *moveRandom*: moves to a random position
+ * - *moveToPosition(X, Y)*: moves to the position (X, Y)
+ */
 class HearingAgentComponent(gameObject: GameObject, override val id: String) : JasonAgent(gameObject) {
     private var randomTimer = TimerImpl(Config.Agents.hearingRandomMovementTimerMillis)
     private var noiseTimer = TimerImpl(Config.Agents.hearingNoiseTimerMillis)
@@ -59,16 +72,11 @@ class HearingAgentComponent(gameObject: GameObject, override val id: String) : J
         return percepts
     }
 
+    /**
+     * Moves the agent to a random position
+     */
     private fun moveRandom() {
-        if (!randomTimer.isStarted || randomTimer.isElapsed()) {
-            randomTimer.restart()
-            var randomObjective: Point2d = ComponentsUtils.getRandomVelocity(gameObject)
-            synchronized(gameObject) {
-                fieldMovementComponent.maxVelocity = Config.Agents.hearingMaxWanderingSpeed
-                fieldMovementComponent.wakeUp()
-                fieldMovementComponent.objective = randomObjective
-            }
-        }
+        this.setRandomObjective(randomTimer, Config.Agents.hearingMaxSpeed, fieldMovementComponent)
     }
 
     /**

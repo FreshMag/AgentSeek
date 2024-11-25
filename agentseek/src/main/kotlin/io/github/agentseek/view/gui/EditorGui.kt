@@ -23,6 +23,9 @@ import javax.swing.*
 import javax.swing.WindowConstants.EXIT_ON_CLOSE
 import kotlin.system.exitProcess
 
+/**
+ * The GUI for the editor.
+ */
 object EditorGui : View {
     private var screenSize: Dimension = Dimension(1000, 720)//Toolkit.getDefaultToolkit().screenSize
     override val screenHeight: Int
@@ -38,6 +41,10 @@ object EditorGui : View {
     private val frame = JFrame(APP_NAME)
     private var selectedPath: String? = null
     private lateinit var scene: Scene
+
+    /**
+     * The selected GameObject in the editor.
+     */
     var selectedGo: GameObject? = null
 
     private val gameViewRendering: RenderingEvent = { g2d ->
@@ -47,6 +54,9 @@ object EditorGui : View {
     }
     private var panel: JPanel = GameViewPanel(screenSize, gameViewRendering)
 
+    /**
+     * Starts the editor.
+     */
     fun start(scene: Scene? = null, selectedPath: String? = null) {
         if (scene != null && selectedPath != null) {
             this.scene = scene

@@ -12,6 +12,9 @@ import io.github.agentseek.view.Camera
 import io.github.agentseek.view.animations.VFX
 import kotlin.time.Duration
 
+/**
+ * MouseNoiseEmitterComponent is responsible for emitting noise when the player clicks on the screen.
+ */
 @Requires(NoiseEmitterComponent::class)
 class MouseNoiseEmitterComponent(gameObject: GameObject) : AbstractComponent(gameObject) {
     private var isEmittingNoise = false
@@ -50,6 +53,9 @@ class MouseNoiseEmitterComponent(gameObject: GameObject) : AbstractComponent(gam
         }
     }
 
+    /**
+     * Returns the noise emitter collider if the player is emitting noise, otherwise null.
+     */
     fun getNoiseEmitterCollider(): Collider? {
         return if (isEmittingNoise) noiseEmitterCollider
         else null

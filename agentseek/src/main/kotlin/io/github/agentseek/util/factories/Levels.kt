@@ -16,8 +16,6 @@ import io.github.agentseek.util.factories.GameObjects.walls
 import io.github.agentseek.util.grid.Grid.Companion.useGrid
 import io.github.agentseek.util.jason.JasonScenes.agents
 import io.github.agentseek.util.jason.JasonScenes.sceneWithJason
-import io.github.agentseek.util.serialization.save
-import io.github.agentseek.view.BlackSceneWithCenteredTextRenderer
 import io.github.agentseek.view.WhiteSceneWithCenteredTextRenderer
 import io.github.agentseek.view.gui.GameGui
 

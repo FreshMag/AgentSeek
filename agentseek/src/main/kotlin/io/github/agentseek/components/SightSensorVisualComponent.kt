@@ -4,9 +4,11 @@ import io.github.agentseek.common.TimerImpl
 import io.github.agentseek.components.common.Config
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.view.animations.VFX
-import java.awt.Color
 import kotlin.time.Duration
 
+/**
+ * A visual component that displays a text when an object is detected by a sight sensor.
+ */
 @Requires(SightSensorComponent::class)
 class SightSensorVisualComponent(gameObject: GameObject) : AbstractComponent(gameObject) {
     private lateinit var sightSensorComponent: SightSensorComponent

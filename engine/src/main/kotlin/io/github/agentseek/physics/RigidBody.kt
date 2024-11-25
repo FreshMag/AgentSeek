@@ -62,15 +62,15 @@ sealed class RigidBody(
      */
     var mass: Double = 1.0
 
-
     /**
      * Whether this [RigidBody] can move or not. If `true`, the [GameObject] cannot move.
      */
     var isStatic: Boolean = false
 
-
+    /**
+     * Last safe point of this [RigidBody] before collision
+     */
     private var safePoint = collider.center
-
 
     /**
      * Acceleration of this [RigidBody] in m/s^2
@@ -100,6 +100,9 @@ sealed class RigidBody(
         collisionResolved = false
     }
 
+    /**
+     * Resolves collision with another [RigidBody]
+     */
     private fun resolveCollision(rigidBody: RigidBody) {
         if (rigidBody.isStatic) {
             val connector = (safePoint - collider.center).normalized()
@@ -122,6 +125,9 @@ sealed class RigidBody(
         rigidBody.callCollision(this.gameObject)
     }
 
+    /**
+     * Calls collision callbacks for this [RigidBody]
+     */
     private fun callCollision(gameObject: GameObject) {
         collisionCallbacks.forEach { it(gameObject) }
     }

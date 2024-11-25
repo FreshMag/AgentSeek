@@ -25,6 +25,9 @@ object GameEngine {
 
     private var scene: Scene? = null
 
+    /**
+     * The view that renders the game
+     */
     var view: View? = null
 
     /**

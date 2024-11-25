@@ -6,11 +6,16 @@ import io.github.agentseek.core.GameObject
 import io.github.agentseek.view.animations.VFX
 import kotlin.time.Duration
 
+/**
+ * A visual component that reacts to noise detected by a [NoiseSensorComponent]. It adds a simple visual effect representing
+ * the noise detection.
+ */
 @Requires(NoiseSensorComponent::class)
 class NoiseSensorVisualComponent(gameObject: GameObject) : AbstractComponent(gameObject) {
     private var noiseSensor: NoiseSensorComponent? = null
     private var noiseFound: Boolean = false
     private val timer = TimerImpl(Config.VisualComponents.noiseSensorDefaultSuspiciousTimeMillis)
+
     override fun init() {
         noiseSensor = gameObject.getComponent<NoiseSensorComponent>()!!
         noiseSensor?.addReaction {

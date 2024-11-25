@@ -11,11 +11,16 @@ import javax.swing.*
 import javax.swing.border.EmptyBorder
 import kotlin.system.exitProcess
 
-
-
+/**
+ * Object that represents the main menu GUI.
+ */
 object MenuGui {
 
+    /**
+     * The initial screen size of the menu GUI.
+     */
     private var screenSize: Dimension = Dimension(Config.GUI.frameWidth, Config.GUI.frameHeight)
+
     private const val START_BUTTON_TEXT = "Start Game"
     private const val START_SELECTED_BUTTON_TEXT = "Start selected"
     private const val START_WITH_REPL_BUTTON_TEXT = "Start Game with REPL"
@@ -23,8 +28,14 @@ object MenuGui {
     private const val START_EDITOR_EMPTY_TEXT = "Start Editor with empty scene"
     private const val QUIT_BUTTON_TEXT = "Quit"
 
+    /**
+     * The path of the selected scene.
+     */
     private var selectedPath: String = ""
 
+    /**
+     * Button to start the editor.
+     */
     private val editorButton = JButton(START_EDITOR_TEXT).apply {
         preferredSize = Dimension(200, 50)
         maximumSize = preferredSize
@@ -32,6 +43,9 @@ object MenuGui {
         isEnabled = false
     }
 
+    /**
+     * Button to start the selected scene.
+     */
     private val startSelected = JButton(START_SELECTED_BUTTON_TEXT).apply {
         preferredSize = Dimension(200, 50)
         maximumSize = preferredSize
@@ -39,8 +53,14 @@ object MenuGui {
         isEnabled = false
     }
 
+    /**
+     * The main frame of the menu GUI.
+     */
     private lateinit var frame: JFrame
 
+    /**
+     * Starts the main menu GUI.
+     */
     fun startMainMenu() {
         frame = JFrame(Config.GUI.menuTitle)
         frame.size = screenSize
@@ -53,6 +73,11 @@ object MenuGui {
         frame.isVisible = true
     }
 
+    /**
+     * Creates the title panel.
+     *
+     * @return The title panel.
+     */
     private fun makeTitlePanel(): JPanel {
         val container = JPanel()
         val titleLabel = JLabel(Config.GUI.menuTitle)
@@ -64,6 +89,11 @@ object MenuGui {
         return container
     }
 
+    /**
+     * Creates the panel with buttons.
+     *
+     * @return The panel with buttons.
+     */
     private fun makePanelWithButtons(): JPanel {
         val contentPane = JPanel()
         contentPane.layout = BoxLayout(contentPane, BoxLayout.Y_AXIS)
@@ -86,7 +116,6 @@ object MenuGui {
             maximumSize = preferredSize
             alignmentX = Component.CENTER_ALIGNMENT
         }
-
 
         val quitButton = JButton(QUIT_BUTTON_TEXT).apply {
             preferredSize = Dimension(200, 50)
@@ -138,6 +167,11 @@ object MenuGui {
         return contentPane
     }
 
+    /**
+     * Creates the panel with the list of scenes.
+     *
+     * @return The panel with the list of scenes.
+     */
     private fun makeScenesPanel(): JPanel {
         val panel = JPanel(BorderLayout())
         val fileListModel = DefaultListModel<String>()
@@ -163,11 +197,21 @@ object MenuGui {
         return panel
     }
 
+    /**
+     * Retrieves the base path for the scenes.
+     *
+     * @return The base path for the scenes.
+     */
     private fun getScenesBasePath(): String {
         val resourceUrl = MenuGui::class.java.getResource("/yaml/scenes")
         return resourceUrl?.path ?: throw IllegalStateException("Scenes directory not found.")
     }
 
+    /**
+     * Refreshes the list of files in the scenes panel.
+     *
+     * @param fileListModel The model of the file list.
+     */
     private fun refreshFileList(fileListModel: DefaultListModel<String>) {
         fileListModel.clear()
         val basePath = getScenesBasePath()
@@ -182,8 +226,12 @@ object MenuGui {
         }
     }
 
+    /**
+     * Handles the event when a file is selected from the list.
+     *
+     * @param filePath The path of the selected file.
+     */
     private fun onFileSelected(filePath: String) {
-        // println("File selected: $filePath")
         editorButton.isEnabled = true
         startSelected.isEnabled = true
         selectedPath = filePath

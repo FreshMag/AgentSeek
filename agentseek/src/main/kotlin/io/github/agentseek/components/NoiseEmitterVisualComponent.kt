@@ -7,6 +7,9 @@ import io.github.agentseek.core.GameObject
 import io.github.agentseek.view.animations.VFX
 import kotlin.time.Duration
 
+/**
+ * Visual component for noise emitter. It adds simple visual effect representing the noise being emitted.
+ */
 @Requires(NoiseEmitterComponent::class)
 class NoiseEmitterVisualComponent(gameObject: GameObject) : AbstractComponent(gameObject) {
     private lateinit var noiseEmitterComponent: NoiseEmitterComponent

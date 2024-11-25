@@ -8,8 +8,14 @@ import java.awt.Font
 import java.awt.Graphics2D
 import java.awt.geom.AffineTransform
 
+/**
+ * Utility functions for rendering animations.
+ */
 object AnimationUtilities {
 
+    /**
+     * Fades a color to transparent based on the given [iteration] with respect to [maxIterations].
+     */
     fun fadingColor(startColor: Color, iteration: Int, maxIterations: Int): Color =
         Color(
             startColor.red,
@@ -18,6 +24,10 @@ object AnimationUtilities {
             255 - (255 * iteration / maxIterations)
         )
 
+    /**
+     * Calculates an incremental rotation based on the given [iteration] with respect to [maxIterations], starting from
+     * [startAngleDegrees] and ending at [endAngleDegrees].
+     */
     fun incrementalRotation(
         startAngleDegrees: Double,
         endAngleDegrees: Double,
@@ -29,6 +39,10 @@ object AnimationUtilities {
         return startAngleDegrees + progress * (endAngleDegrees - startAngleDegrees)
     }
 
+    /**
+     * Renders a text animation iteration at the given [position] with the given [text], [originalColor], [fontSize],
+     * [iteration], and [maxIterations].
+     */
     fun RenderingContext<Graphics2D>.renderTextAnimationIteration(
         position: Point2d,
         text: String,

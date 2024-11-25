@@ -5,6 +5,9 @@ import io.github.agentseek.core.GameObject
 import io.github.agentseek.view.utilities.Rendering.fillShape
 import java.awt.Graphics2D
 
+/**
+ * A renderer for the guards in the game.
+ */
 class GuardRenderer() : SimpleRenderer() {
 
     override fun render(

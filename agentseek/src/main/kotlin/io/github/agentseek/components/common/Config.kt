@@ -7,10 +7,19 @@ import java.io.File
 import java.io.FileInputStream
 import java.util.*
 
+/**
+ * Object that holds the configuration properties for the application.
+ */
 object Config {
 
+    /**
+     * Properties containing the configuration values.
+     */
     private val properties: Properties = Properties()
 
+    /**
+     * Initializes the configuration by loading properties from the config file.
+     */
     init {
         val file = File(Config::class.java.getResource("/config.properties")?.file!!)
         if (file.exists()) {
@@ -20,6 +29,13 @@ object Config {
         }
     }
 
+    /**
+     * Retrieves a Color object based on the given expression.
+     * The expression can be a color name or an RGB(A) value in the format "(R,G,B)" or "(R,G,B,A)".
+     *
+     * @param expression The color expression.
+     * @return The Color object or null if the expression is invalid.
+     */
     fun getColor(expression: String): Color? {
         try {
             if (expression.contains("(")) {
@@ -38,6 +54,9 @@ object Config {
         }
     }
 
+    /**
+     * Object that holds the player-related configuration properties.
+     */
     object Player {
         val noiseEmittingRadius: Double
             get() = properties.getProperty("player.noiseEmittingRadius", "3.0").toDouble()
@@ -49,6 +68,9 @@ object Config {
             get() = properties.getProperty("player.name", "Player")
     }
 
+    /**
+     * Object that holds the agents-related configuration properties.
+     */
     object Agents {
         val cameraColor: Color
             get() = getColor(properties.getProperty("agents.camera.color", "DARK_GRAY")) ?: Color.BLACK
@@ -72,7 +94,6 @@ object Config {
             get() = getColor(properties.getProperty("agents.camera.standardLightColor", "YELLOW")) ?: Color.YELLOW
         val cameraDangerLightColor: Color
             get() = getColor(properties.getProperty("agents.camera.dangerLightColor", "RED")) ?: Color.RED
-
 
         val guardDefaultColor: Color
             get() = getColor(properties.getProperty("agents.guard.defaultColor", "BLACK")) ?: Color.BLACK
@@ -122,14 +143,19 @@ object Config {
             get() = properties.getProperty("agents.hearing.maxSpeed", "4.5").toDouble()
         val hearingMaxWanderingSpeed: Double
             get() = properties.getProperty("agents.hearing.maxWanderingSpeed", "2.0").toDouble()
-
     }
 
+    /**
+     * Object that holds the physics-related configuration properties.
+     */
     object Physics {
         val defaultMass: Double
             get() = properties.getProperty("physics.defaultMass", "1.0").toDouble()
     }
 
+    /**
+     * Object that holds the GUI-related configuration properties.
+     */
     object GUI {
         val menuTitle: String
             get() = properties.getProperty("gui.menuTitle", "Agent Seek")
@@ -141,11 +167,17 @@ object Config {
             get() = properties.getProperty("gui.frameHeight", "720").toInt()
     }
 
+    /**
+     * Object that holds the camera-related configuration properties.
+     */
     object Camera {
         val viewPortWidth: Double
             get() = properties.getProperty("camera.viewPort.width", "50.0").toDouble()
     }
 
+    /**
+     * Object that holds the rendering-related configuration properties.
+     */
     object Rendering {
         val defaultLayer: Layer
             get() = Layer.valueOf(properties.getProperty("rendering.defaultLayer", "GENERIC"))
@@ -157,6 +189,9 @@ object Config {
             get() = properties.getProperty("rendering.textFont", "Serif")
     }
 
+    /**
+     * Object that holds the names-related configuration properties.
+     */
     object Names {
         val playerName: String
             get() = properties.getProperty("player.name", "Player")
@@ -166,6 +201,9 @@ object Config {
             get() = properties.getProperty("door.name", "Door")
     }
 
+    /**
+     * Object that holds the components-related configuration properties.
+     */
     object Components {
         val mouseEmitterNoiseRadius: Double
             get() = properties.getProperty("mouseEmitter.noiseRadius", "5.0").toDouble()
@@ -180,6 +218,9 @@ object Config {
             get() = getColor(properties.getProperty("sightSensor.defaultColor", "YELLOW")) ?: Color.YELLOW
     }
 
+    /**
+     * Object that holds the field movement-related configuration properties.
+     */
     object FieldMovement {
         val rotationDegrees: Double
             get() = properties.getProperty("fieldMovement.rotationDegrees", "115.0").toDouble()
@@ -189,6 +230,9 @@ object Config {
             get() = properties.getProperty("fieldMovement.dangerCoefficient", "0.75").toDouble()
     }
 
+    /**
+     * Object that holds the visual components-related configuration properties.
+     */
     object VisualComponents {
         val sightSensorDefaultSuspiciousTimeMillis: Long
             get() = properties.getProperty("sightSensor.visual.defaultSuspiciousTimeMillis", "1000").toLong()

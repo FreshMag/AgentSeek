@@ -6,7 +6,13 @@ import io.github.agentseek.core.engine.GameEngine
 import io.github.agentseek.physics.RigidBody
 import io.github.agentseek.util.DummyComponent
 
+/**
+ * Factory for creating scenes for the REPL.
+ */
 object SceneFactory {
+    /**
+     * Creates a scene for the REPL.
+     */
     fun replScene(): Pair<Scene, DummyComponent> {
         val emptyScene = emptyScene()
         val defaultRenderer = GameEngine.view?.defaultRenderer() ?: throw IllegalStateException("Missing view")
@@ -25,6 +31,9 @@ object SceneFactory {
         return Pair(emptyScene, dummyGO.getComponent<DummyComponent>()!!)
     }
 
+    /**
+     * Creates an empty scene.
+     */
     fun emptyScene(): Scene = SceneImpl()
 
 }
