@@ -5,6 +5,7 @@ import io.github.agentseek.common.TimerImpl
 import io.github.agentseek.components.FieldMovementComponent
 import io.github.agentseek.components.NoiseSensorComponent
 import io.github.agentseek.components.common.ComponentsUtils
+import io.github.agentseek.components.common.ComponentsUtils.setRandomObjective
 import io.github.agentseek.components.common.Config
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.env.Actions
@@ -60,15 +61,7 @@ class HearingAgentComponent(gameObject: GameObject, override val id: String) : J
     }
 
     private fun moveRandom() {
-        if (!randomTimer.isStarted || randomTimer.isElapsed()) {
-            randomTimer.restart()
-            var randomObjective: Point2d = ComponentsUtils.getRandomObjective(gameObject)
-            synchronized(gameObject) {
-                fieldMovementComponent.maxVelocity = Config.Agents.hearingMaxWanderingSpeed
-                fieldMovementComponent.wakeUp()
-                fieldMovementComponent.objective = randomObjective
-            }
-        }
+        this.setRandomObjective(randomTimer, Config.Agents.hearingMaxSpeed, fieldMovementComponent)
     }
 
     /**

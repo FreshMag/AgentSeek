@@ -6,6 +6,7 @@ import io.github.agentseek.components.FieldMovementComponent
 import io.github.agentseek.components.NoiseSensorComponent
 import io.github.agentseek.components.SightSensorComponent
 import io.github.agentseek.components.common.ComponentsUtils
+import io.github.agentseek.components.common.ComponentsUtils.setRandomObjective
 import io.github.agentseek.components.common.Config
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.env.Actions
@@ -152,9 +153,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
      */
     private fun move(x: Int, y: Int) {
         synchronized(gameObject) {
-            synchronized(gameObject) {
-                fieldMovementComponent.maxVelocity = Config.Agents.guardMaxSpeed
-            }
+            fieldMovementComponent.maxVelocity = Config.Agents.guardMaxSpeed
             fieldMovementComponent.wakeUp()
             fieldMovementComponent.objective = point(x, y)
         }
@@ -164,14 +163,6 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
      * Set the objective position to pseudo random coordinates
      */
     private fun moveRandom() {
-        if (!randomTimer.isStarted || randomTimer.isElapsed()) {
-            randomTimer.restart()
-            var randomObjective: Point2d = ComponentsUtils.getRandomObjective(gameObject)
-            synchronized(gameObject) {
-                fieldMovementComponent.maxVelocity = Config.Agents.guardMaxWanderingSpeed
-                fieldMovementComponent.wakeUp()
-                fieldMovementComponent.objective = randomObjective
-            }
-        }
+        this.setRandomObjective(randomTimer, Config.Agents.guardMaxWanderingSpeed, fieldMovementComponent)
     }
 }
