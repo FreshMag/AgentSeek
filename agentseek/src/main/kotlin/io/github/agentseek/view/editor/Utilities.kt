@@ -19,8 +19,14 @@ import java.awt.event.MouseListener
 import java.io.File
 import javax.swing.*
 
+/**
+ * Utility functions for the editor.
+ */
 object Utilities {
 
+    /**
+     * Loads a game object from a file and adds it to the scene, using a file chooser dialog.
+     */
     fun loadGameObjectDialog(frame: JFrame, scene: Scene) {
         val fileChooser = JFileChooser(File("./agentseek/src/main/resources"))
         fileChooser.dialogTitle = "Load Game Object"
@@ -45,6 +51,9 @@ object Utilities {
         }
     }
 
+    /**
+     * Adds a new game object to the scene, using a dialog.
+     */
     fun addGameObjectDialog(frame: JFrame, scene: Scene) {
         val addDialog = JDialog(frame, "Add New Item", true)
         addDialog.layout = GridLayout(0, 2)
@@ -115,6 +124,9 @@ object Utilities {
         addDialog.isVisible = true
     }
 
+    /**
+     * Adds a mouse listener to the panel that selects a game object when clicked.
+     */
     fun JPanel.addClickListener(scene: Scene) {
         addMouseListener(object : MouseListener {
             override fun mouseClicked(e: MouseEvent?) {
@@ -140,6 +152,9 @@ object Utilities {
         })
     }
 
+    /**
+     * Adds a key listener to the panel that allows for moving and duplicating game objects.
+     */
     fun keyListener(jPanel: JPanel, jFrame: JFrame, scene: Scene): KeyListener =
         object : KeyListener {
 
@@ -165,6 +180,9 @@ object Utilities {
             override fun keyReleased(e: KeyEvent?) {}
         }
 
+    /**
+     * Behavior for moving a game object.
+     */
     fun moveBehavior(panel: JPanel, frame: JFrame) {
         val previous = panel.mouseListeners.first()
         panel.removeMouseListener(previous)
@@ -191,6 +209,9 @@ object Utilities {
         })
     }
 
+    /**
+     * Behavior for duplicating a game object.
+     */
     fun duplicateBehavior(panel: JPanel, frame: JFrame, world: World) {
         val previous = panel.mouseListeners.first()
         panel.removeMouseListener(previous)
@@ -222,6 +243,9 @@ object Utilities {
 
     }
 
+    /**
+     * Duplicates a game object.
+     */
     fun duplicate(world: World, original: GameObject): GameObject {
         val path = original.save("./", original.name)
         val go = world.loadGameObject(path)!!
