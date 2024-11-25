@@ -9,13 +9,13 @@ import kotlin.math.sqrt
 object ComponentsUtils {
 
     /**
-     * Calculates a random velocity by casting rays in all directions from the given game object
+     * Calculates a random objective by casting rays in all directions from the given game object
      * and selecting the direction of the furthest intersecting point.
      *
      * @param gameObject The game object from which to cast rays.
-     * @return A Vector2d representing the calculated random velocity.
+     * @return A [Point2d] representing the objective
      */
-    fun getRandomVelocity(gameObject: GameObject): Point2d =
+    fun getRandomObjective(gameObject: GameObject): Point2d =
         FastEntities.allDirections().mapNotNull { gameObject.castRay(it).firstIntersecting }
             .maxBy { it.distance }.gameObject.position
 
