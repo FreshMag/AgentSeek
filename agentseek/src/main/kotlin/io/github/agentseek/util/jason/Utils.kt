@@ -21,7 +21,7 @@ object Utils {
                 getTerm(0).toNumber(),
                 getTerm(1).toNumber()
             )
-        } catch (e: NoValueException) {
+        } catch (_: NoValueException) {
             throw IllegalArgumentException("Cannot parse as Vector2D: $this")
         }
     }

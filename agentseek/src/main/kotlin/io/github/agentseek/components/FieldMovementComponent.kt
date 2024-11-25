@@ -20,7 +20,6 @@ class FieldMovementComponent(
     AbstractComponent(gameObject) {
     private lateinit var sensor: DistanceSensorComponent
     private var previousDirection = Vector2d.zero()
-    private var directionObjective: Vector2d = Vector2d.zero()
     private val forwardDirection
         get() = objective - gameObject.center()
 

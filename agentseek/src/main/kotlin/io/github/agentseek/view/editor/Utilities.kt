@@ -89,7 +89,7 @@ object Utilities {
                         println("The class $rendererClassName does not extend Renderer.")
                         null
                     }
-                } catch (e: ClassNotFoundException) {
+                } catch (_: ClassNotFoundException) {
                     println("Class not found: $rendererClassName")
                     null
                 } catch (e: Exception) {

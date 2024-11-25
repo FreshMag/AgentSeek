@@ -34,7 +34,7 @@ object REPLParsing {
                 .getConstructor(GameObject::class.java)
                 .newInstance(this) as Component
             return component
-        } catch (e: ClassNotFoundException) {
+        } catch (_: ClassNotFoundException) {
             println("Component class $className not found")
         }
         return null
@@ -49,7 +49,7 @@ object REPLParsing {
         createComponentFromClass(className)?.let {
             try {
                 this.addComponent(it)
-            } catch (e: IllegalStateException) {
+            } catch (_: IllegalStateException) {
                 println("The GameObject already has that component")
             }
         }
@@ -79,7 +79,7 @@ object REPLParsing {
                 .getConstructor()
                 .newInstance() as Renderer<*>
             this.renderer = renderer
-        } catch (e: ClassNotFoundException) {
+        } catch (_: ClassNotFoundException) {
             println("Renderer class $className not found")
         }
     }
@@ -245,10 +245,10 @@ object REPLParsing {
                 "square" -> RigidBody.RectangleRigidBody(gameObject, args[0].toDouble(), args[0].toDouble())
                 else -> throw IllegalArgumentException()
             }
-        } catch (e: NumberFormatException) {
+        } catch (_: NumberFormatException) {
             println("Please provide an integer value between parentheses")
             return null
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             println("$form is not a valid form expression. Try circle(<RADIUS>) or rectangle(<WIDTH>, <HEIGHT>)")
             return null
         }
