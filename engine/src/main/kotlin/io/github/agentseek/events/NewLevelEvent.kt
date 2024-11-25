@@ -8,7 +8,7 @@ import io.github.agentseek.util.serialization.Scenes.loadSceneFromResource
 /**
  * This class manages a NewLevel Event and implements Event interface.
  */
-class NewLevelEvent(val destinationSceneResourceName: String) : Event {
+open class NewLevelEvent(val destinationSceneResourceName: String) : Event {
 
     override fun handle(state: Scene) {
         val newScene = loadSceneFromResource(destinationSceneResourceName)
