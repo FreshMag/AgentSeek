@@ -1,0 +1,13 @@
+---
+gameObjects:
+- name: ""
+  position:
+    x: 0.0
+    "y": 0.0
+  components:
+  - class: "io.github.agentseek.components.ClickToExitComponent"
+    arguments: []
+  renderer:
+    class: "io.github.agentseek.view.WhiteSceneWithCenteredTextRenderer"
+    arguments: []
+flags: {}
