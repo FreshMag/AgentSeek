@@ -1,12 +1,10 @@
 package io.github.agentseek.core
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.components.Component
 import io.github.agentseek.components.Requires
 import io.github.agentseek.events.Event
 import io.github.agentseek.physics.RigidBody
-import io.github.agentseek.util.serialization.GameObjectSerializer
 import io.github.agentseek.view.EmptyRenderer
 import io.github.agentseek.view.Renderer
 import io.github.agentseek.world.World
@@ -143,7 +141,7 @@ class GameObject(
     }
 
     override fun hashCode(): Int {
-        var result = id.hashCode() ?: 0
+        var result = id.hashCode()
         result = 31 * result + position.hashCode()
         result = 31 * result + components.hashCode()
         return result
