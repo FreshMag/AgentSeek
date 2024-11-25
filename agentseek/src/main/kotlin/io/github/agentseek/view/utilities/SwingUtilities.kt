@@ -12,7 +12,9 @@ import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin
 
-
+/**
+ * Utility object for rendering shapes using [Graphics2D].
+ */
 object SwingUtilities {
 
     /**

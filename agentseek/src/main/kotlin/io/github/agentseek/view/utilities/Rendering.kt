@@ -7,6 +7,9 @@ import java.awt.Graphics2D
 import java.awt.geom.Ellipse2D
 import java.awt.geom.Rectangle2D
 
+/**
+ * Utility object for rendering shapes.
+ */
 object Rendering {
 
     /**
