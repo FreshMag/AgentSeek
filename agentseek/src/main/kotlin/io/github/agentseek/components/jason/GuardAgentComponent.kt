@@ -15,8 +15,27 @@ import jason.asSyntax.Literal
 import jason.asSyntax.NumberTerm
 import jason.asSyntax.Structure
 
+/**
+ * Component used by the guard agent. The Guard agent checks the surroundings, looking for the player, and it moves
+ * around the map randomly. When it sees the player, it starts tracking it, returning appropriate percepts. It can also
+ * contact other guards to inform them about the player's position. Lastly, it can hear the player's noise and react to it
+ * and be warned by a camera agent.
+ *
+ * ### Percepts
+ * The percepts returned by this agent are the following:
+ * - *player_position(X, Y)*
+ * - *enemy_heard(X, Y)*
+ * - *base_reached*
+ * - *base_position(X, Y)*
+ *
+ * ### Actions
+ * The actions supported by this agent are the following:
+ * - *moveRandom*: moves to a random position
+ * - *moveToPosition(X, Y)*: moves to the position (X, Y)
+ * - *stop*: stops the agent's movement
+ * - *checkSurroundings*: looks around while defending the base
+ */
 class GuardAgentComponent(gameObject: GameObject, override val id: String) : JasonAgent(gameObject) {
-
 
     private var basePosition = Point2d.origin()
     private lateinit var sightSensorComponent: SightSensorComponent
@@ -29,6 +48,9 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
     private val noiseTimer = TimerImpl(Config.Agents.guardNoiseTimerMillis)
 
 
+    /**
+     * Reaction to the sight of the player.
+     */
     private val sightSensorReaction = { perceptions: List<SightSensorComponent.Perception> ->
         val enemyPosition = perceptions.find { it.gameObject.name == Config.Names.playerName }?.gameObject?.position
         if (enemyPosition != null) {
@@ -37,6 +59,9 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
         }
     }
 
+    /**
+     * Reaction to the noise heard by the agent.
+     */
     private val noiseSensorReaction = { perceptions: List<NoiseSensorComponent.Perception> ->
         val noisePosition = perceptions.find { it.gameObject.name == Config.Names.playerName }?.noisePosition
         if (noisePosition != null) {
