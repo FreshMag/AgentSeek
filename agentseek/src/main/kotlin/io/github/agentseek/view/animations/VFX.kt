@@ -10,10 +10,23 @@ import java.awt.Color
 import java.awt.Graphics2D
 import kotlin.time.Duration.Companion.milliseconds
 
-
+/**
+ * Factory for visual effects.
+ */
 object VFX {
+    /**
+     * Default time between animation iterations.
+     */
     private const val DEFAULT_SCHEDULE_TIME_MILLIS = 50
 
+    /**
+     * Creates an expanding circle animation.
+     *
+     * @param worldPosition the world position of the circle
+     * @param color the color of the circle
+     * @param speed the speed of the animation
+     * @param maxRadius the maximum radius of the circle
+     */
     fun expandingCircle(
         worldPosition: Point2d, color: Color, speed: Int, maxRadius: Double = 10.0
     ) {
@@ -38,6 +51,15 @@ object VFX {
         }
     }
 
+    /**
+     * Creates a fading text animation.
+     *
+     * @param worldPosition the world position of the text
+     * @param text the text to display
+     * @param color the starting color of the text
+     * @param size the size of the text
+     * @param durationMillis the duration of the animation in milliseconds
+     */
     fun fadingText(worldPosition: Point2d, text: String, color: Color, size: Int, durationMillis: Int) {
         val view = GameEngine.view ?: return
         val context: RenderingContext<Graphics2D> = view.getRenderingContext() ?: return
