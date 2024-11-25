@@ -2,13 +2,13 @@ package io.github.agentseek.components.jason
 
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.common.TimerImpl
-import io.github.agentseek.common.Vector2d
 import io.github.agentseek.components.FieldMovementComponent
 import io.github.agentseek.components.NoiseSensorComponent
 import io.github.agentseek.components.common.ComponentsUtils
 import io.github.agentseek.components.common.Config
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.env.Actions
+import io.github.agentseek.util.FastEntities.point
 import jason.asSyntax.Literal
 import jason.asSyntax.NumberTerm
 import jason.asSyntax.Structure
@@ -51,7 +51,7 @@ class HearingAgentComponent(gameObject: GameObject, override val id: String) : J
     override fun getPercepts(): MutableList<Literal> {
         val percepts = mutableListOf<Literal>()
         if (lastNoisePosition != null) {
-            percepts.add(Literal.parseLiteral("enemy_heard(${lastNoisePosition!!.x.toInt()}, ${lastNoisePosition!!.y.toInt()})"))
+            percepts.add(Literal.parseLiteral("player_heard(${lastNoisePosition!!.x.toInt()}, ${lastNoisePosition!!.y.toInt()})"))
         } else if (noiseTimer.isElapsed()) {
             noiseTimer.reset()
         }
@@ -60,14 +60,14 @@ class HearingAgentComponent(gameObject: GameObject, override val id: String) : J
     }
 
     private fun moveRandom() {
-        val randomObjective = ComponentsUtils.getRandomVelocity(gameObject)
         if (!randomTimer.isStarted || randomTimer.isElapsed()) {
             randomTimer.restart()
-
-        }
-        synchronized(gameObject) {
-            fieldMovementComponent.wakeUp()
-            fieldMovementComponent.objective = randomObjective
+            var randomObjective: Point2d = ComponentsUtils.getRandomVelocity(gameObject)
+            synchronized(gameObject) {
+                fieldMovementComponent.maxVelocity = Config.Agents.hearingMaxWanderingSpeed
+                fieldMovementComponent.wakeUp()
+                fieldMovementComponent.objective = randomObjective
+            }
         }
     }
 
@@ -88,8 +88,9 @@ class HearingAgentComponent(gameObject: GameObject, override val id: String) : J
      */
     private fun move(x: Int, y: Int) {
         synchronized(gameObject) {
-            gameObject.rigidBody.velocity =
-                Vector2d(x, y).minus(Vector2d(gameObject.position.x, gameObject.position.y)).normalized()
+            fieldMovementComponent.maxVelocity = Config.Agents.hearingMaxSpeed
+            fieldMovementComponent.wakeUp()
+            fieldMovementComponent.objective = point(x, y)
         }
     }
 }

@@ -1,6 +1,7 @@
 package io.github.agentseek.util.factories
 
 import io.github.agentseek.components.*
+import io.github.agentseek.components.common.Config
 import io.github.agentseek.components.jason.CameraAgentComponent
 import io.github.agentseek.components.jason.GuardAgentComponent
 import io.github.agentseek.core.Scene
@@ -84,7 +85,7 @@ object Scenes {
                 aslName = "guard_agent",
                 agentComponent = { id, go -> GuardAgentComponent(go, id) },
                 { NoiseSensorComponent(it, 3.0) },
-                { SightSensorComponent(it, 7.0, 1.0) },
+                { SightSensorComponent(it, 7.0, 1.0, Config.Agents.cameraNamesToTrack.toSet()) },
                 { DistanceSensorComponent(it, 2.0) },
                 { FieldMovementComponent(it) },
                 position = point(10, 4),
@@ -95,7 +96,7 @@ object Scenes {
                 aslName = "guard_agent",
                 agentComponent = { id, go -> GuardAgentComponent(go, id) },
                 { NoiseSensorComponent(it, 3.0) },
-                { SightSensorComponent(it, 6.0, 2.0) },
+                { SightSensorComponent(it, 6.0, 2.0, Config.Agents.cameraNamesToTrack.toSet()) },
                 { DistanceSensorComponent(it, 2.0) },
                 { FieldMovementComponent(it) },
                 position = point(40, 4),
@@ -141,7 +142,7 @@ object Scenes {
                 aslName = "guard_agent",
                 agentComponent = { id, go -> GuardAgentComponent(go, id) },
                 { NoiseSensorComponent(it, 3.0) },
-                { SightSensorComponent(it, 7.0, 1.0) },
+                { SightSensorComponent(it, 7.0, 1.0, Config.Agents.cameraNamesToTrack.toSet()) },
                 { DistanceSensorComponent(it, 2.0) },
                 { FieldMovementComponent(it) },
                 position = point(10, 4),

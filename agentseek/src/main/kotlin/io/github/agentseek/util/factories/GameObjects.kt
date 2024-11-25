@@ -5,8 +5,10 @@ import io.github.agentseek.components.*
 import io.github.agentseek.components.common.Config
 import io.github.agentseek.components.jason.CameraAgentComponent
 import io.github.agentseek.components.jason.GuardAgentComponent
+import io.github.agentseek.components.jason.HearingAgentComponent
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.physics.RigidBody
+import io.github.agentseek.util.FastEntities.circle
 import io.github.agentseek.util.FastEntities.gameObject
 import io.github.agentseek.util.FastEntities.point
 import io.github.agentseek.util.FastEntities.rectangle
@@ -17,7 +19,8 @@ import io.github.agentseek.util.jason.JasonScenes
 import io.github.agentseek.util.jason.JasonScenes.jasonAgent
 import io.github.agentseek.view.CameraRenderer
 import io.github.agentseek.view.DoorRenderer
-import io.github.agentseek.view.SimpleRenderer
+import io.github.agentseek.view.GuardRenderer
+import io.github.agentseek.view.HearingRenderer
 import io.github.agentseek.view.gui.GameGui
 import io.github.agentseek.world.World
 
@@ -82,12 +85,49 @@ object GameObjects {
             aslName = "guard_agent",
             agentComponent = { id, go -> GuardAgentComponent(go, id) },
             { NoiseSensorComponent(it, noiseSensorRadius.toDouble()) },
-            { SightSensorComponent(it, sightSensorConeLength.toDouble(), sightSensorConeAperture.toDouble()) },
+            {
+                SightSensorComponent(
+                    it,
+                    sightSensorConeLength.toDouble(),
+                    sightSensorConeAperture.toDouble(),
+                    Config.Agents.cameraNamesToTrack.toSet()
+                )
+            },
             { DistanceSensorComponent(it, distanceSensorRadius.toDouble()) },
-            { FieldMovementComponent(it) },
+            { FieldMovementComponent(it, Config.Agents.guardMaxSpeed) },
             position = position,
             rigidBody = rigidBody,
-            renderer = SimpleRenderer(),
+            renderer = GuardRenderer(),
+        ).apply {
+            if (isCenter) {
+                this.copy(
+                    gameObjectSetter = { world ->
+                        gameObjectSetter(world).also {
+                            it.rigidBody.collider.center = position
+                        }
+                    }
+                )
+            }
+        }
+
+    fun hearingAgent(
+        id: String,
+        position: Point2d,
+        noiseSensorRadius: Number = Config.Agents.hearingDefaultNoiseSensorRadius,
+        distanceSensorRadius: Number = Config.Agents.guardDefaultDistanceSensorRadius,
+        rigidBody: (GameObject) -> RigidBody = circle(Config.Agents.hearingSize),
+        isCenter: Boolean = true,
+    ): JasonScenes.JasonAgentConfig =
+        jasonAgent(
+            id = id,
+            aslName = "hearing_agent",
+            agentComponent = { id, go -> HearingAgentComponent(go, id) },
+            { NoiseSensorComponent(it, noiseSensorRadius.toDouble()) },
+            { DistanceSensorComponent(it, distanceSensorRadius.toDouble()) },
+            { FieldMovementComponent(it, Config.Agents.hearingMaxSpeed) },
+            position = position,
+            rigidBody = rigidBody,
+            renderer = HearingRenderer(),
         ).apply {
             if (isCenter) {
                 this.copy(

@@ -98,7 +98,13 @@ object Config {
             get() = getColor(properties.getProperty("agents.guard.standardLightColor", "YELLOW")) ?: Color.YELLOW
         val guardDangerLightColor: Color
             get() = getColor(properties.getProperty("agents.guard.dangerLightColor", "RED")) ?: Color.RED
+        val guardMaxSpeed: Double
+            get() = properties.getProperty("agents.guard.maxSpeed", "3.5").toDouble()
+        val guardMaxWanderingSpeed: Double
+            get() = properties.getProperty("agents.guard.maxWanderingSpeed", "1.5").toDouble()
 
+        val hearingDefaultColor: Color
+            get() = getColor(properties.getProperty("agents.hearing.defaultColor", "BLACK")) ?: Color.BLACK
         val hearingRandomMovementTimerMillis: Long
             get() = properties.getProperty("agents.hearing.randomMovementTimerMillis", "3000").toLong()
         val hearingNoiseTimerMillis: Long
@@ -108,6 +114,14 @@ object Config {
                 ?: Color.YELLOW
         val hearingDangerLightColor: Color
             get() = getColor(properties.getProperty("agents.hearing.dangerLightColor", "RED")) ?: Color.RED
+        val hearingDefaultNoiseSensorRadius: Double
+            get() = properties.getProperty("agents.hearing.defaultNoiseSensorRadius", "4.0").toDouble()
+        val hearingSize: Double
+            get() = properties.getProperty("agents.hearing.size", "1.5").toDouble()
+        val hearingMaxSpeed: Double
+            get() = properties.getProperty("agents.hearing.maxSpeed", "4.5").toDouble()
+        val hearingMaxWanderingSpeed: Double
+            get() = properties.getProperty("agents.hearing.maxWanderingSpeed", "2.0").toDouble()
 
     }
 

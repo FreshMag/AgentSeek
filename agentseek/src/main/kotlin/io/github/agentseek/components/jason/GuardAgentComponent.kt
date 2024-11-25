@@ -10,17 +10,15 @@ import io.github.agentseek.components.common.Config
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.env.Actions
 import io.github.agentseek.util.FastEntities.point
+import io.github.agentseek.util.GameObjectUtilities.center
 import jason.asSyntax.Literal
 import jason.asSyntax.NumberTerm
 import jason.asSyntax.Structure
-import java.awt.Color
 
 class GuardAgentComponent(gameObject: GameObject, override val id: String) : JasonAgent(gameObject) {
 
-    companion object {
-        private val basePosition = Point2d(30, 30)
-    }
 
+    private var basePosition = Point2d.origin()
     private lateinit var sightSensorComponent: SightSensorComponent
     private lateinit var noiseSensorComponent: NoiseSensorComponent
     private lateinit var fieldMovementComponent: FieldMovementComponent
@@ -29,7 +27,6 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
     private var randomTimer = TimerImpl(Config.Agents.guardRandomMovementTimerMillis)
     private val sightTimer = TimerImpl(Config.Agents.guardSightTimerMillis)
     private val noiseTimer = TimerImpl(Config.Agents.guardNoiseTimerMillis)
-
 
 
     private val sightSensorReaction = { perceptions: List<SightSensorComponent.Perception> ->
@@ -55,6 +52,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
         noiseSensorComponent = gameObject.getComponent<NoiseSensorComponent>()!!
         noiseSensorComponent.addReaction(noiseSensorReaction)
 
+        basePosition = gameObject.world.gameObjects.find { it.name == Config.Names.doorName }!!.center()
     }
 
     override fun execute(action: Structure): Boolean {
@@ -101,6 +99,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
         ) {
             percepts.add(Literal.parseLiteral("base_reached"))
         }
+        percepts.add(Literal.parseLiteral("base_position(${basePosition.x.toInt()},${basePosition.y.toInt()})"))
         checkPercepts()
         return percepts
     }
@@ -128,6 +127,9 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
      */
     private fun move(x: Int, y: Int) {
         synchronized(gameObject) {
+            synchronized(gameObject) {
+                fieldMovementComponent.maxVelocity = Config.Agents.guardMaxSpeed
+            }
             fieldMovementComponent.wakeUp()
             fieldMovementComponent.objective = point(x, y)
         }
@@ -141,6 +143,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
             randomTimer.restart()
             var randomObjective: Point2d = ComponentsUtils.getRandomVelocity(gameObject)
             synchronized(gameObject) {
+                fieldMovementComponent.maxVelocity = Config.Agents.guardMaxWanderingSpeed
                 fieldMovementComponent.wakeUp()
                 fieldMovementComponent.objective = randomObjective
             }
