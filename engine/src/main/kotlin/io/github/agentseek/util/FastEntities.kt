@@ -24,6 +24,22 @@ object FastEntities {
         world.gameObjectBuilder().build().also { if (addToWorld) world.addGameObject(it) }
 
     /**
+     * Creates a `Component` function with customizable initialization, update, and removal functions.
+     */
+    fun component(
+        initFun: AbstractComponent.() -> Unit = {},
+        updateFun: AbstractComponent.(Duration) -> Unit = {},
+        onRemovedFun: AbstractComponent.() -> Unit = {}
+    ): (GameObject) -> Component =
+        { go ->
+            object : AbstractComponent(go) {
+                override fun init() = this.initFun()
+                override fun onUpdate(deltaTime: Duration) = this.updateFun(deltaTime)
+                override fun onRemoved() = this.onRemovedFun()
+            }
+        }
+
+    /**
      * Creates a `GameObject` builder function with customizable components, rigid body, renderer, position, and name.
      *
      * The resulting builder function takes a `World` parameter to finalize the object construction within a specific world.
