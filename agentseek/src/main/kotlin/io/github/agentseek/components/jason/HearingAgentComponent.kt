@@ -4,7 +4,6 @@ import io.github.agentseek.common.Point2d
 import io.github.agentseek.common.TimerImpl
 import io.github.agentseek.components.FieldMovementComponent
 import io.github.agentseek.components.NoiseSensorComponent
-import io.github.agentseek.components.common.ComponentsUtils
 import io.github.agentseek.components.common.ComponentsUtils.setRandomObjective
 import io.github.agentseek.components.common.Config
 import io.github.agentseek.core.GameObject
