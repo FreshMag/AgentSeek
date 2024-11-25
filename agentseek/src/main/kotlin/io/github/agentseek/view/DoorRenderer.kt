@@ -5,6 +5,9 @@ import io.github.agentseek.core.GameObject
 import io.github.agentseek.view.utilities.Rendering.fillShape
 import java.awt.Graphics2D
 
+/**
+ * Renderer for doors.
+ */
 class DoorRenderer() : SimpleRenderer() {
 
     override fun render(

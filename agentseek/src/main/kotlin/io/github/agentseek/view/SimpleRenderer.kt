@@ -5,6 +5,9 @@ import io.github.agentseek.core.GameObject
 import io.github.agentseek.view.utilities.Rendering.fillShape
 import java.awt.Graphics2D
 
+/**
+ * Open class that implements a simple rendering behavior, following the shape specified in the game object's rigid body.
+ */
 open class SimpleRenderer(override val layer: Layer = Config.Rendering.defaultLayer) : Renderer<Graphics2D> {
     private val additionalRendering = mutableListOf<(GameObject, RenderingContext<Graphics2D>?) -> Unit>()
 

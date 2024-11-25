@@ -10,8 +10,13 @@ import io.github.agentseek.view.utilities.Rendering.fillCircle
 import io.github.agentseek.view.utilities.Rendering.fillRectangle
 import java.awt.Graphics2D
 
+/**
+ * A renderer for the camera.
+ */
 class CameraRenderer(override val layer: Layer = Config.Rendering.defaultLayer) : SimpleRenderer(layer) {
-
+    /**
+     * Directions of the camera.
+     */
     private val directions = allDirections().map { it * 0.5 }.map { it.rotateDegrees(45.0) }
 
     override fun render(gameObject: GameObject, renderingContext: RenderingContext<Graphics2D>?) {
