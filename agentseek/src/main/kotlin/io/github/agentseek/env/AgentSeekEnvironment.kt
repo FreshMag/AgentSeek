@@ -10,14 +10,24 @@ import jason.asSyntax.Structure
 import jason.environment.Environment
 import java.util.*
 
+/**
+ * Jason environment for the AgentSeek game.
+ */
 class AgentSeekEnvironment : Environment() {
 
     override fun init(args: Array<out String>?) {
         super.init(args)
     }
 
+    /**
+     * Map of agents in the environment. Key is the agent's ID, value is the agent itself.
+     */
     private val agents: MutableMap<String, JasonAgent> = Collections.synchronizedMap(mutableMapOf())
 
+    /**
+     * Links the ASL agent with the given ID to the agent in the scene.
+     * @param id ID of the agent to link
+     */
     private fun link(id: String) {
         val manager = JasonInitializerComponent.jasonManager
             ?: throw IllegalStateException("Jason initializer inside the engine is not initialized")
