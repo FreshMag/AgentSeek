@@ -14,6 +14,9 @@ import io.github.agentseek.view.Renderer
 import io.github.agentseek.world.World
 import kotlin.time.Duration
 
+/**
+ * Provides a set of utility functions to quickly create game objects and components.
+ */
 object FastEntities {
     /**
      * Creates an empty `GameObject` in the scene.
