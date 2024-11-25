@@ -2,7 +2,6 @@ package io.github.agentseek.events
 
 import io.github.agentseek.core.Scene
 import io.github.agentseek.core.engine.GameEngine
-import io.github.agentseek.core.engine.GameEngine.logError
 import io.github.agentseek.util.serialization.Scenes.loadSceneFromResource
 
 /**
@@ -14,6 +13,6 @@ open class NewLevelEvent(val destinationSceneResourceName: String) : Event {
         val newScene = loadSceneFromResource(destinationSceneResourceName)
         newScene?.let {
             GameEngine.loadScene(it)
-        } ?: logError("A NewLevelEvent was notified, but $destinationSceneResourceName was not found among resources.")
+        } ?: GameEngine.logError("A NewLevelEvent was notified, but $destinationSceneResourceName was not found among resources.")
     }
 }
