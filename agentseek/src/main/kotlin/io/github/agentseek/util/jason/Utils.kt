@@ -1,9 +1,6 @@
 package io.github.agentseek.util.jason
 
 import io.github.agentseek.common.Point2d
-import io.github.agentseek.common.Vector2d
-import io.github.agentseek.util.FastEntities.point
-import io.github.agentseek.util.FastEntities.vector
 import jason.NoValueException
 import jason.asSyntax.Literal
 import jason.asSyntax.NumberTerm
