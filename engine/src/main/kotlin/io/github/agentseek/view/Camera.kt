@@ -19,8 +19,17 @@ class Camera(
      */
     var cameraWorldPosition: Point2d = Point2d.origin(),
 ) {
+    /**
+     * Max width of the world that can be seen within this camera.
+     */
     var viewPortWidth = worldViewPortWidth
         private set
+
+    /**
+     * Max height of the world that can be seen within this camera.
+     *
+     * *Note*: it is obtained calculating in proportion of the aspect ratio of the view and the [viewPortWidth]
+     */
     val viewPortHeight
         get() = ((viewPortWidth * view.screenHeight) / view.screenWidth)
 
