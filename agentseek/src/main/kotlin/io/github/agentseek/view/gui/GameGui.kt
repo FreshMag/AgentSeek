@@ -19,10 +19,28 @@ import javax.swing.WindowConstants.EXIT_ON_CLOSE
 
 typealias RenderingEvent = (Graphics2D) -> Unit
 
+/**
+ * Object that represents the main game GUI.
+ */
 object GameGui : View, InputListener() {
+    /**
+     * The camera used for rendering the game view.
+     */
     override val camera: Camera = Camera(this, Config.Camera.viewPortWidth)
+
+    /**
+     * The rendering context for the game view.
+     */
     private val renderingContext = RenderingContext<Graphics2D>(camera)
+
+    /**
+     * Buffer to hold rendering events.
+     */
     private var eventsBuffer: List<RenderingEvent> = emptyList()
+
+    /**
+     * The main frame of the game GUI.
+     */
     private val frame = JFrame(Config.GUI.frameTitle)
 
     /**
@@ -41,8 +59,19 @@ object GameGui : View, InputListener() {
      */
     private const val FRAME_HEIGHT_UPPER_MARGIN = 28
 
+    /**
+     * The initial screen size of the game GUI.
+     */
     private var screenSize: Dimension = Dimension(Config.GUI.frameWidth, Config.GUI.frameHeight)
+
+    /**
+     * The panel used for rendering the game view.
+     */
     private val gameView: GameViewPanel = GameViewPanel(screenSize, gameViewRendering)
+
+    /**
+     * The height of the screen.
+     */
     override val screenHeight: Int
         get() = gameView.height.apply {
             return if (this == 0) {
@@ -51,6 +80,10 @@ object GameGui : View, InputListener() {
                 this
             }
         }
+
+    /**
+     * The width of the screen.
+     */
     override val screenWidth: Int
         get() = gameView.width.apply {
             return if (this == 0) {
@@ -60,6 +93,12 @@ object GameGui : View, InputListener() {
             }
         }
 
+    /**
+     * Starts the game GUI.
+     *
+     * @param useRepl Whether to use the REPL for the game.
+     * @param scene The initial scene to load.
+     */
     fun startGameGui(useRepl: Boolean = false, scene: Scene = Scenes.levelOne()) {
         frame.name = Config.GUI.frameTitle
         val panel = gameView
@@ -84,6 +123,12 @@ object GameGui : View, InputListener() {
         start(useRepl, scene)
     }
 
+    /**
+     * Starts the game engine.
+     *
+     * @param useRepl Whether to use the REPL for the game.
+     * @param scene The initial scene to load.
+     */
     private fun start(useRepl: Boolean, scene: Scene) {
         if (useRepl) {
             Thread {
@@ -95,6 +140,9 @@ object GameGui : View, InputListener() {
         }
     }
 
+    /**
+     * Renders the game view.
+     */
     override fun render() {
         eventsBuffer = renderingContext.sinkToBuffer()
         SwingUtilities.invokeLater {
@@ -102,9 +150,19 @@ object GameGui : View, InputListener() {
         }
     }
 
+    /**
+     * Retrieves the rendering context.
+     *
+     * @return The rendering context.
+     */
     @Suppress("UNCHECKED_CAST")
     override fun <T> getRenderingContext(): RenderingContext<T>? =
         renderingContext as? RenderingContext<T>
 
+    /**
+     * Retrieves the default renderer.
+     *
+     * @return The default renderer.
+     */
     override fun defaultRenderer(): Renderer<Graphics2D> = SimpleRenderer()
 }
