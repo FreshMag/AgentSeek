@@ -7,6 +7,11 @@ import io.github.agentseek.core.GameObject
 import io.github.agentseek.util.GameObjectUtilities.center
 import kotlin.time.Duration
 
+/**
+ * Component that moves the game object using field based movement inspired by robotics. Many sources contribute to the
+ * calculation of a *field* that determines the game object direction and velocity.
+ * The field is calculated using the distances from nearby objects and the objective set.
+ */
 @Requires(DistanceSensorComponent::class)
 class FieldMovementComponent(
     gameObject: GameObject,
@@ -19,6 +24,9 @@ class FieldMovementComponent(
     private val forwardDirection
         get() = objective - gameObject.center()
 
+    /**
+     * The objective point to reach.
+     */
     var objective: Point2d = Point2d(50.0, 50.0)
 
     private var isStopped: Boolean = false
@@ -51,14 +59,16 @@ class FieldMovementComponent(
         gameObject.rigidBody.velocity = previousDirection * maxVelocity
     }
 
-    fun setDirection(direction: Vector2d) {
-        directionObjective = direction.normalized()
-    }
-
+    /**
+     * Stops the movement of the game object.
+     */
     fun stop() {
         isStopped = true
     }
 
+    /**
+     * Resumes the movement of the game object.
+     */
     fun wakeUp() {
         isStopped = false
     }

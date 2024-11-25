@@ -6,6 +6,9 @@ import io.github.agentseek.core.GameObject
 import io.github.agentseek.physics.Rays.castRay
 import io.github.agentseek.util.FastEntities.allDirections8
 
+/**
+ * Component that calculates the resultant vector of distances from nearby objects within a certain radius
+ */
 class DistanceSensorComponent(
     gameObject: GameObject, private val radius: Double
 ) : AbstractComponent(gameObject) {
@@ -15,8 +18,14 @@ class DistanceSensorComponent(
      */
     fun getDistancesResultant(): Vector2d = calculateDanger()
 
+    /**
+     * Calculates the resultant vector of distances from nearby objects
+     */
     private fun Iterable<Vector2d>.sumUp(): Vector2d = fold(Vector2d.zero()) { acc, vector -> acc + vector }
 
+    /**
+     * Calculates the danger vector using the eight directions around the agent
+     */
     private fun calculateDanger(): Vector2d {
         return (allDirections8())
             .mapNotNull { direction ->

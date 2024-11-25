@@ -10,10 +10,16 @@ import io.github.agentseek.view.utilities.Rendering.strokeCircle
 import kotlin.math.absoluteValue
 import kotlin.time.Duration
 
+/**
+ * Various levels of noise emission.
+ */
 private enum class NoiseLevel {
     LOW, DEFAULT, HIGH
 }
 
+/**
+ * Component that emits noise based on the speed of the game object.
+ */
 class NoiseEmitterComponent(gameObject: GameObject, private val radius: Double) : AbstractComponent(gameObject) {
 
     private var isEmittingNoise = false
@@ -46,11 +52,17 @@ class NoiseEmitterComponent(gameObject: GameObject, private val radius: Double) 
 
     }
 
+    /**
+     * Returns the noise emitter collider if the game object is emitting noise, otherwise null.
+     */
     fun getNoiseEmitterCollider(): Collider? {
         return if (isEmittingNoise) noiseEmitterCollider
         else null
     }
 
+    /**
+     * Returns the noise level based on the speed of the game object.
+     */
     private fun getNoiseLevel(): NoiseLevel {
         return if (gameObject.rigidBody.velocity.x.absoluteValue >= Config.Components.noiseEmitterSpeedThreshold
             || gameObject.rigidBody.velocity.y.absoluteValue >= Config.Components.noiseEmitterSpeedThreshold
