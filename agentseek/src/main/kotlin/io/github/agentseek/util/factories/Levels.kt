@@ -1,8 +1,11 @@
 package io.github.agentseek.util.factories
 
+import io.github.agentseek.components.ClickToExitComponent
 import io.github.agentseek.core.Scene
 import io.github.agentseek.env.AgentSeekEnvironment
 import io.github.agentseek.util.FastEntities.bounds
+import io.github.agentseek.util.FastEntities.gameObject
+import io.github.agentseek.util.FastEntities.scene
 import io.github.agentseek.util.factories.GameObjects.cameraAgent
 import io.github.agentseek.util.factories.GameObjects.door
 import io.github.agentseek.util.factories.GameObjects.guardAgent
@@ -13,13 +16,16 @@ import io.github.agentseek.util.factories.GameObjects.walls
 import io.github.agentseek.util.grid.Grid.Companion.useGrid
 import io.github.agentseek.util.jason.JasonScenes.agents
 import io.github.agentseek.util.jason.JasonScenes.sceneWithJason
+import io.github.agentseek.util.serialization.save
+import io.github.agentseek.view.BlackSceneWithCenteredTextRenderer
+import io.github.agentseek.view.WhiteSceneWithCenteredTextRenderer
 import io.github.agentseek.view.gui.GameGui
 
 object Levels {
 
     @JvmStatic
     fun main(args: Array<String>) {
-        GameGui.startGameGui(scene = obstacleLevel())
+        GameGui.startGameGui(scene = prisonLevel())
     }
 
     fun prisonLevel(): Scene = useGrid(rows = 5, columns = 7, 6.5) { grid ->
@@ -95,7 +101,7 @@ object Levels {
                 )
             ),
             door(
-                destinationSceneName = "prisonScene",
+                destinationSceneName = "Victory",
                 position = grid(-1.30, 0.5),
                 size = grid.boundsSize
             )
@@ -185,11 +191,19 @@ object Levels {
 
                 ),
             door(
-                destinationSceneName = "finalLevel",
+                destinationSceneName = "Victory",
                 position = grid(-3, 7.8),
                 size = grid.boundsSize,
                 isCenter = false
             )
         )
     }
+
+    fun gameOverScene(): Scene =
+        scene(
+            gameObject(
+                { ClickToExitComponent(it) },
+                renderer = WhiteSceneWithCenteredTextRenderer(),
+            )
+        )
 }
