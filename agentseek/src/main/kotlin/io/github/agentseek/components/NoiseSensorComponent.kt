@@ -15,7 +15,7 @@ import kotlin.time.Duration
 /**
  * A sensor that detects noise in the environment around a [radius] centered at the [gameObject].
  */
-class NoiseSensorComponent(gameObject: GameObject, radius: Double) : AbstractComponent(gameObject),
+class NoiseSensorComponent(gameObject: GameObject, val radius: Double) : AbstractComponent(gameObject),
     Sensor<List<NoiseSensorComponent.Perception>> {
     private val noiseSensorCollider: Collider = Collider.CircleCollider(radius, gameObject)
     private var lastPos = gameObject.position
