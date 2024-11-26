@@ -17,6 +17,7 @@ import io.github.agentseek.util.factories.GameObjects.walls
 import io.github.agentseek.util.grid.Grid.Companion.useGrid
 import io.github.agentseek.util.jason.JasonScenes.agents
 import io.github.agentseek.util.jason.JasonScenes.sceneWithJason
+import io.github.agentseek.util.serialization.save
 import io.github.agentseek.view.WhiteSceneWithCenteredTextRenderer
 import io.github.agentseek.view.gui.GameGui
 
@@ -24,8 +25,27 @@ object Levels {
 
     @JvmStatic
     fun main(args: Array<String>) {
-        GameGui.startGameGui(scene = pathLevel())
+        GameGui.startGameGui(scene = obstacleLevel())
     }
+
+    fun startingLevel(): Scene = useGrid(rows = 5, columns = 7, 15.0) { grid ->
+        scene(
+            player(
+                position = grid(3.5, 0.5)
+            ),
+            *bounds(
+                grid.boundsSize,
+                GameGui.defaultRenderer(),
+                GameGui.camera.viewPortWidth,
+                GameGui.camera.viewPortHeight
+            ),
+            door(
+                destinationSceneName = "Level1",
+                position = grid(-2.25, 3.5),
+                size = 2.5
+            )
+        )
+    }.also { scene -> scene.save("./", "Level0") }
 
     fun prisonLevel(): Scene = useGrid(rows = 5, columns = 7, 6.5) { grid ->
         sceneWithJason(
@@ -35,6 +55,9 @@ object Levels {
                     id = "camera1",
                     position = grid(0.65, 6.35),
                     isCenter = false
+                ),cameraAgent(
+                    id = "camera2",
+                    position = grid(4.25, -0.25),
                 ), guardAgent(
                     id = "agent1",
                     position = grid(1, 0),
@@ -100,11 +123,13 @@ object Levels {
                 )
             ),
             door(
-                destinationSceneName = "Victory",
+                destinationSceneName = "Level2",
                 position = grid(-1.30, 0.5),
                 size = grid.boundsSize
             )
         )
+    }.also{
+        it.save("./", "Level1")
     }
 
     fun obstacleLevel(): Scene = useGrid(rows = 8, columns = 10, 6.5) { grid ->
@@ -195,7 +220,9 @@ object Levels {
                 size = grid.boundsSize,
                 isCenter = false
             )
-        )
+        ).also{
+            it.save("./", "Level4")
+        }
     }
 
     fun randomLevel(): Scene = useGrid(rows = 10, columns = 10, 5) { grid ->
@@ -295,11 +322,13 @@ object Levels {
                 ),
             ),
             door(
-                destinationSceneName = "prisonScene",
+                destinationSceneName = "Level3",
                 position = grid(-1.30, 0.5),
                 size = grid.boundsSize
             )
         )
+    }.also{
+        it.save("./", "Level2")
     }
 
     fun pathLevel(): Scene = sceneWithJason(
@@ -390,10 +419,12 @@ object Levels {
             )
         ),
         door(
-            "jasonExample",
+            "Level4",
             position = point(1.5, 10)
         )
-    )
+    ).also{
+        it.save("./", "Level3")
+    }
 
     fun gameOverScene(): Scene =
         scene(
