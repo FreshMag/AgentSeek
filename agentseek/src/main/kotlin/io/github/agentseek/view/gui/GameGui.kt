@@ -99,7 +99,7 @@ object GameGui : View, InputListener() {
      * @param useRepl Whether to use the REPL for the game.
      * @param scene The initial scene to load.
      */
-    fun startGameGui(useRepl: Boolean = false, scene: Scene = Levels.randomLevel()) {
+    fun startGameGui(useRepl: Boolean = false, scene: Scene = Levels.startingLevel()) {
         frame.name = Config.GUI.frameTitle
         val panel = gameView
         frame.add(panel, BorderLayout.CENTER)
