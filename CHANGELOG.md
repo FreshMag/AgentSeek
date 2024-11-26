@@ -1,4 +1,22 @@
 
+# [1.0.3] - 2024-11-26
+Improvements to game components and agent behaviors. 
+
+## New Components
+- Implemented a component to exit the game on victory and game over screens
+- Implemented a component responsible for emitting noise when the player clicks on the screen.
+- Implemented a component that triggers a  when the player collides with an enemy object.
+
+## Agent Behavior Improvements:
+- Refined the behavior of the camera agent by removing print statements and optimizing the monitoring logic.
+- Enhanced the guard agent's behavior by cleaning up print statements and improving the logic for following enemies and alerting allies.
+- Updated the hearing agent's plans to streamline the search for the player.
+
+## Documentation
+- Added missing documentation
+- Enriched the project's README.md
+
+
 # [1.0.2] - 2024-11-18
 ## Features
 ### New Agents:
