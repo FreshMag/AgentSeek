@@ -16,34 +16,51 @@ Project for Intelligent Systems Engineering course a.y. 2023-2024.
 *Agent Seek* is a simple game where the player moves in a 2D environment, seeking the exit that
 leads to the next level. The player needs to avoid the agents that are trying to catch him.
 
-<img width=30% src="resources/gifs/basic_structure.gif">
+<p align="center"><img width=30% src="resources/gifs/basic_structure.gif"></p>
 
-There are three types of agents:
+The game features three types of agents, each with distinct behaviors:
+1. **Camera Agent** (_Gray_)
+   - Stationary but rotates to detect the player in its field of view.
+   - Alerts all other agents if it spots the player.
+2. **Hearing Agent** (_Red_)
+   - Moves through the environment, guided solely by sound.
+   - Chases noise sources created by the player.
+3. **Guard Agent** (_Blue_)
+   - Actively patrols and can see and hear the player.
+   - Upon detecting the player, it:
+     - Starts chasing immediately.
+     - Alerts nearby guards to protect the exit.
+     - Responds to alerts from the Camera Agent.
 
-- **Camera Agent** (the one in gray): it can turn around seeking for the player, but it can't move. When the player
-  enters its field of view, it will alert the other agents.
-- **Hearing Agent** (the one in red): it can move in the environment, but can't see the player. It can only hear the
-  player producing noise, and start chasing the source of noise.
-- **Guard Agent** (the one in blue): it can move in the environment and see/hear the player. It will chase the player as
-  soon
-  as it sees/hears him, and will alert the other guard agents to go protect the exit. Also, it receives the alert from
-  the camera agent.
+<p align="center"><img width=30% src="resources/gifs/player_spotted.gif"></p>
 
-<img width=30% src="resources/gifs/player_spotted.gif">
+Player Controls:
+- _Movement_: Use W, A, S, D to move.
+- _Sneak_: Hold SHIFT to move slower and more silently.
+- _Distraction_: Click near your position (within a short range) to create noise and lure agents away from your path.
 
-The player can move using WASD commands. Holding down the SHIFT key will make it move slower, but more silently. Lastly,
-the player can click around the screen, provided that the clicked point isn't too far from the player, to produce noise
-in that point. This way, he/she can attract the agents and exploit the situation to reach the exit.
-
-<img width=30% src="resources/gifs/generating_noise.gif">
+<p align="center"><img width=30% src="resources/gifs/generating_noise.gif"></p>
 
 ## Installation
 
-To run the game, simply download the JAR from the latest release and run it with the following command:
+### Prerequisites:
+
+- Ensure you have Java installed (version 17 or later recommended).
+
+### Steps to Run:
+
+1.	Download the latest release JAR file from the Releases page.
+2.  Open a terminal or command prompt and run the following command:
 
 ```shell
 java -jar agentseek-<VERSION>.jar
 ```
+
+## Credits
+
+This project was developed as part of the Intelligent Systems Engineering course (Academic Year 2023–2024).
+
+Feel free to report any issues or suggest improvements via the Issues page.
 
 <!--
 ***
