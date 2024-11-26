@@ -391,7 +391,7 @@ object Levels {
         ),
         door(
             "jasonExample",
-            position = point(0, 10)
+            position = point(1.5, 10)
         )
     )
 
