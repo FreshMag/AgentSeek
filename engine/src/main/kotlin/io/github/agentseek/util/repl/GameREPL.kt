@@ -8,14 +8,19 @@ import io.github.agentseek.util.factories.SceneFactory
 import org.jline.reader.LineReaderBuilder
 import org.jline.terminal.TerminalBuilder
 import picocli.CommandLine
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.nanoseconds
 
-
+/**
+ * REPL for the game engine.
+ */
 object GameREPL {
+    /**
+     * The scene being used in the REPL.
+     */
     lateinit var scene: Scene
     private lateinit var dummyComponent: DummyComponent
-
+    /**
+     * Whether the game is running.
+     */
     var isRunning = false
     private val replCommand = REPLParsing.REPLCommand()
     private val cmd = CommandLine(replCommand)
@@ -24,6 +29,9 @@ object GameREPL {
         .terminal(terminal)
         .build()
 
+    /**
+     * Parses a line of input.
+     */
     private fun parseLine(line: String) {
         if (line.isEmpty()) {
             if (isRunning) {
@@ -42,6 +50,11 @@ object GameREPL {
         }
     }
 
+    /**
+     * Starts the REPL. If a scene is provided, it will be used, otherwise a default scene will be created.
+     *
+     * *Note*: this function is blocking and will not return.
+     */
     fun start(scene: Scene? = null) {
         println("Welcome to the Game Engine REPL!")
         println("\t - Press ENTER to do one iteration of the game loop")
@@ -63,6 +76,9 @@ object GameREPL {
 
 }
 
+/**
+ * Main function for the REPL.
+ */
 fun main() {
     GameREPL.start()
 }

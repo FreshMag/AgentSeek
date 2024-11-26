@@ -14,44 +14,10 @@ import io.github.agentseek.view.Renderer
 import io.github.agentseek.world.World
 import kotlin.time.Duration
 
+/**
+ * Provides a set of utility functions to quickly create game objects and components.
+ */
 object FastEntities {
-
-    /**
-     * Creates a component from a scene, returning the created GameObject and Component
-     */
-    fun Scene.createComponent(
-        initFun: Component.() -> Unit = {},
-        updateFun: Component.(Duration) -> Unit = {},
-        onRemovedFun: Component.() -> Unit = {},
-        addToGameObject: Boolean = true,
-        addToWorld: Boolean = true
-    ): Pair<GameObject, Component> {
-        val go = world.gameObjectBuilder().build().also {
-            if (addToWorld) {
-                world.addGameObject(it)
-            }
-        }
-        val component = object : AbstractComponent(go) {
-            override fun init() {
-                initFun()
-            }
-
-            override fun onUpdate(deltaTime: Duration) {
-                updateFun(deltaTime)
-            }
-
-            override fun onRemoved() {
-                onRemovedFun()
-            }
-        }.also {
-            if (addToGameObject) {
-                go.addComponent(it)
-            }
-        }
-
-        return Pair(go, component)
-    }
-
     /**
      * Creates an empty `GameObject` in the scene.
      *
@@ -59,6 +25,22 @@ object FastEntities {
      */
     fun Scene.emptyGameObject(addToWorld: Boolean = true): GameObject =
         world.gameObjectBuilder().build().also { if (addToWorld) world.addGameObject(it) }
+
+    /**
+     * Creates a `Component` function with customizable initialization, update, and removal functions.
+     */
+    fun component(
+        initFun: AbstractComponent.() -> Unit = {},
+        updateFun: AbstractComponent.(Duration) -> Unit = {},
+        onRemovedFun: AbstractComponent.() -> Unit = {}
+    ): (GameObject) -> Component =
+        { go ->
+            object : AbstractComponent(go) {
+                override fun init() = this.initFun()
+                override fun onUpdate(deltaTime: Duration) = this.updateFun(deltaTime)
+                override fun onRemoved() = this.onRemovedFun()
+            }
+        }
 
     /**
      * Creates a `GameObject` builder function with customizable components, rigid body, renderer, position, and name.
@@ -206,16 +188,17 @@ object FastEntities {
     /**
      * Returns an array of game object setters that adds rectangular bounds of size [size] to the world
      */
-    fun bounds(size: Number,
-               renderer: Renderer<*>,
-               cameraWidth: Number,
-               cameraHeight: Number,
-               offCameraSize: Int = 50
+    fun bounds(
+        size: Number,
+        renderer: Renderer<*>,
+        cameraWidth: Number,
+        cameraHeight: Number,
+        offCameraSize: Int = 50
     ): Array<(World) -> GameObject> =
         listOf(
             point(-offCameraSize + size.toDouble(), 0),
             point(cameraWidth.toDouble() - size.toDouble(), 0),
-            point(0, cameraHeight.toDouble() - size.toDouble() - 1.5),
+            point(0, cameraHeight.toDouble() - size.toDouble()),
             point(0, -offCameraSize + size.toDouble())
         ).map {
             gameObject(
@@ -235,6 +218,22 @@ object FastEntities {
             vector(0, -1),
             vector(-1, 0),
             vector(0, 1),
+        )
+
+    /**
+     * Returns a list of vectors corresponding to the eight possible directions in this order:
+     * east, southeast, south, southwest, west, northwest, north, northeast.
+     */
+    fun allDirections8(): Iterable<Vector2d> =
+        listOf(
+            vector(1, 0),
+            vector(1, -1),
+            vector(0, -1),
+            vector(-1, -1),
+            vector(-1, 0),
+            vector(-1, 1),
+            vector(0, 1),
+            vector(1, 1),
         )
 
 }

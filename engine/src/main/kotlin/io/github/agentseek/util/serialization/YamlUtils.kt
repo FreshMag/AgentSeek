@@ -15,7 +15,6 @@ import java.io.File
 import java.nio.file.FileSystems
 import java.nio.file.Files
 
-
 private val deserializingModule = SimpleModule("DeserializingModule")
 
 private val mapper: ObjectMapper
@@ -44,23 +43,32 @@ internal object YAMLParse {
             val result = file.use { mapper.readValue<T>(it) }
             file.close()
             return result
-        } catch (e: NoSuchFileException) {
+        } catch (_: NoSuchFileException) {
             return null
         }
     }
 
+    /**
+     * Parses a yaml string [content] into a data class of type [T]
+     */
     inline fun <reified T : Any> parseString(content: String): T? =
         try {
             mapper.readValue<T>(content)
-        } catch (e: JsonParseException) {
+        } catch (_: JsonParseException) {
             null
         }
 
+    /**
+     * Parses a yaml file [fileName] into a GameObject. The obtained game object will be referred to the [world] provided.
+     */
     fun parseGameObject(world: World, fileName: String): GameObject? {
         deserializingModule.addDeserializer(GameObject::class.java, GameObjectDeserializer(world))
         return parseDto<GameObject>(fileName)
     }
 
+    /**
+     * Parses a yaml string into a GameObject.
+     */
     fun parseGameObjectFromString(world: World, content: String): GameObject? {
         deserializingModule.addDeserializer(GameObject::class.java, GameObjectDeserializer(world))
         return parseString<GameObject>(content)
@@ -69,6 +77,9 @@ internal object YAMLParse {
 }
 
 internal object YAMLWrite {
+    /**
+     * Writes a data class [content] into a yaml file [fileName]
+     */
     fun writeDto(fileName: String, content: Any) {
         mapper.writerWithDefaultPrettyPrinter().writeValue(File(fileName), content)
     }

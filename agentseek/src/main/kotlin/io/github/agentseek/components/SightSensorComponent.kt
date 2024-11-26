@@ -2,6 +2,7 @@ package io.github.agentseek.components
 
 import io.github.agentseek.common.Cone2d
 import io.github.agentseek.common.Vector2d
+import io.github.agentseek.components.common.Config
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.physics.Collider
 import io.github.agentseek.physics.Rays.castRay
@@ -13,14 +14,29 @@ import io.github.agentseek.view.utilities.Rendering.fillGradientCone
 import java.awt.Color
 import kotlin.time.Duration
 
+/**
+ * A sensor that detects other objects in its field of view.
+ */
 class SightSensorComponent(
     gameObject: GameObject,
+    /**
+     * The length of the cone within which the sensor can detect objects.
+     */
     val coneLength: Double,
+    /**
+     * The aperture of the cone in radians.
+     */
     val coneApertureRadians: Double,
-    private val namesBlacklist: Set<String> = setOf(),
+    /**
+     * The names of the objects that the sensor can detect.
+     */
+    private val namesWhitelist: Set<String>,
 ) :
     AbstractComponent(gameObject), Sensor<List<SightSensorComponent.Perception>> {
 
+    /**
+     * A data class representing the perception of an object detected by the sensor.
+     */
     data class Perception(val gameObject: GameObject, val distance: Double)
 
     private val sensorCollider: Collider = Collider.ConeCollider(coneApertureRadians, coneLength, 0.0, gameObject)
@@ -31,8 +47,11 @@ class SightSensorComponent(
     /**
      * The color of the cone of light projected by this sensor.
      */
-    var lightColor: Color = Color.YELLOW
+    var lightColor: Color = Config.Components.sightSensorDefaultColor
 
+    /**
+     * The direction of sight of the sensor.
+     */
     val directionOfSight: Vector2d
         get() = vector(1.0, 0).rotateRadians((sensorCollider.shape as Cone2d).rotation)
 
@@ -52,7 +71,7 @@ class SightSensorComponent(
             lastPos = gameObject.position
         }
         val colliding = sensorCollider.findColliding()
-        if (colliding.isNotEmpty() && colliding.any { it.gameObject.name.lowercase() !in namesBlacklist }) {
+        if (colliding.isNotEmpty() && colliding.any { it.gameObject.name.lowercase() in namesWhitelist }) {
             val perceptions: List<Perception> = colliding.mapNotNull {
                 val go = it.gameObject
                 val intersection = gameObject.castRay(go).firstIntersecting
@@ -92,5 +111,8 @@ class SightSensorComponent(
         shape.rotation = direction.angle()
     }
 
-    fun getIsObjectInSight() = isObjectInSight
+    /**
+     * Returns whether an object is in sight of the sensor.
+     */
+    fun getIsObjectInSight(): Boolean = isObjectInSight
 }

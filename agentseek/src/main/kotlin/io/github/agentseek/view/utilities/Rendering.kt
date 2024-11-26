@@ -1,17 +1,36 @@
 package io.github.agentseek.view.utilities
 
-import io.github.agentseek.common.Circle2d
-import io.github.agentseek.common.Cone2d
-import io.github.agentseek.common.Rectangle2d
-import io.github.agentseek.common.Shape2d
+import io.github.agentseek.common.*
 import io.github.agentseek.view.RenderingContext
+import io.github.agentseek.view.gui.GameGui
 import java.awt.Color
 import java.awt.Graphics2D
-import java.awt.Stroke
 import java.awt.geom.Ellipse2D
 import java.awt.geom.Rectangle2D
 
+/**
+ * Utility object for rendering shapes.
+ */
 object Rendering {
+
+    /**
+     * Draws a [vector2d] from a given [position] with a specified [color].
+     */
+    fun RenderingContext<Graphics2D>.drawVector(position: Point2d, vector2d: Vector2d, color: Color) {
+        render {
+            val previousColor = it.color
+            it.color = color
+            val p1 = camera.toCameraPoint(position)
+            val p2 = camera.toCameraPoint(position + vector2d)
+            it.drawLine(
+                p1.x.toInt(),
+                p1.y.toInt(),
+                p2.x.toInt(),
+                p2.y.toInt()
+            )
+            it.color = previousColor
+        }
+    }
 
     /**
      * Strokes a simple black circle starting from a [Circle2d]
@@ -160,6 +179,44 @@ object Rendering {
         val cone = camera.toCameraCone(cone2d)
         render {
             SwingUtilities.fillConeWithGradient(it, cone, startColor, endColor)
+        }
+    }
+
+    /**
+     * Fills the screen with a [title] and [subtitle], using the specified [backgroundColor] and [textColor].
+     */
+    fun RenderingContext<Graphics2D>.fillScreenWithTitleAndSubtitle(
+        backgroundColor: Color,
+        title: String,
+        subtitle: String,
+        textColor: Color,
+    ) {
+        render { g2d ->
+            val width = GameGui.screenWidth
+            val height = GameGui.screenHeight
+            val titleFont = g2d.font.deriveFont(64f)
+            g2d.font = titleFont
+            val titleMetrics = g2d.fontMetrics
+            val titleWidth = titleMetrics.stringWidth(title)
+            val titleHeight = titleMetrics.height
+
+            // Draw background rectangle
+            g2d.color = backgroundColor
+            g2d.fillRect(0, 0, width, height)
+
+            // Draw text
+            g2d.color = textColor
+            g2d.drawString(title, (width - titleWidth) / 2, (height + titleHeight) / 2 - titleMetrics.descent - 40)
+            val subtitleFont = g2d.font.deriveFont(24f)
+            g2d.font = subtitleFont
+            val subtitleMetrics = g2d.fontMetrics
+            val subtitleWidth = subtitleMetrics.stringWidth(subtitle)
+            val subtitleHeight = subtitleMetrics.height
+            g2d.drawString(
+                subtitle,
+                (width - subtitleWidth) / 2,
+                (height + subtitleHeight) / 2 - subtitleMetrics.descent + 40
+            )
         }
     }
 }

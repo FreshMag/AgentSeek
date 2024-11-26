@@ -125,8 +125,9 @@ data class Vector2d(var x: Double, var y: Double) {
     }
 
     companion object {
+        /**
+         * Returns the zero vector (0,0)
+         */
         fun zero(): Vector2d = Vector2d(0.0, 0.0)
-
-        fun fromPosition(position: Point2d): Vector2d = Vector2d(position.x, position.y)
     }
 }

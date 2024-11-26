@@ -1,0 +1,720 @@
+---
+gameObjects:
+- name: ""
+  position:
+    x: 0.0
+    "y": 0.0
+  components:
+  - class: "io.github.agentseek.components.jason.JasonInitializerComponent"
+    arguments:
+    - name: "mas2jName"
+      type: "java.lang.String"
+      value: "easy"
+    - name: "environmentClassFQName"
+      type: "java.lang.String"
+      value: "io.github.agentseek.env.AgentSeekEnvironment"
+    - name: "agents"
+      type: "java.util.List<io.github.agentseek.components.jason.Agent>"
+      value:
+      - id: "camera0"
+        aslAgentName: "camera_agent"
+      - id: "camera1"
+        aslAgentName: "camera_agent"
+      - id: "camera2"
+        aslAgentName: "camera_agent"
+      - id: "camera3"
+        aslAgentName: "camera_agent"
+      - id: "camera4"
+        aslAgentName: "camera_agent"
+      - id: "camera5"
+        aslAgentName: "camera_agent"
+      - id: "camera6"
+        aslAgentName: "camera_agent"
+      - id: "camera7"
+        aslAgentName: "camera_agent"
+      - id: "camera8"
+        aslAgentName: "camera_agent"
+      - id: "agent1"
+        aslAgentName: "guard_agent"
+    - name: "hideJasonGui"
+      type: "boolean"
+      value: false
+  renderer:
+    class: "io.github.agentseek.view.EmptyRenderer"
+    arguments: []
+- name: "camera0"
+  position:
+    x: 26.975
+    "y": 6.455
+  components:
+  - class: "io.github.agentseek.components.jason.CameraAgentComponent"
+    arguments:
+    - name: "id"
+      type: "java.lang.String"
+      value: "camera0"
+  renderer:
+    class: "io.github.agentseek.view.CameraRenderer"
+    arguments: []
+- name: "camera1"
+  position:
+    x: 7.225
+    "y": 11.275
+  components:
+  - class: "io.github.agentseek.components.jason.CameraAgentComponent"
+    arguments:
+    - name: "id"
+      type: "java.lang.String"
+      value: "camera1"
+  renderer:
+    class: "io.github.agentseek.view.CameraRenderer"
+    arguments: []
+- name: "camera2"
+  position:
+    x: 7.225
+    "y": 18.505000000000003
+  components:
+  - class: "io.github.agentseek.components.jason.CameraAgentComponent"
+    arguments:
+    - name: "id"
+      type: "java.lang.String"
+      value: "camera2"
+  renderer:
+    class: "io.github.agentseek.view.CameraRenderer"
+    arguments: []
+- name: "camera3"
+  position:
+    x: 26.975
+    "y": 28.145000000000003
+  components:
+  - class: "io.github.agentseek.components.jason.CameraAgentComponent"
+    arguments:
+    - name: "id"
+      type: "java.lang.String"
+      value: "camera3"
+  renderer:
+    class: "io.github.agentseek.view.CameraRenderer"
+    arguments: []
+- name: "camera4"
+  position:
+    x: 34.875
+    "y": 28.145000000000003
+  components:
+  - class: "io.github.agentseek.components.jason.CameraAgentComponent"
+    arguments:
+    - name: "id"
+      type: "java.lang.String"
+      value: "camera4"
+  renderer:
+    class: "io.github.agentseek.view.CameraRenderer"
+    arguments: []
+- name: "camera5"
+  position:
+    x: 42.775
+    "y": 28.145000000000003
+  components:
+  - class: "io.github.agentseek.components.jason.CameraAgentComponent"
+    arguments:
+    - name: "id"
+      type: "java.lang.String"
+      value: "camera5"
+  renderer:
+    class: "io.github.agentseek.view.CameraRenderer"
+    arguments: []
+- name: "camera6"
+  position:
+    x: 26.975
+    "y": 6.455
+  components:
+  - class: "io.github.agentseek.components.jason.CameraAgentComponent"
+    arguments:
+    - name: "id"
+      type: "java.lang.String"
+      value: "camera6"
+  renderer:
+    class: "io.github.agentseek.view.CameraRenderer"
+    arguments: []
+- name: "camera7"
+  position:
+    x: 42.775
+    "y": 6.455
+  components:
+  - class: "io.github.agentseek.components.jason.CameraAgentComponent"
+    arguments:
+    - name: "id"
+      type: "java.lang.String"
+      value: "camera7"
+  renderer:
+    class: "io.github.agentseek.view.CameraRenderer"
+    arguments: []
+- name: "camera8"
+  position:
+    x: 19.075000000000003
+    "y": 6.455
+  components:
+  - class: "io.github.agentseek.components.jason.CameraAgentComponent"
+    arguments:
+    - name: "id"
+      type: "java.lang.String"
+      value: "camera8"
+  renderer:
+    class: "io.github.agentseek.view.CameraRenderer"
+    arguments: []
+- name: "agent1"
+  rigidBody:
+    shape:
+      type: "io.github.agentseek.common.Rectangle2d"
+      params:
+        upperLeft:
+          x: 15.125
+          "y": 11.275
+        lowerLeft:
+          x: 15.125
+          "y": 12.775
+        lowerRight:
+          x: 16.625
+          "y": 12.775
+        upperRight:
+          x: 16.625
+          "y": 11.275
+        height: 1.5
+        width: 1.5
+        center:
+          x: 15.875
+          "y": 12.025
+        position:
+          x: 15.125
+          "y": 11.275
+    mass: 1.0
+    velocity:
+      x: 0.0
+      "y": 0.0
+    static: false
+  components:
+  - class: "io.github.agentseek.components.jason.GuardAgentComponent"
+    arguments:
+    - name: "id"
+      type: "java.lang.String"
+      value: "agent1"
+  - class: "io.github.agentseek.components.NoiseSensorComponent"
+    arguments:
+    - name: "radius"
+      type: "double"
+      value: 4.0
+  - class: "io.github.agentseek.components.SightSensorComponent"
+    arguments:
+    - name: "coneLength"
+      type: "double"
+      value: 10.0
+    - name: "coneApertureRadians"
+      type: "double"
+      value: 1.2
+    - name: "namesWhitelist"
+      type: "java.util.Set<java.lang.String>"
+      value:
+      - "player"
+  - class: "io.github.agentseek.components.DistanceSensorComponent"
+    arguments:
+    - name: "radius"
+      type: "double"
+      value: 2.25
+  - class: "io.github.agentseek.components.FieldMovementComponent"
+    arguments:
+    - name: "maxVelocity"
+      type: "double"
+      value: 3.5
+  - class: "io.github.agentseek.components.GameOverComponent"
+    arguments: []
+  renderer:
+    class: "io.github.agentseek.view.GuardRenderer"
+    arguments: []
+- name: "Player"
+  rigidBody:
+    shape:
+      type: "io.github.agentseek.common.Rectangle2d"
+      params:
+        upperLeft:
+          x: 26.225
+          "y": 17.755000000000003
+        lowerLeft:
+          x: 26.225
+          "y": 19.255000000000003
+        lowerRight:
+          x: 27.725
+          "y": 19.255000000000003
+        upperRight:
+          x: 27.725
+          "y": 17.755000000000003
+        height: 1.5
+        width: 1.5
+        center:
+          x: 26.975
+          "y": 18.505000000000003
+        position:
+          x: 26.225
+          "y": 17.755000000000003
+    mass: 1.0
+    velocity:
+      x: 0.0
+      "y": 0.0
+    static: false
+  components:
+  - class: "io.github.agentseek.components.NoiseEmitterComponent"
+    arguments:
+    - name: "radius"
+      type: "double"
+      value: 3.0
+  - class: "io.github.agentseek.components.MouseNoiseEmitterComponent"
+    arguments: []
+  - class: "io.github.agentseek.components.InputComponent"
+    arguments: []
+  renderer:
+    class: "io.github.agentseek.view.SimpleRenderer"
+    arguments: []
+- name: "Bounds"
+  rigidBody:
+    shape:
+      type: "io.github.agentseek.common.Rectangle2d"
+      params:
+        upperLeft:
+          x: -45.0
+          "y": 0.0
+        lowerLeft:
+          x: -45.0
+          "y": 50.0
+        lowerRight:
+          x: 5.0
+          "y": 50.0
+        upperRight:
+          x: 5.0
+          "y": 0.0
+        height: 50.0
+        width: 50.0
+        center:
+          x: -20.0
+          "y": 25.0
+        position:
+          x: -45.0
+          "y": 0.0
+    mass: 1.0
+    velocity:
+      x: 0.0
+      "y": 0.0
+    static: true
+  components: []
+  renderer:
+    class: "io.github.agentseek.view.SimpleRenderer"
+    arguments: []
+- name: "Bounds"
+  rigidBody:
+    shape:
+      type: "io.github.agentseek.common.Rectangle2d"
+      params:
+        upperLeft:
+          x: 45.0
+          "y": 0.0
+        lowerLeft:
+          x: 45.0
+          "y": 50.0
+        lowerRight:
+          x: 95.0
+          "y": 50.0
+        upperRight:
+          x: 95.0
+          "y": 0.0
+        height: 50.0
+        width: 50.0
+        center:
+          x: 70.0
+          "y": 25.0
+        position:
+          x: 45.0
+          "y": 0.0
+    mass: 1.0
+    velocity:
+      x: 0.0
+      "y": 0.0
+    static: true
+  components: []
+  renderer:
+    class: "io.github.agentseek.view.SimpleRenderer"
+    arguments: []
+- name: "Bounds"
+  rigidBody:
+    shape:
+      type: "io.github.agentseek.common.Rectangle2d"
+      params:
+        upperLeft:
+          x: 0.0
+          "y": 29.6
+        lowerLeft:
+          x: 0.0
+          "y": 79.6
+        lowerRight:
+          x: 50.0
+          "y": 79.6
+        upperRight:
+          x: 50.0
+          "y": 29.6
+        height: 50.0
+        width: 50.0
+        center:
+          x: 25.0
+          "y": 54.599999999999994
+        position:
+          x: 0.0
+          "y": 29.6
+    mass: 1.0
+    velocity:
+      x: 0.0
+      "y": 0.0
+    static: true
+  components: []
+  renderer:
+    class: "io.github.agentseek.view.SimpleRenderer"
+    arguments: []
+- name: "Bounds"
+  rigidBody:
+    shape:
+      type: "io.github.agentseek.common.Rectangle2d"
+      params:
+        upperLeft:
+          x: 0.0
+          "y": -45.0
+        lowerLeft:
+          x: 0.0
+          "y": 5.0
+        lowerRight:
+          x: 50.0
+          "y": 5.0
+        upperRight:
+          x: 50.0
+          "y": -45.0
+        height: 50.0
+        width: 50.0
+        center:
+          x: 25.0
+          "y": -20.0
+        position:
+          x: 0.0
+          "y": -45.0
+    mass: 1.0
+    velocity:
+      x: 0.0
+      "y": 0.0
+    static: true
+  components: []
+  renderer:
+    class: "io.github.agentseek.view.SimpleRenderer"
+    arguments: []
+- name: "Wall0"
+  rigidBody:
+    shape:
+      type: "io.github.agentseek.common.Rectangle2d"
+      params:
+        upperLeft:
+          x: 17.1
+          "y": 12.48
+        lowerLeft:
+          x: 17.1
+          "y": 14.889999999999999
+        lowerRight:
+          x: 21.05
+          "y": 14.889999999999999
+        upperRight:
+          x: 21.05
+          "y": 12.48
+        height: 2.41
+        width: 3.95
+        center:
+          x: 19.075000000000003
+          "y": 13.684999999999999
+        position:
+          x: 17.1
+          "y": 12.48
+    mass: 1.0
+    velocity:
+      x: 0.0
+      "y": 0.0
+    static: true
+  components: []
+  renderer:
+    class: "io.github.agentseek.view.SimpleRenderer"
+    arguments: []
+- name: "Wall1"
+  rigidBody:
+    shape:
+      type: "io.github.agentseek.common.Rectangle2d"
+      params:
+        upperLeft:
+          x: 25.0
+          "y": 12.48
+        lowerLeft:
+          x: 25.0
+          "y": 14.889999999999999
+        lowerRight:
+          x: 28.95
+          "y": 14.889999999999999
+        upperRight:
+          x: 28.95
+          "y": 12.48
+        height: 2.41
+        width: 3.95
+        center:
+          x: 26.975
+          "y": 13.684999999999999
+        position:
+          x: 25.0
+          "y": 12.48
+    mass: 1.0
+    velocity:
+      x: 0.0
+      "y": 0.0
+    static: true
+  components: []
+  renderer:
+    class: "io.github.agentseek.view.SimpleRenderer"
+    arguments: []
+- name: "Wall2"
+  rigidBody:
+    shape:
+      type: "io.github.agentseek.common.Rectangle2d"
+      params:
+        upperLeft:
+          x: 32.9
+          "y": 12.48
+        lowerLeft:
+          x: 32.9
+          "y": 14.889999999999999
+        lowerRight:
+          x: 36.85
+          "y": 14.889999999999999
+        upperRight:
+          x: 36.85
+          "y": 12.48
+        height: 2.41
+        width: 3.95
+        center:
+          x: 34.875
+          "y": 13.684999999999999
+        position:
+          x: 32.9
+          "y": 12.48
+    mass: 1.0
+    velocity:
+      x: 0.0
+      "y": 0.0
+    static: true
+  components: []
+  renderer:
+    class: "io.github.agentseek.view.SimpleRenderer"
+    arguments: []
+- name: "Wall3"
+  rigidBody:
+    shape:
+      type: "io.github.agentseek.common.Rectangle2d"
+      params:
+        upperLeft:
+          x: 17.1
+          "y": 17.300000000000004
+        lowerLeft:
+          x: 17.1
+          "y": 19.710000000000004
+        lowerRight:
+          x: 21.05
+          "y": 19.710000000000004
+        upperRight:
+          x: 21.05
+          "y": 17.300000000000004
+        height: 2.41
+        width: 3.95
+        center:
+          x: 19.075000000000003
+          "y": 18.505000000000003
+        position:
+          x: 17.1
+          "y": 17.300000000000004
+    mass: 1.0
+    velocity:
+      x: 0.0
+      "y": 0.0
+    static: true
+  components: []
+  renderer:
+    class: "io.github.agentseek.view.SimpleRenderer"
+    arguments: []
+- name: "Wall4"
+  rigidBody:
+    shape:
+      type: "io.github.agentseek.common.Rectangle2d"
+      params:
+        upperLeft:
+          x: 32.9
+          "y": 17.300000000000004
+        lowerLeft:
+          x: 32.9
+          "y": 19.710000000000004
+        lowerRight:
+          x: 36.85
+          "y": 19.710000000000004
+        upperRight:
+          x: 36.85
+          "y": 17.300000000000004
+        height: 2.41
+        width: 3.95
+        center:
+          x: 34.875
+          "y": 18.505000000000003
+        position:
+          x: 32.9
+          "y": 17.300000000000004
+    mass: 1.0
+    velocity:
+      x: 0.0
+      "y": 0.0
+    static: true
+  components: []
+  renderer:
+    class: "io.github.agentseek.view.SimpleRenderer"
+    arguments: []
+- name: "Wall5"
+  rigidBody:
+    shape:
+      type: "io.github.agentseek.common.Rectangle2d"
+      params:
+        upperLeft:
+          x: 17.1
+          "y": 22.120000000000005
+        lowerLeft:
+          x: 17.1
+          "y": 24.530000000000005
+        lowerRight:
+          x: 21.05
+          "y": 24.530000000000005
+        upperRight:
+          x: 21.05
+          "y": 22.120000000000005
+        height: 2.41
+        width: 3.95
+        center:
+          x: 19.075000000000003
+          "y": 23.325000000000003
+        position:
+          x: 17.1
+          "y": 22.120000000000005
+    mass: 1.0
+    velocity:
+      x: 0.0
+      "y": 0.0
+    static: true
+  components: []
+  renderer:
+    class: "io.github.agentseek.view.SimpleRenderer"
+    arguments: []
+- name: "Wall6"
+  rigidBody:
+    shape:
+      type: "io.github.agentseek.common.Rectangle2d"
+      params:
+        upperLeft:
+          x: 25.0
+          "y": 22.120000000000005
+        lowerLeft:
+          x: 25.0
+          "y": 24.530000000000005
+        lowerRight:
+          x: 28.95
+          "y": 24.530000000000005
+        upperRight:
+          x: 28.95
+          "y": 22.120000000000005
+        height: 2.41
+        width: 3.95
+        center:
+          x: 26.975
+          "y": 23.325000000000003
+        position:
+          x: 25.0
+          "y": 22.120000000000005
+    mass: 1.0
+    velocity:
+      x: 0.0
+      "y": 0.0
+    static: true
+  components: []
+  renderer:
+    class: "io.github.agentseek.view.SimpleRenderer"
+    arguments: []
+- name: "Wall7"
+  rigidBody:
+    shape:
+      type: "io.github.agentseek.common.Rectangle2d"
+      params:
+        upperLeft:
+          x: 32.9
+          "y": 22.120000000000005
+        lowerLeft:
+          x: 32.9
+          "y": 24.530000000000005
+        lowerRight:
+          x: 36.85
+          "y": 24.530000000000005
+        upperRight:
+          x: 36.85
+          "y": 22.120000000000005
+        height: 2.41
+        width: 3.95
+        center:
+          x: 34.875
+          "y": 23.325000000000003
+        position:
+          x: 32.9
+          "y": 22.120000000000005
+    mass: 1.0
+    velocity:
+      x: 0.0
+      "y": 0.0
+    static: true
+  components: []
+  renderer:
+    class: "io.github.agentseek.view.SimpleRenderer"
+    arguments: []
+- name: "Door"
+  rigidBody:
+    shape:
+      type: "io.github.agentseek.common.Rectangle2d"
+      params:
+        upperLeft:
+          x: 6.699999999999999
+          "y": 0.8220000000000001
+        lowerLeft:
+          x: 6.699999999999999
+          "y": 5.821999999999999
+        lowerRight:
+          x: 11.7
+          "y": 5.821999999999999
+        upperRight:
+          x: 11.7
+          "y": 0.8220000000000001
+        height: 5.0
+        width: 5.0
+        center:
+          x: 9.2
+          "y": 3.3219999999999996
+        position:
+          x: 6.699999999999999
+          "y": 0.8220000000000001
+    mass: 1.0
+    velocity:
+      x: 0.0
+      "y": 0.0
+    static: true
+  components:
+  - class: "io.github.agentseek.components.DoorComponent"
+    arguments:
+    - name: "destinationSceneResourceName"
+      type: "java.lang.String"
+      value: "Level3"
+  renderer:
+    class: "io.github.agentseek.view.DoorRenderer"
+    arguments: []
+flags: {}

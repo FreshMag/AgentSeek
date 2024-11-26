@@ -6,6 +6,9 @@ import io.github.agentseek.core.GameObject
 import io.github.agentseek.core.engine.GameEngine.log
 import kotlin.time.Duration
 
+/**
+ * A dummy component that demonstrates the usage of the engine. Used inside the REPL to provide access to the scene.
+ */
 class DummyComponent(gameObject: GameObject) : AbstractComponent(gameObject) {
 
     override fun init() {

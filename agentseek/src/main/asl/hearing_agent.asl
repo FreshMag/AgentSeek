@@ -1,12 +1,8 @@
-/* Initial goals */
 
 !start.
 
-/* Plans */
-
 +!start : true <-
     link(this);
-	.print("link");
 	!searchForPlayer.
 
 +!searchForPlayer : player_heard(X, Y) <-

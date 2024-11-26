@@ -2,26 +2,33 @@ package io.github.agentseek.components.jason
 
 import io.github.agentseek.common.Point2d
 import io.github.agentseek.common.TimerImpl
-import io.github.agentseek.common.Vector2d
 import io.github.agentseek.components.FieldMovementComponent
 import io.github.agentseek.components.NoiseSensorComponent
-import io.github.agentseek.components.common.ComponentsUtils
+import io.github.agentseek.components.common.ComponentsUtils.setRandomObjective
+import io.github.agentseek.components.common.Config
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.env.Actions
+import io.github.agentseek.util.FastEntities.point
 import jason.asSyntax.Literal
 import jason.asSyntax.NumberTerm
 import jason.asSyntax.Structure
-import java.awt.Color
 
+/**
+ * Component used by the hearing agent. The Hearing agent reacts to the noise made by the player, moving towards the
+ * player's last known position.
+ *
+ * ### Percepts
+ * The percepts returned by this agent are the following:
+ * - *player_heard(X, Y)*
+ *
+ * ### Actions
+ * The actions supported by this agent are the following:
+ * - *moveRandom*: moves to a random position
+ * - *moveToPosition(X, Y)*: moves to the position (X, Y)
+ */
 class HearingAgentComponent(gameObject: GameObject, override val id: String) : JasonAgent(gameObject) {
-    companion object {
-        private const val ENEMY_NAME = "Player"
-        private const val DEFAULT_RANDOM_TIMER = 3000L
-        private const val DEFAULT_NOISE_TIMER = 5000L
-    }
-
-    private var randomTimer = TimerImpl(DEFAULT_RANDOM_TIMER)
-    private var noiseTimer = TimerImpl(DEFAULT_NOISE_TIMER)
+    private var randomTimer = TimerImpl(Config.Agents.hearingRandomMovementTimerMillis)
+    private var noiseTimer = TimerImpl(Config.Agents.hearingNoiseTimerMillis)
     private lateinit var noiseSensorComponent: NoiseSensorComponent
     private lateinit var fieldMovementComponent: FieldMovementComponent
     private var lastNoisePosition: Point2d? = null
@@ -30,7 +37,7 @@ class HearingAgentComponent(gameObject: GameObject, override val id: String) : J
         fieldMovementComponent = gameObject.getComponent<FieldMovementComponent>()!!
         noiseSensorComponent = gameObject.getComponent<NoiseSensorComponent>()!!
         noiseSensorComponent.addReaction { perceptions ->
-            val noisePosition = perceptions.find { it.gameObject.name == ENEMY_NAME }?.noisePosition
+            val noisePosition = perceptions.find { it.gameObject.name == Config.Names.playerName }?.noisePosition
             if (noisePosition != null) {
                 lastNoisePosition = noisePosition
                 noiseTimer.restart()
@@ -57,7 +64,7 @@ class HearingAgentComponent(gameObject: GameObject, override val id: String) : J
     override fun getPercepts(): MutableList<Literal> {
         val percepts = mutableListOf<Literal>()
         if (lastNoisePosition != null) {
-            percepts.add(Literal.parseLiteral("enemy_heard(${lastNoisePosition!!.x.toInt()}, ${lastNoisePosition!!.y.toInt()})"))
+            percepts.add(Literal.parseLiteral("player_heard(${lastNoisePosition!!.x.toInt()}, ${lastNoisePosition!!.y.toInt()})"))
         } else if (noiseTimer.isElapsed()) {
             noiseTimer.reset()
         }
@@ -65,16 +72,11 @@ class HearingAgentComponent(gameObject: GameObject, override val id: String) : J
         return percepts
     }
 
+    /**
+     * Moves the agent to a random position
+     */
     private fun moveRandom() {
-        val randomVelocity = ComponentsUtils.getRandomVelocity(gameObject)
-        if (!randomTimer.isStarted || randomTimer.isElapsed()) {
-            randomTimer.restart()
-
-        }
-        synchronized(gameObject) {
-            fieldMovementComponent.wakeUp()
-            fieldMovementComponent.objective = randomVelocity
-        }
+        this.setRandomObjective(randomTimer, Config.Agents.hearingMaxSpeed, fieldMovementComponent)
     }
 
     /**
@@ -82,9 +84,9 @@ class HearingAgentComponent(gameObject: GameObject, override val id: String) : J
      */
     private fun checkPercepts() {
         if (lastNoisePosition != null && (randomTimer.isStarted && !randomTimer.isElapsed())) {
-            noiseSensorComponent.noiseColor = Color.RED
+            noiseSensorComponent.noiseColor = Config.Agents.hearingDangerLightColor
         } else {
-            noiseSensorComponent.noiseColor = Color.YELLOW
+            noiseSensorComponent.noiseColor = Config.Agents.hearingStandardLightColor
             lastNoisePosition = null
         }
     }
@@ -94,8 +96,9 @@ class HearingAgentComponent(gameObject: GameObject, override val id: String) : J
      */
     private fun move(x: Int, y: Int) {
         synchronized(gameObject) {
-            gameObject.rigidBody.velocity =
-                Vector2d(x, y).minus(Vector2d(gameObject.position.x, gameObject.position.y)).normalized()
+            fieldMovementComponent.maxVelocity = Config.Agents.hearingMaxSpeed
+            fieldMovementComponent.wakeUp()
+            fieldMovementComponent.objective = point(x, y)
         }
     }
 }

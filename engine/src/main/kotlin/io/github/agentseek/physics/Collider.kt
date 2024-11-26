@@ -4,8 +4,14 @@ import io.github.agentseek.common.*
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.util.GameObjectUtilities.otherGameObjects
 
+/**
+ * A collider is a component of a game object that defines its shape and size. It is used to detect collisions between
+ * game objects.
+ */
 sealed class Collider(val shape: Shape2d, val gameObject: GameObject) {
-
+    /**
+     * The position of the collider in the game world
+     */
     var position: Point2d = shape.position
         get() = shape.position
         set(value) {
@@ -13,12 +19,16 @@ sealed class Collider(val shape: Shape2d, val gameObject: GameObject) {
             field = value
         }
 
+    /**
+     * The center of the collider in the game world
+     */
     var center: Point2d = shape.center
         get() = shape.center
         set(value) {
             shape.center = value
             field = value
         }
+
     /**
      * Traverses the rigid body of the parent game object. Note that this Collider might not be associated with that
      * rigid body

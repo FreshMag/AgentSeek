@@ -17,12 +17,21 @@ class Camera(
     /**
      * Position of the camera (in world's coordinates).
      */
-    private var cameraWorldPosition: Point2d = Point2d.origin(),
+    var cameraWorldPosition: Point2d = Point2d.origin(),
 ) {
+    /**
+     * Max width of the world that can be seen within this camera.
+     */
     var viewPortWidth = worldViewPortWidth
         private set
+
+    /**
+     * Max height of the world that can be seen within this camera.
+     *
+     * *Note*: it is obtained calculating in proportion of the aspect ratio of the view and the [viewPortWidth]
+     */
     val viewPortHeight
-        get() = (viewPortWidth * view.screenHeight) / view.screenWidth
+        get() = ((viewPortWidth * view.screenHeight) / view.screenWidth)
 
     /**
      * Converts a position in world's coordinates into a new position in screen's coordinates (i.e. camera coordinates)

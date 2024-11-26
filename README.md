@@ -9,11 +9,58 @@
 [![MIT License][license-shield]][license-url]
 [![Conventional Commits][conventional-commits-shield]][conventional-commits-url]
 
-
 ## Overview
 
-Project for Intelligent Systems Engineering course a.y. 2023-2024
+Project for Intelligent Systems Engineering course a.y. 2023-2024.
 
+*Agent Seek* is a simple game where the player moves in a 2D environment, seeking the exit that
+leads to the next level. The player needs to avoid the agents that are trying to catch him.
+
+<img width=30% src="resources/gifs/basic_structure.gif">
+
+The game features three types of agents, each with distinct behaviors:
+1. **Camera Agent** (_Gray_)
+   - Stationary but rotates to detect the player in its field of view.
+   - Alerts all other agents if it spots the player.
+2. **Hearing Agent** (_Red_)
+   - Moves through the environment, guided solely by sound.
+   - Chases noise sources created by the player.
+3. **Guard Agent** (_Blue_)
+   - Actively patrols and can see and hear the player.
+   - Upon detecting the player, it:
+     - Starts chasing immediately.
+     - Alerts nearby guards to protect the exit.
+     - Responds to alerts from the Camera Agent.
+
+<img width=30% src="resources/gifs/player_spotted.gif">
+
+### Player Controls:
+- _Movement_: Use W, A, S, D to move.
+- _Sneak_: Hold SHIFT to move slower and more silently.
+- _Distraction_: Click near your position (within a short range) to create noise and lure agents away from your path.
+
+<img width=30% src="resources/gifs/generating_noise.gif">
+
+## Installation
+
+### Prerequisites:
+
+- Ensure you have Java installed (version 17 or later recommended).
+
+### Steps to Run:
+
+1.	Download the latest release JAR file from the Releases page.
+2.  Open a terminal or command prompt and run the following command:
+
+```shell
+java -jar agentseek-<VERSION>.jar
+```
+
+## Credits
+
+This project was developed as part of the Intelligent Systems Engineering course (Academic Year 2023–2024).
+
+Feel free to report any issues or suggest improvements via the Issues page.
 
 <!--
 ***

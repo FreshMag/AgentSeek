@@ -6,46 +6,65 @@ import io.github.agentseek.components.FieldMovementComponent
 import io.github.agentseek.components.NoiseSensorComponent
 import io.github.agentseek.components.SightSensorComponent
 import io.github.agentseek.components.common.ComponentsUtils
+import io.github.agentseek.components.common.ComponentsUtils.setRandomObjective
+import io.github.agentseek.components.common.Config
 import io.github.agentseek.core.GameObject
 import io.github.agentseek.env.Actions
 import io.github.agentseek.util.FastEntities.point
+import io.github.agentseek.util.GameObjectUtilities.center
 import jason.asSyntax.Literal
 import jason.asSyntax.NumberTerm
 import jason.asSyntax.Structure
-import java.awt.Color
-import kotlin.math.sqrt
 
+/**
+ * Component used by the guard agent. The Guard agent checks the surroundings, looking for the player, and it moves
+ * around the map randomly. When it sees the player, it starts tracking it, returning appropriate percepts. It can also
+ * contact other guards to inform them about the player's position. Lastly, it can hear the player's noise and react to it
+ * and be warned by a camera agent.
+ *
+ * ### Percepts
+ * The percepts returned by this agent are the following:
+ * - *player_position(X, Y)*
+ * - *enemy_heard(X, Y)*
+ * - *base_reached*
+ * - *base_position(X, Y)*
+ *
+ * ### Actions
+ * The actions supported by this agent are the following:
+ * - *moveRandom*: moves to a random position
+ * - *moveToPosition(X, Y)*: moves to the position (X, Y)
+ * - *stop*: stops the agent's movement
+ * - *checkSurroundings*: looks around while defending the base
+ */
 class GuardAgentComponent(gameObject: GameObject, override val id: String) : JasonAgent(gameObject) {
 
-    companion object {
-        private const val ENEMY_NAME = "Player"
-        private val basePosition = Point2d(30, 30)
-        private const val DEFAULT_NEAR_BASE_DISTANCE = 10.0
-        private const val DEFAULT_RANDOM_TIMER = 4000L
-        private const val DEFAULT_SIGHT_TIMER = 5000L
-        private const val DEFAULT_NOISE_TIMER = 5000L
-    }
-
+    private var basePosition = Point2d.origin()
     private lateinit var sightSensorComponent: SightSensorComponent
     private lateinit var noiseSensorComponent: NoiseSensorComponent
     private lateinit var fieldMovementComponent: FieldMovementComponent
     private var lastEnemyPosition: Point2d? = null
     private var lastNoisePosition: Point2d? = null
-    private var randomTimer = TimerImpl(DEFAULT_RANDOM_TIMER)
-    private val sightTimer = TimerImpl(DEFAULT_SIGHT_TIMER)
-    private val noiseTimer = TimerImpl(DEFAULT_NOISE_TIMER)
+    private var randomTimer = TimerImpl(Config.Agents.guardRandomMovementTimerMillis)
+    private val sightTimer = TimerImpl(Config.Agents.guardSightTimerMillis)
+    private val noiseTimer = TimerImpl(Config.Agents.guardNoiseTimerMillis)
 
 
+    /**
+     * Reaction to the sight of the player.
+     */
     private val sightSensorReaction = { perceptions: List<SightSensorComponent.Perception> ->
-        val enemyPosition = perceptions.find { it.gameObject.name == ENEMY_NAME }?.gameObject?.position
+        val enemyPosition = perceptions.find { it.gameObject.name == Config.Names.playerName }?.gameObject?.position
         if (enemyPosition != null) {
             lastEnemyPosition = enemyPosition
             sightTimer.restart()
         }
     }
 
+    /**
+     * Reaction to the noise heard by the agent.
+     */
     private val noiseSensorReaction = { perceptions: List<NoiseSensorComponent.Perception> ->
-        val noisePosition = perceptions.find { it.gameObject.name == ENEMY_NAME }?.noisePosition
+        val noisePosition = perceptions.find { it.gameObject.name == Config.Names.playerName }?.noisePosition
         if (noisePosition != null) {
             lastNoisePosition = noisePosition
             noiseTimer.restart()
@@ -58,6 +77,8 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
         sightSensorComponent.addReaction(sightSensorReaction)
         noiseSensorComponent = gameObject.getComponent<NoiseSensorComponent>()!!
         noiseSensorComponent.addReaction(noiseSensorReaction)
+
+        basePosition = gameObject.world.gameObjects.find { it.name == Config.Names.doorName }!!.center()
     }
 
     override fun execute(action: Structure): Boolean {
@@ -87,7 +108,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
     override fun getPercepts(): MutableList<Literal> {
         val percepts = mutableListOf<Literal>()
         if (lastEnemyPosition != null) {
-            percepts.add(Literal.parseLiteral("enemy_position(${lastEnemyPosition!!.x.toInt()}, ${lastEnemyPosition!!.y.toInt()})"))
+            percepts.add(Literal.parseLiteral("player_position(${lastEnemyPosition!!.x.toInt()}, ${lastEnemyPosition!!.y.toInt()})"))
         } else if (sightTimer.isElapsed()) {
             sightTimer.reset()
         }
@@ -96,9 +117,15 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
         } else if (noiseTimer.isElapsed()) {
             noiseTimer.reset()
         }
-        if (isNearBase()) {
+        if (ComponentsUtils.isPointWithinDistance(
+                firstWorldPoint = point(gameObject.position.x, gameObject.position.y), secondWorldPoint = point(
+                    basePosition.x, basePosition.y
+                ), maxDistance = Config.Agents.guardNearBaseDistance
+            )
+        ) {
             percepts.add(Literal.parseLiteral("base_reached"))
         }
+        percepts.add(Literal.parseLiteral("base_position(${basePosition.x.toInt()},${basePosition.y.toInt()})"))
         checkPercepts()
         return percepts
     }
@@ -108,27 +135,17 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
      */
     private fun checkPercepts() {
         if (lastEnemyPosition != null && (sightTimer.isStarted && !sightTimer.isElapsed())) {
-            sightSensorComponent.lightColor = Color.RED
+            sightSensorComponent.lightColor = Config.Agents.guardDangerLightColor
         } else {
-            sightSensorComponent.lightColor = Color.YELLOW
+            sightSensorComponent.lightColor = Config.Agents.guardStandardLightColor
             lastEnemyPosition = null
         }
         if (lastNoisePosition != null && (noiseTimer.isStarted && !noiseTimer.isElapsed())) {
-            noiseSensorComponent.noiseColor = Color.RED
+            noiseSensorComponent.noiseColor = Config.Agents.guardDangerLightColor
         } else {
-            noiseSensorComponent.noiseColor = Color.YELLOW
+            noiseSensorComponent.noiseColor = Config.Agents.guardStandardLightColor
             lastNoisePosition = null
         }
-    }
-
-    /**
-     * Determines if the game object is near the base, calculating the Euclidean distance between the game object's current position
-     * and base position.
-     */
-    private fun isNearBase(): Boolean {
-        val dx = gameObject.position.x - basePosition.x
-        val dy = gameObject.position.y - basePosition.y
-        return sqrt(dx * dx + dy * dy) <= DEFAULT_NEAR_BASE_DISTANCE
     }
 
     /**
@@ -136,6 +153,7 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
      */
     private fun move(x: Int, y: Int) {
         synchronized(gameObject) {
+            fieldMovementComponent.maxVelocity = Config.Agents.guardMaxSpeed
             fieldMovementComponent.wakeUp()
             fieldMovementComponent.objective = point(x, y)
         }
@@ -145,13 +163,6 @@ class GuardAgentComponent(gameObject: GameObject, override val id: String) : Jas
      * Set the objective position to pseudo random coordinates
      */
     private fun moveRandom() {
-        if (!randomTimer.isStarted || randomTimer.isElapsed()) {
-            randomTimer.restart()
-            val randomVelocity = ComponentsUtils.getRandomVelocity(gameObject)
-            synchronized(gameObject) {
-                fieldMovementComponent.wakeUp()
-                fieldMovementComponent.objective = randomVelocity
-            }
-        }
+        this.setRandomObjective(randomTimer, Config.Agents.guardMaxWanderingSpeed, fieldMovementComponent)
     }
 }

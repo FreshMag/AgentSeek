@@ -2,6 +2,9 @@ package io.github.agentseek.env
 
 import jason.asSyntax.Literal
 
+/**
+ * Object that contains the actions that the agents can perform.
+ */
 object Actions {
 
     /**

@@ -6,8 +6,14 @@ import jason.infra.local.RunLocalMAS
 import jason.runtime.RuntimeServicesFactory
 import java.io.File
 
+/**
+ * Utility data class for loading a Jason agent.
+ */
 data class Agent(val id: String, val aslAgentName: String)
 
+/**
+ * Component that initializes a Jason environment.
+ */
 class JasonInitializerComponent(
     gameObject: GameObject,
     private val mas2jName: String,
@@ -31,9 +37,14 @@ class JasonInitializerComponent(
     }
 
     companion object {
+        /**
+         * Reference to the Jason manager object. This is used to send messages to the Jason environment.
+         */
         var jasonManager: GameObject? = null
 
-
+        /**
+         * Generates a temporary MAS file used to launch the Jason environment.
+         */
         private fun generateTempFile(
             name: String,
             environment: Class<*>,
