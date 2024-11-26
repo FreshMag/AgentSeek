@@ -16,7 +16,7 @@ Project for Intelligent Systems Engineering course a.y. 2023-2024.
 *Agent Seek* is a simple game where the player moves in a 2D environment, seeking the exit that
 leads to the next level. The player needs to avoid the agents that are trying to catch him.
 
-<p align="center"><img width=30% src="resources/gifs/basic_structure.gif"></p>
+<img width=30% src="resources/gifs/basic_structure.gif">
 
 The game features three types of agents, each with distinct behaviors:
 1. **Camera Agent** (_Gray_)
@@ -32,14 +32,14 @@ The game features three types of agents, each with distinct behaviors:
      - Alerts nearby guards to protect the exit.
      - Responds to alerts from the Camera Agent.
 
-<p align="center"><img width=30% src="resources/gifs/player_spotted.gif"></p>
+<img width=30% src="resources/gifs/player_spotted.gif">
 
-Player Controls:
+### Player Controls:
 - _Movement_: Use W, A, S, D to move.
 - _Sneak_: Hold SHIFT to move slower and more silently.
 - _Distraction_: Click near your position (within a short range) to create noise and lure agents away from your path.
 
-<p align="center"><img width=30% src="resources/gifs/generating_noise.gif"></p>
+<img width=30% src="resources/gifs/generating_noise.gif">
 
 ## Installation
 
