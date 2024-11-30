@@ -1,4 +1,4 @@
-
+defend_base_time(3000).
 base_position(30,30).
 
 !start.
@@ -30,18 +30,15 @@ base_position(30,30).
 
 +!followEnemy : player_position(X, Y) <-
     move(X, Y);
-    .wait(500);
     !searchForPlayer.
 
 +!followEnemy : enemy_heard(X, Y) <-
     move(X, Y);
-    .wait(500);
     !searchForPlayer.
 
 +!followEnemy : camera_remote_player_position(X, Y) <-
     move(X, Y);
     -camera_remote_player_position(X, Y)[source(_)];
-    .wait(500);
     !searchForPlayer.
 
 +!alertAllies : player_position(X, Y) <-
@@ -49,17 +46,15 @@ base_position(30,30).
 
 +!moveRandom : not player_position(X, Y) <-
     moveRandom;
-    .wait(500);
     !searchForPlayer.
 
 +!returningToBase : guard_remote_player_position & base_position(X, Y) <-
     move(X, Y);
-    .wait(500);
     !searchForPlayer.
 
-+!defendBase : base_reached & guard_remote_player_position <-
++!defendBase : defend_base_time(T) & base_reached & guard_remote_player_position <-
     stop;
-    .wait(player_position(X, Y), 3000);
+    .wait(player_position(X, Y), T);
     !searchForPlayer.
 
 -!defendBase : not player_position(X, Y) <-
