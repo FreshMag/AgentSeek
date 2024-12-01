@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "io.github.agentseek"
-version = "fix: remove debug wait from asl agents."
+version = "1.0.3"
 
 repositories {
     mavenCentral()

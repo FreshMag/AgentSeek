@@ -1,8 +1,4 @@
 
-# [fix: remove debug wait from asl agents.] - 2024-11-30
-
-
-
 # [1.0.3] - 2024-11-26
 Improvements to game components and agent behaviors. 
 
