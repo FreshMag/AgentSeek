@@ -1,4 +1,10 @@
 
+# [1.0.4] - 2024-12-01
+## Refactoring
+- Refactored agents behavior
+- Extracted beliefs for agents' waiting actions
+
+
 # [1.0.3] - 2024-11-26
 Improvements to game components and agent behaviors. 
 
