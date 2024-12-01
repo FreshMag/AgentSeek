@@ -7,6 +7,8 @@ import java.awt.Component
 import java.awt.Dimension
 import java.awt.Font
 import java.io.File
+import java.net.URLDecoder
+import java.util.jar.JarFile
 import javax.swing.*
 import javax.swing.border.EmptyBorder
 import kotlin.system.exitProcess
@@ -197,13 +199,32 @@ object MenuGui {
         return panel
     }
 
+    fun listAvailableScenesInJar(): List<String> {
+        val jarPath = File(
+            URLDecoder.decode(
+                object {}.javaClass.protectionDomain.codeSource.location.path,
+                "UTF-8"
+            )
+        )
+        if (jarPath.isFile) {
+            val jarFile = JarFile(jarPath)
+            return jarFile.use { jar ->
+                jar.entries().asSequence().map { it.name }.filter { it.contains("scene.yaml") }.toList()
+            }
+        } else {
+            println("Not running from a JAR file.")
+            return emptyList()
+        }
+    }
+
+
     /**
      * Retrieves the base path for the scenes.
      *
      * @return The base path for the scenes.
      */
     private fun getScenesBasePath(): String {
-        val resourceUrl = MenuGui::class.java.getResource("/yaml/scenes")
+        val resourceUrl = object {}.javaClass.classLoader.getResource("yaml/scenes")
         return resourceUrl?.path ?: throw IllegalStateException("Scenes directory not found.")
     }
 
@@ -216,13 +237,14 @@ object MenuGui {
         fileListModel.clear()
         val basePath = getScenesBasePath()
         val directory = File(basePath)
-        if (directory.exists() && directory.isDirectory) {
-            directory.listFiles()?.forEach { file ->
-                if (file.isFile && file.name.endsWith(".yaml")) {
-                    val relativeFileName = file.name.substringBefore(".")
-                    fileListModel.addElement(relativeFileName)
-                }
-            }
+        val sceneFiles = if (directory.exists() && directory.isDirectory) {
+            directory.listFiles()?.filter { it.isFile && it.name.endsWith(".yaml") }
+        } else {
+            listAvailableScenesInJar().map { File(it) }
+        }
+        sceneFiles?.forEach { sceneFile ->
+            val relativeFileName = sceneFile.name.substringBefore(".")
+            fileListModel.addElement(relativeFileName)
         }
     }
 
