@@ -1,4 +1,10 @@
 
+# [1.0.5] - 2024-12-01
+## Fixes
+- JAR resource resolution fixes
+- Agents plan fixes: missing waits caused plan failures
+
+
 # [1.0.4] - 2024-12-01
 ## Refactoring
 - Refactored agents behavior
