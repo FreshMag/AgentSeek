@@ -21,11 +21,10 @@ object Config {
      * Initializes the configuration by loading properties from the config file.
      */
     init {
-        val file = File(Config::class.java.getResource("/config.properties")?.file!!)
-        if (file.exists()) {
-            FileInputStream(file).use { properties.load(it) }
-        } else {
-            GameEngine.logError("Config file not found: ${file.absolutePath}")
+        val resourceAsStream = object {}.javaClass.classLoader.getResourceAsStream("config.properties")
+            ?: throw IllegalArgumentException("config.properties not found in resources")
+        resourceAsStream.use {
+            properties.load(it)
         }
     }
 

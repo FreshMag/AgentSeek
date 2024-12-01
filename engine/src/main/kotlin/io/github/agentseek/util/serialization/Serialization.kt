@@ -58,12 +58,18 @@ object Scenes {
     /**
      * Loads a [Scene] taken from `"<RESOURCE_DIR>/yaml/scenes/<NAME>.scene.yaml"`
      */
-    fun Any.loadSceneFromResource(name: String): Scene? =
-        this::class.java.getResource("/yaml/scenes/${removeExtension(name)}.scene.yaml")
-            ?.also { SceneDeserializer.resourcePath = this::class.java.getResource("/yaml/gameObjects/")?.path ?: "" }
-            ?.let {
-                YAMLParse.parseString<Scene>(
-                    it.readText()
-                )
-            }
+    fun Any.loadSceneFromResource(name: String): Scene? {
+        val resourceStream =
+            object {}.javaClass.classLoader.getResourceAsStream("yaml/scenes/${removeExtension(name)}.scene.yaml")
+        return resourceStream.use {
+            it?.also { SceneDeserializer.resourcePath =
+                this::class.java.getResource("yaml/gameObjects/")?.path ?: "" }
+                ?.let {
+                    YAMLParse.parseString<Scene>(
+                        it.bufferedReader().use { reader -> reader.readText() }
+                    )
+                }
+        }
+
+    }
 }
