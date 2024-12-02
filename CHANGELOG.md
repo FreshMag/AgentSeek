@@ -1,4 +1,13 @@
 
+# [1.0.6] - 2024-12-02
+## Fix
+- Fixed ASL files resolution
+- Fixed management of resources
+
+## Features
+- Added scene destroy on window closing
+
+
 # [1.0.5] - 2024-12-01
 ## Fixes
 - JAR resource resolution fixes
