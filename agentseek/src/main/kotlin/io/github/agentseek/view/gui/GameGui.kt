@@ -13,6 +13,8 @@ import java.awt.Dimension
 import java.awt.Graphics2D
 import java.awt.event.ComponentAdapter
 import java.awt.event.ComponentEvent
+import java.awt.event.WindowAdapter
+import java.awt.event.WindowEvent
 import javax.swing.JFrame
 import javax.swing.SwingUtilities
 import javax.swing.WindowConstants.EXIT_ON_CLOSE
@@ -117,6 +119,14 @@ object GameGui : View, InputListener() {
                 screenSize = e?.component?.size ?: screenSize
             }
         })
+
+        // Destroys the scene when the window is closed
+        frame.addWindowListener(object : WindowAdapter() {
+            override fun windowClosing(e: WindowEvent) {
+                GameEngine.destroyScene()
+            }
+        });
+
         // Sets GameEngine view
         GameEngine.view = this
         // Starts the game view
