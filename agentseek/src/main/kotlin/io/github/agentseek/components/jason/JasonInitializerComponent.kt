@@ -22,7 +22,10 @@ class JasonInitializerComponent(
     private val hideJasonGui: Boolean = false,
 ) : AbstractComponent(gameObject) {
 
+    private var tempFiles: List<File> = emptyList()
+
     override fun init() {
+        tempFiles = generateTemporaryAgentFiles(agents)
         val file = generateTempFile(mas2jName, Class.forName(environmentClassFQName), agents).absolutePath
         jasonManager = this.gameObject
         Thread {
@@ -34,6 +37,7 @@ class JasonInitializerComponent(
         // stops the MAS
         val rs = RuntimeServicesFactory.get()
         rs.stopMAS(0, false, 0)
+        tempFiles.forEach { it.delete() }
     }
 
     companion object {
@@ -48,7 +52,7 @@ class JasonInitializerComponent(
         private fun generateTempFile(
             name: String,
             environment: Class<*>,
-            agents: List<Agent>
+            agents: List<Agent>,
         ): File {
             val content = """
         MAS $name {
@@ -59,7 +63,7 @@ class JasonInitializerComponent(
             ${agents.joinToString(separator = "\n\t\t") { "${it.id} ${it.aslAgentName};" }}
         
             aslSourcePath:
-            "agentseek/src/main/asl";
+            ".";
         }
         """.trimIndent()
 
@@ -68,5 +72,24 @@ class JasonInitializerComponent(
 
             return tempFile
         }
+
+        /**
+         * Generates temporary agent files used inside the Jason environment. Returns the list of files created
+         * (they must be manually deleted).
+         */
+        private fun generateTemporaryAgentFiles(agents: List<Agent>): List<File> =
+            agents.map { agent ->
+                val resource = object {}.javaClass.classLoader.getResourceAsStream(agent.aslAgentName + ".asl")
+                if (resource == null) {
+                    throw IllegalStateException("Internal exception: Resource for agent ${agent.aslAgentName} not found")
+                }
+                resource.bufferedReader().use {
+                    val file = File("${agent.aslAgentName}.asl")
+                    file.createNewFile()
+                    file.writeText(it.readText())
+                    file
+                }
+            }
+
     }
 }
